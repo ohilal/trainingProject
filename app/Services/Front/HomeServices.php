@@ -21,7 +21,7 @@ class HomeServices
 
     public function homeIndex(): array
     {
-        $departments = $this->departmentRepository->limit(3);
+        $departments = $this->departmentRepository->all();
         $courses = $this->courseRepository->getAllWith('Department', 'Terms');
         return compact('departments', 'courses');
     }

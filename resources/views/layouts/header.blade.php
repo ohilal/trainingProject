@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Laramint ( Elearning & Gamification LMS )</title>
+    <title>التنمية الصناعية- الإدارة العامة لإدارة وتنمية المواهب </title>
 
     <!-- Custom fonts for this template-->
     <link href="{{URL::to('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">

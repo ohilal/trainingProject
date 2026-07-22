@@ -4,17 +4,17 @@
 @section("content")
 @php($path = 8)
 @svg($path)
-<div class="container-xxl bg-primary hero-header">
+<div class="container-xxl bg-gradient-teal hero-header rounded-3">
     <div class="container px-lg-5">
-        <div class="row g-5 align-items-end">
-            <div class="col-lg-6 text-center text-lg-start">
-                <h1 class="text-white mb-4 animated slideInDown">The free, fun, and effective way to learn English language!</h1>
-                <p class="text-white pb-3 animated slideInDown">Learning with Laramint is fun, and research shows that it works! With quick, bite-sized lessons, you’ll earn points and unlock new levels while gaining real-world communication skills.</p>
-                <a href="" class="btn btn-secondary py-sm-3 px-sm-5 rounded-pill me-3 animated slideInLeft">Read More</a>
-                <a href="{{ route('front.courses') }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Courses</a>
+        <div class="row g-5 align-items-center" style="align-items: center;">
+            <div class="col-lg-5 text-center text-lg-start">
+                <h1 class="text-white mb-4 animated slideInDown">مرحبا بكم فى بنك المعرفة!</h1>
+                <p class="text-darkteal pb-3 animated slideInDown">منصة تدريب تضم محتوى تدريبى ومعرفى يخدم جميع العاملين  وفقا لطبيعة اختصاصات الإدارات المختلفة، لتحقيق التكامل وضمان توفير محتوى متخصص.  </p>
+                <a href="" class="btn btn-darkteal btn-sm py-sm-3 px-sm-5 rounded-pill me-3 animated slideInLeft">المزيد...</a>
+                <a href="{{ route('front.courses') }}" class="btn btn-light btn-sm py-sm-3 px-sm-5 rounded-pill animated slideInRight">الدورات</a>
             </div>
-            <div class="col-lg-6 text-center text-lg-start">
-                <img class="img-fluid animated zoomIn" src="front/img/hero.png" alt="">
+            <div class="col-lg-7 text-center text-lg-start">
+                <img class="img-fluid animated zoomIn" src="front/img/11_lms.png" alt="" style="border-radius:25px;">
             </div>
         </div>
     </div>
@@ -22,9 +22,9 @@
 
  <!-- Department Start -->
  @if(count($departments) > 1)
- <div class="container-xxl py-5">
-     <div class="container py-5 px-lg-5">
-         <div class="row g-4">
+ <div class="container-xxl py-2">
+     <div class="container py-2 px-lg-2">
+         <div class="row   mx-auto g-4" style="justify-content: center;">
              @forelse ($departments as $department)
                  <x-front.department :department="$department"/>
              @empty
@@ -41,16 +41,16 @@
     <div class="container py-5 px-lg-5">
         <div class="row g-5 align-items-center">
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                <p class="section-title text-secondary">laramint<span></span></p>
-                <h1 class="mb-5">What's laramint</h1>
+                <p class="section-title text-secondary">بنك المعرفة<span></span></p>
+                <h1 class="mb-5">ما هو بنك المعرفة؟ </h1>
                 
                 <div class="skill mb-4">
                     <div class="d-flex justify-content-between">
-                        <p class="mb-2">Thousands of video examples of language used in real life</p>
+                        <p class="mb-2">مكتبة إلكترونية بها العديد من الوسائط المختلفة</p>
                         <p class="mb-2">85%</p>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-darkteal" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="skill mb-4">
@@ -71,7 +71,7 @@
                         <div class="progress-bar bg-dark" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
-                <a href="" class="btn btn-primary py-sm-3 px-sm-5 rounded-pill mt-3">Read More</a>
+                <a href="" class="btn btn-darkteal py-sm-3 px-sm-5 rounded-pill mt-3">المزيد ... </a>
             </div>
             <div class="col-lg-6">
                 <img class="img-fluid wow zoomIn" data-wow-delay="0.5s" src="front/img/about.png">
@@ -85,28 +85,28 @@
 
 
 <!-- Facts Start -->
-<div class="container-xxl bg-primary fact py-5 wow fadeInUp" data-wow-delay="0.1s">
+<div class="container-xxl bg-darkteal fact rounded-3 py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5 px-lg-5">
         <div class="row g-4">
             <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.1s">
-                <i class="fa fa-certificate fa-3x text-secondary mb-3"></i>
+                <i class="fa fa-graduation-cap fa-3x text-light mb-3"></i>
                 <h1 class="text-white mb-2" data-toggle="counter-up">1234</h1>
-                <p class="text-white mb-0">Years Experience</p>
+                <p class="text-white mb-0"> عدد الدورات فى العام</p>
             </div>
             <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.3s">
-                <i class="fa fa-users-cog fa-3x text-secondary mb-3"></i>
+                <i class="fas fa-photo-video fa-3x text-light mb-3"></i>
                 <h1 class="text-white mb-2" data-toggle="counter-up">1234</h1>
-                <p class="text-white mb-0">Team Members</p>
+                <p class="text-white mb-0">إجمالى الدورات المتاحة </p>
             </div>
             <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.5s">
-                <i class="fa fa-users fa-3x text-secondary mb-3"></i>
+                <i class="fa fa-award fa-3x text-light mb-3"></i>
                 <h1 class="text-white mb-2" data-toggle="counter-up">1234</h1>
-                <p class="text-white mb-0">Satisfied Clients</p>
+                <p class="text-white mb-0">الموظفون المكرمون </p>
             </div>
             <div class="col-md-6 col-lg-3 text-center wow fadeIn" data-wow-delay="0.7s">
-                <i class="fa fa-check fa-3x text-secondary mb-3"></i>
+                <i class="fa fa-calendar fa-3x text-light mb-3"></i>
                 <h1 class="text-white mb-2" data-toggle="counter-up">1234</h1>
-                <p class="text-white mb-0">Compleate Projects</p>
+                <p class="text-white mb-0">عدد الفعاليات </p>
             </div>
         </div>
     </div>
@@ -170,16 +170,16 @@
 
 
 <!-- Newsletter Start -->
-<div class="container-xxl bg-primary newsletter py-5 wow fadeInUp" data-wow-delay="0.1s">
+<div class="container-xxl bg-darkteal newsletter py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5 px-lg-5">
         <div class="row justify-content-center">
             <div class="col-lg-7 text-center">
-                <p class="section-title text-white justify-content-center"><span></span>Newsletter<span></span></p>
-                <h1 class="text-center text-white mb-4">Stay Always In Touch</h1>
-                <p class="text-white mb-4">Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit sed stet lorem sit clita duo justo</p>
+                <p class="section-title text-white justify-content-center"><span></span>النشرة البريدية<span></span></p>
+                <h1 class="text-center text-white mb-4">ابقَ على تواصل</h1>
+                <p class="text-white mb-4">اشترك في نشرتنا البريدية لتبقى على اطلاع بأحدث الأحداث والبرامج</p>
                 <div class="position-relative w-100 mt-3">
-                    <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="Enter Your Email" style="height: 48px;">
-                    <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                    <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="أدخل بريدك الإلكتروني" style="height: 48px;">
+                    <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-darkteal fs-4"></i></button>
                 </div>
             </div>
         </div>
@@ -192,13 +192,13 @@
 <div class="container-xxl py-5">
     <div class="container py-5 px-lg-5">
         <div class="wow fadeInUp" data-wow-delay="0.1s">
-            <p class="section-title text-secondary justify-content-center"><span></span>Explorer<span></span></p>
-            <h1 class="text-center mb-5">Recently Completed Course</h1>
+            <p class="section-title text-secondary justify-content-center"><span></span>--<span></span></p>
+            <h1 class="text-center mb-5">الدورات المضافة حديثا</h1>
         </div>
         <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.3s">
             <div class="col-12 text-center">
                 <ul class="list-inline mb-5" id="portfolio-flters">
-                    <li class="mx-2 active" data-filter="*">All</li>
+                    <li class="mx-2 active" data-filter="*">الكل</li>
                     @forelse ($departments as $department)
                         <li class="mx-2" data-filter=".department-{{ $department->id }}">{{ $department->title }}</li>
                     @empty
@@ -228,7 +228,7 @@
 
 
 <!-- Testimonial Start -->
-<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+{{-- <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5 px-lg-5">
         <p class="section-title text-secondary justify-content-center"><span></span>Testimonial<span></span></p>
         <h1 class="text-center mb-5">What Say Our Clients!</h1>
@@ -265,7 +265,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Testimonial End -->
 
 
@@ -273,8 +273,8 @@
 <div class="container-xxl py-5">
     <div class="container py-5 px-lg-5">
         <div class="wow fadeInUp" data-wow-delay="0.1s">
-            <p class="section-title text-secondary justify-content-center"><span></span>Our Team<span></span></p>
-            <h1 class="text-center mb-5">Our Team Members</h1>
+            <p class="section-title text-secondary justify-content-center"><span></span> فريق المدربين<span></span></p>
+            <h1 class="text-center mb-5">أشهر المدربين</h1>
         </div>
         <div class="row g-4">
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">

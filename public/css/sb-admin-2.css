@@ -74,8 +74,9 @@ body {
   font-weight: 400;
   line-height: 1.5;
   color: #505050;
-  text-align: left;
+  text-align: right;
   background-color: #fff;
+  direction: rtl;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -4565,7 +4566,7 @@ input[type="button"].btn-block {
 .navbar-nav {
   display: flex;
   flex-direction: column;
-  padding-left: 0;
+  padding-right: 0;
   margin-bottom: 0;
   list-style: none;
 }
@@ -11338,7 +11339,7 @@ a:focus {
   vertical-align: 0;
   border: 0;
   font-weight: 900;
-  content: '\f105';
+  content: '\f104';
   font-family: 'Font Awesome 5 Free';
 }
 
@@ -11350,14 +11351,18 @@ a:focus {
 .sidebar .nav-item .nav-link,
 .topbar .nav-item .nav-link {
   position: relative;
+  direction: rtl;
+  text-align: right;
 }
 
 .sidebar .nav-item .nav-link .badge-counter,
 .topbar .nav-item .nav-link .badge-counter {
   position: absolute;
   transform: scale(0.7);
-  transform-origin: top right;
-  right: .25rem;
+  /* transform-origin: top right;
+  right: .25rem; */
+  transform-origin: top left;
+  left: .25rem;
   margin-top: -.25rem;
 }
 
@@ -11529,6 +11534,7 @@ a:focus {
 
 .sidebar .nav-item {
   position: relative;
+  text-align: right;
 }
 
 .sidebar .nav-item:last-child {
@@ -11536,7 +11542,8 @@ a:focus {
 }
 
 .sidebar .nav-item .nav-link {
-  text-align: center;
+  /* text-align: center; */
+  text-align: right;
   padding: 0.75rem 1rem;
   width: 6.5rem;
 }
@@ -11712,7 +11719,7 @@ a:focus {
 
 @media (min-width: 768px) {
   .sidebar {
-    width: 14rem !important;
+    width: 12rem !important;
   }
 
   .sidebar .nav-item .collapse {
@@ -11742,9 +11749,10 @@ a:focus {
   .sidebar .nav-item .nav-link {
     display: block;
     width: 100%;
-    text-align: left;
+    /* text-align: left; */
+    text-align: right;
     padding: 1rem;
-    width: 14rem;
+    width: 12rem;
   }
 
   .sidebar .nav-item .nav-link i {
@@ -11760,7 +11768,8 @@ a:focus {
   .sidebar .nav-item .nav-link[data-toggle="collapse"]::after {
     width: 1rem;
     text-align: center;
-    float: right;
+    /* float: right; */
+    float: left;
     vertical-align: 0;
     border: 0;
     font-weight: 900;
@@ -11769,7 +11778,7 @@ a:focus {
   }
 
   .sidebar .nav-item .nav-link[data-toggle="collapse"].collapsed::after {
-    content: '\f105';
+    content: '\f104';
   }
 
   .sidebar .sidebar-brand .sidebar-brand-icon i {
@@ -11781,7 +11790,8 @@ a:focus {
   }
 
   .sidebar .sidebar-heading {
-    text-align: left;
+    /* text-align: left; */
+    text-align: right;
   }
 
   .sidebar.toggled {
@@ -12064,7 +12074,7 @@ a:focus {
 }
 
 .card .card-header[data-toggle="collapse"].collapsed::after {
-  content: '\f105';
+  content: '\f104';
 }
 
 .chart-area {
@@ -12738,3 +12748,7 @@ table thead th {
   background-color: #00ac69;
 }
 
+.ltr{
+  direction: ltr;
+  text-align: left;
+}

@@ -10,7 +10,7 @@
     <div class="container py-5 px-lg-5">
         <div class="wow fadeInUp" data-wow-delay="0.1s">
             <p class="section-title text-secondary justify-content-center"><span></span>Explorer<span></span></p>
-            <h1 class="text-center mb-5">Recently Completed Course</h1>
+            <h1 class="text-center mb-5">الدورات المضافة حديثا </h1>
         </div>
         <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.3s">
             <div class="col-12 text-center">

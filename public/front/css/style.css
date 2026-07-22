@@ -1,12 +1,20 @@
 /********** Template CSS **********/
 :root {
-    --primary: #6222CC;
-    --secondary: #FBA504;
+    /* --primary: #6222CC; */
+    --primary: #22596e;
+    /* --secondary: #FBA504; */
+      --secondary: #f37121;
+    --darkteal: #22596e;
     --light: #F6F4F9;
     --dark: #04000B;
+    direction: rtl;
 }
-
-
+body{
+     font-family: Almarai, 'noto_kufi_arabicregular', system-ui, -apple-system, 'Segoe UI', 'Cairo', Roboto, 'Helvetica Neue', sans-serif;
+}
+.text-darkteal{
+    color:var(--darkteal);
+}
 /*** Spinner ***/
 #spinner {
     opacity: 0;
@@ -31,6 +39,9 @@
 
 
 /*** Heading ***/
+h1, h2, h3, h4, h5, h6 {
+  font-family: Almarai-Bold, 'Cairo-Bold', 'noto_kufi_arabicregular', system-ui, -apple-system, 'Segoe UI', 'Cairo', Roboto, 'Helvetica Neue', sans-serif;
+}
 h1,
 h2,
 .fw-bold {
@@ -86,11 +97,24 @@ h6,
     border-radius: 50px;
 }
 
+.btn-darkteal {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--darkteal);
+  --bs-btn-border-color: var(--darkteal);
+  --bs-btn-hover-bg: #4f7785;
+  --bs-btn-hover-border-color: #c9c9c9;
+  --bs-btn-active-bg: #3a7285;
+  --bs-btn-active-border-color: #3a728557;
+  --bs-btn-disabled-bg: var(--darkteal);
+  --bs-btn-disabled-border-color: var(--darkteal);
+  --bs-btn-focus-shadow-rgb: 205, 26, 28;
+}
 
 /*** Navbar ***/
 .navbar .dropdown-toggle::after {
     border: none;
-    content: "\f067";
+    /* content: "\f067"; */
+    content: "\f0d7";
     font-family: "Font Awesome 5 Free";
     font-size: 10px;
     font-weight: bold;
@@ -102,8 +126,8 @@ h6,
     position: relative;
     margin-right: 25px;
     padding: 35px 0;
-    font-family: 'Jost', sans-serif;
-    font-size: 18px;
+    /* font-family: 'Jost', sans-serif; */
+    font-size: 16px;
     font-weight: 500;
     color: var(--light) !important;
     outline: none;
@@ -168,7 +192,7 @@ h6,
         left: 0;
         border-bottom: 1px solid rgba(256, 256, 256, .1);
         z-index: 999;
-        background-color: #6222CC;
+        background-color: var(--darkteal);
     }
     
     .sticky-top.navbar-light {
@@ -218,7 +242,8 @@ h6,
 
 .hero-header {
     margin-bottom: 6rem;
-    padding: 18rem 0;
+    /* padding: 18rem 0; */
+    padding: 10rem 0;
     background:
         url(../img/blob-top-left.png),
         url(../img/blob-top-right.png),
@@ -300,6 +325,53 @@ h6,
 .section-title.text-white span:first-child::after,
 .section-title.text-white span:last-child::after {
     background: #FFFFFF;
+}
+/**** Font  ***/
+@font-face {
+  font-family: 'Cairo-SemiBold';
+  src: url('../../fonts/cairo-semibold-webfont.eot');
+  src: url('../../fonts/cairo-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../../fonts/cairo-semibold-webfont.woff2') format('woff2'),
+       url('../../fonts/cairo-semibold-webfont.woff') format('woff'),
+       url('../../fonts/Cairo-SemiBold.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Almarai';
+  src: url('../../fonts/Almarai-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Almarai-Bold';
+  src: url('../../fonts/Almarai-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-Bold';
+  src: url('../../fonts/cairo-bold-webfont.eot');
+  src: url('../../fonts/cairo-bold-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../../fonts/cairo-bold-webfont.woff2') format('woff2'),
+       url('../../fonts/cairo-bold-webfont.woff') format('woff'),
+       url('../../fonts/Cairo-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'noto_kufi_arabicregular';
+  src: url('../../fonts/notokufiarabic-regular.eot');
+  src: url('../../fonts/notokufiarabic-regular.eot?#iefix') format('embedded-opentype'),
+       url('../../fonts/noto_kufi_arabicregular.woff2') format('woff2'),
+       url('../../fonts/noto_kufi_arabicregular.woff') format('woff'),
+       url('../../fonts/notokufiarabic-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 
@@ -411,7 +483,18 @@ h6,
 .service-item:hover a.btn {
     bottom: 0;
 }
-
+/*** background ***/
+.bg-gradient-teal{
+    --bs-bg-opacity: 1;
+    /* background-color: rgba(var(--darkteal), var(--bs-bg-opacity)) !important;
+    background-color: var(--darkteal) !important; */
+/* background-color: #3a7285; */
+background: #B4CBE2;
+background: linear-gradient(45deg,rgba(180, 203, 226, 1) 0%, rgba(163, 193, 194, 1) 100%);
+}
+.bg-darkteal{ 
+    background-color: var(--darkteal) !important;
+}
 
 /*** Project Portfolio ***/
 #portfolio-flters li {

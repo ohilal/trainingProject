@@ -77,6 +77,11 @@ abstract class BaseRepository
      * @param  int  $limitNumber
      * @return \Illuminate\Database\Eloquent\Builder
      */
+    public function all()
+    {
+        return $this->model::all();
+    }
+
     public function limit($limitNumber = 0)
     {
 
