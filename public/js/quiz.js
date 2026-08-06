@@ -57,20 +57,33 @@ function scrollToAnchor(question) {
     $("html,body").animate({ scrollTop: aTag.offset().top }, "slow");
 }
 
+// function saveAndClose() {
+
+//     $.when(
+//         $(".workout_questions").each(function () {
+//             var data = $(this).serialize();
+//             var url = $(this).attr("action");
+    
+//             $.post(url, data, function (data) {});
+//         })
+//        ).then(function () {
+//             window.location.reload();
+//        });
+
+    
+
+    
+// }
 function saveAndClose() {
+    var requests = [];
 
-    $.when(
-        $(".workout_questions").each(function () {
-            var data = $(this).serialize();
-            var url = $(this).attr("action");
-    
-            $.post(url, data, function (data) {});
-        })
-       ).then(function () {
-            window.location.reload();
-       });
+    $(".workout_questions").each(function () {
+        var data = $(this).serialize();
+        var url = $(this).attr("action");
+        requests.push($.post(url, data));
+    });
 
-    
-
-    
+    $.when.apply($, requests).then(function () {
+        window.location.reload();
+    });
 }

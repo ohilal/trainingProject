@@ -31,10 +31,8 @@ class QuizAdapter extends TaskParent
         if (!$this->checkMentorCanBeAccess($workout))
             return redirect()->back()->with('danger', __('for this task, review is not exist.'));
 
-        if ($workout->is_completed || $workout->is_mentor)
+        if ($workout->is_completed)
             return $this->Review($participant, $workout, $activity);
-
-        
 
         WorkoutService::setWorkOutQuizSyncForThisExcersice($workout, $sessionable->Model);
 

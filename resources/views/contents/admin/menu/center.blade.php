@@ -20,7 +20,7 @@
             </div>
             <div class="card-footer text-center">
                 <a href="{{ route('department.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                    {{ __('Department') }}
+                    {{ __('تصنيف الدورات') }}
                 </a>
             </div>
         </div>
@@ -35,7 +35,7 @@
             </div>
             <div class="card-footer text-center">
                 <a href="{{ route('course.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                    {{ __('Course') }}
+                    {{ __('الدورات') }}
                 </a>
             </div>
         </div>

@@ -13,11 +13,13 @@ abstract class FileParent
 
     private function temporayUrlGenerator($file): string
     {
-        
-        if (Storage::missing('storage/public/' . $file))
+        $relativePath = preg_replace('#^public/#', '', $file);
+
+        if (Storage::disk('public')->missing($relativePath)) {
             return '';
-            
-        return asset(Storage::url($file));
+        }
+
+        return asset(Storage::disk('public')->url($relativePath));
     }
 
     public function makeRenderFile()

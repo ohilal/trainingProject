@@ -60,20 +60,25 @@ trait WorkoutViewRender
     {
         $workoutQuiz = $workout->WorkOutQuiz;
         $sumOfScore = 0;
-       
         $is_completed = true;
         $is_mentor = false;
+
         foreach ($workoutQuiz as $question) {
-            if ($is_mentor == false && $question->is_mentor) {
-                
-                $is_completed = false;
+            if ($question->is_mentor) {
                 $is_mentor = true;
             }
+
+            if ($question->score === null) {
+                $is_completed = false;
+            }
+
             $sumOfScore += (int)$question->score;
         }
 
-        
-        $score = (int)($sumOfScore /  count($workoutQuiz));
+        $score = 0;
+        if ($workoutQuiz->count() > 0) {
+            $score = (int)($sumOfScore / $workoutQuiz->count());
+        }
 
         $workout->update([
             'score' => $score,

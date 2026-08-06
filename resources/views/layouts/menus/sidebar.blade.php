@@ -6,7 +6,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Mint <sup>V 0.01</sup></div>
+        <div class="sidebar-brand-text mx-3 text-nowrap">بنك المعرفة <small><sup>V 0.01</sup></small></div>
     </a>
 
     <!-- Divider -->
@@ -16,12 +16,12 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>{{ __("Dashboard") }}</span></a>
+            <span>{{ __("لوحة التحكم") }}</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-envelope"></i>
-            <span>{{ __("Messages") }}</span></a>
+            <span>{{ __("الرسائل") }}</span></a>
     </li>
 
     <!-- Divider -->

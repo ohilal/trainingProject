@@ -47,9 +47,20 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="description">Description</label>
                         <textarea name="description" type="text" class="form-control editor" id="description"
                             placeholder="Description">{{ $department->description ?? '' }}</textarea>
                         @error('description')
+                            <span class="invalid-feedback" role="alert">
+                                {{ $message }}
+                            </span>
+                        @enderror
+                    </div>
+                     <div class="form-group">
+                        <label for="icon">Icon</label>
+                        <input name="icon" type="text" class="form-control form-control-user" id="icon"
+                            placeholder="icon" value="{{ $department->icon ?? '' }}">
+                        @error('icon')
                             <span class="invalid-feedback" role="alert">
                                 {{ $message }}
                             </span>
