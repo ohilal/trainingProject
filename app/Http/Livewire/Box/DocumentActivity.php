@@ -11,6 +11,7 @@ class DocumentActivity extends Component
 
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
+    protected string $pageName = 'documentPage';
 
     public $session;
     public $activity;

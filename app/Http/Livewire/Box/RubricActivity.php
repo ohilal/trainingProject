@@ -10,6 +10,7 @@ class RubricActivity extends Component
 {
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
+    protected string $pageName = 'rubricPage';
 
     public $session;
 

@@ -133,6 +133,7 @@ ul ul,
 ol ul,
 ul ol {
   margin-bottom: 0;
+  text-align: inherit;
 }
 
 dt {
@@ -147,7 +148,10 @@ dd {
 blockquote {
   margin: 0 0 1rem;
 }
-
+.form-control{
+  text-align: inherit;
+  direction: inherit;
+}
 b,
 strong {
   font-weight: bolder;
@@ -178,7 +182,16 @@ a {
   text-decoration: none;
   background-color: transparent;
 }
-
+/* ------------------- direction rtl ------------------- */
+.dynamic-question-text {
+    /* Aligns left for English/LTR, right for Arabic/RTL */
+    text-align: start; 
+    
+    /* Dynamically treats the text alignment and paragraph direction 
+       based on the first strong character of the question content */
+    unicode-bidi: plaintext; 
+}
+/* ------------------- end direction rtl ------------------- */
 a:hover {
   color: #224abe;
   text-decoration: underline;
@@ -2308,9 +2321,11 @@ textarea.form-control {
 }
 
 .form-check-input {
-  position: absolute;
+  /* position: absolute; */
   margin-top: 0.3rem;
-  margin-left: -1.25rem;
+  margin:0 1.25rem;
+  padding: 0.25rem;
+  text-align: inherit;
 }
 
 .form-check-input[disabled]~.form-check-label,

@@ -10,6 +10,7 @@ class FeedbackActivity extends Component
 {
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
+    protected string $pageName = 'feedbackPage';
     
     public $session;
 

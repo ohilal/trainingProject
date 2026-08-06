@@ -11,6 +11,7 @@ class FileActivity extends Component
 
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
+    protected string $pageName = 'filePage';
     
     public $session;
     public $activity;

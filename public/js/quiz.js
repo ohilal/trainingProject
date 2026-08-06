@@ -69,10 +69,7 @@ function scrollToAnchor(question) {
 //        ).then(function () {
 //             window.location.reload();
 //        });
-
-    
-
-    
+   
 // }
 function saveAndClose() {
     var requests = [];

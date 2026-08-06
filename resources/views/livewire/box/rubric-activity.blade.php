@@ -20,7 +20,7 @@
 </div>
 
 
-<div class="modal fade" id="rubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="rubric" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="rubric">
         <div class="modal-content">
             

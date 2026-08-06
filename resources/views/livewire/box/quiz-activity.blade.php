@@ -21,7 +21,7 @@
 
 
 
-<div class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="quiz">
         <div class="modal-content">
             <div class="modal-header">

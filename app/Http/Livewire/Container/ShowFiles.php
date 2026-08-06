@@ -5,10 +5,11 @@ namespace App\Http\Livewire\Container;
 use App\Models\Document;
 use App\Models\File;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ShowFiles extends Component
 {
-    
+    use WithPagination;
 
     public string $search = '';
 

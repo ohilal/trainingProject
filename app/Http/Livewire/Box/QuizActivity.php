@@ -10,6 +10,7 @@ class QuizActivity extends Component
 {
     use WithPagination;
     protected string $paginationTheme = 'bootstrap';
+    protected string $pageName = 'quizPage';
     
     public $session;
     
