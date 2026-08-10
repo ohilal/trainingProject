@@ -23,4 +23,15 @@ class FrontController extends Controller
     }
 
     
+    /**
+     * Display Organization Structure Page
+     *
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function organizationStructure()
+    {
+        return view('contents.front.organizationStructure.index');
+    }
+
+    
 }
