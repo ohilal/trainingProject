@@ -39,7 +39,7 @@
 </ul>
 </li>
 
-            <a href="{{ route('front.plans') }}" class="nav-item nav-link">دليل مهام الإدارات</a>
+            <a href="{{ route('front.organizationStructure') }}" class="nav-item nav-link">دليل مهام الإدارات</a>
 
   
             <a href="" class="nav-item nav-link">ركن الابتكار</a>
