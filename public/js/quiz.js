@@ -7,12 +7,10 @@ $(document).ready(function () {
     }
     $("#btnQuestions .btnQuestion:first").addClass("process-step-active");
 
-    // Qwen 
-    //   $("#saveButton").click(function (event) {
-    //     event.preventDefault();
-    //     saveOnly();
-    // });
-
+    $("#saveButton").click(function (event) {
+        event.preventDefault();
+        saveOnly();
+    });
 
     $("#saveAndClose").click(function (event) {
         event.preventDefault();
@@ -90,18 +88,18 @@ function saveAndClose() {
     $.when.apply($, requests).then(function () {
         window.location.reload();
     });
-    }
+}
 
-// function saveOnly() {
-//     $(".workout_questions").each(function () {
-//         var data = $(this).serialize();
-//         var url = $(this).attr("action");
+function saveOnly() {
+    $(".workout_questions").each(function () {
+        var data = $(this).serialize();
+        var url = $(this).attr("action");
 
-//         $.post(url, data, function (data) {
-//             // Optionally handle individual response if needed
-//         });
-//     });
+        $.post(url, data, function (data) {
+            // Optionally handle individual response if needed
+        });
+    });
 
-//     // Show a success message or visual feedback
-//     alert("{{ __('Your answers have been saved successfully!') }}");
-// }
+    // Show a success message or visual feedback
+    alert("{{ __('Your answers have been saved successfully!') }}");
+}

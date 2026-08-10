@@ -1,3 +1,4 @@
+(public/js/quiz.js, resources/views/contents/learn/quiz/show.blade.php)
 # Compiled and build artifacts
 *.pyc
 __pycache__/
