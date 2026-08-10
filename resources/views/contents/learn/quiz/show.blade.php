@@ -26,6 +26,9 @@
 
 
             <div class="card-footer text-center">
+                <button class="btn btn-primary" id="saveButton">
+                    <i class="fa fa-save"></i> {{ __("save") }}
+                </button>
                 <button class="btn btn-danger" id="saveAndClose">
                     <i class="fa fa-save"></i> {{ __("save & close") }}
                 </button>
