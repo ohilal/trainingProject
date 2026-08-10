@@ -52,6 +52,7 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
     Route::get('/course/{course_id}', [FrontCourseController::class, 'course'])->name('course');
     Route::get('/plans', [FrontCourseController::class, 'plans'])->name('plans');
     Route::get('/organizationStructure', [FrontController::class, 'organizationStructure'])->name('organizationStructure');
+    Route::get('/events', [FrontController::class, 'events'])->name('events');
 });
 
 

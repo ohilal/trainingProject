@@ -370,8 +370,8 @@
                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                         <div class="toggle-header" style="background-color: var(--bs-gray-600); color:#fff;">
                             <div class="toggle-icon">
-                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                             </div>
                             <div class="toggle-title">نائب رئيس الهيئة للخدمات وتنمية الصناعة</div>
                         </div>
@@ -383,8 +383,8 @@
                                     <div class="toggle mb-0 pt-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية لتنمية وتطوير الصناعة المحلية
@@ -406,8 +406,8 @@
                                     <div class="toggle mb-0 pt-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية للشئون الفنية
@@ -434,8 +434,8 @@
                                     <div class="toggle mb-0 pt-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية للسجل والتراخيص الصناعية
@@ -464,8 +464,8 @@
                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                         <div class="toggle-header" style="background-color: var(--bs-gray-600); color:#fff;">
                             <div class="toggle-icon">
-                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                             </div>
                             <div class="toggle-title">نائب رئيس الهيئة لتنمية وإدارة المناطق الصناعية</div>
                         </div>
@@ -477,8 +477,8 @@
                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية للمشروعات الصناعية
@@ -500,8 +500,8 @@
                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية لتخصيص ومتابعة الأراضي والوحدات الصناعية
@@ -523,8 +523,8 @@
                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية للمناطق الصناعية
@@ -550,4 +550,36 @@
         </div>
     </div>
 </section>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // تحديد جميع عناصر الهيدر القابلة للنقر
+    const toggleHeaders = document.querySelectorAll('.toggle-header');
+
+    toggleHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            // العثور على العنصر الأب (التoggle الرئيسي) والمحتوى والأيقونات
+            const parentToggle = this.closest('.toggle');
+            const content = parentToggle.querySelector('.toggle-content');
+            const openIcon = parentToggle.querySelector('.toggle-open');
+            const closedIcon = parentToggle.querySelector('.toggle-closed');
+            
+            // التبديل بين إظهار وإخفاء المحتوى
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                if(openIcon) openIcon.style.display = 'none';
+                if(closedIcon) closedIcon.style.display = 'inline-block';
+                parentToggle.classList.add('toggle-active');
+            } else {
+                content.style.display = 'none';
+                if(openIcon) openIcon.style.display = 'inline-block';
+                if(closedIcon) closedIcon.style.display = 'none';
+                parentToggle.classList.remove('toggle-active');
+            }
+        });
+        
+        // تغيير شكل المؤشر عند المرور ليدل على إمكانية النقر
+        header.style.cursor = 'pointer';
+    });
+});
+</script>
 @endsection

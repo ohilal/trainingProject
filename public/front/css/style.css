@@ -326,6 +326,16 @@ h6,
 .section-title.text-white span:last-child::after {
     background: #FFFFFF;
 }
+
+.toggle-icon, .accordion-icon {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+    padding: 0 0.375rem;
+    text-align: center;
+    display:inline-block;
+    float:right;
+}
 /**** Font  ***/
 @font-face {
   font-family: 'Cairo-SemiBold';

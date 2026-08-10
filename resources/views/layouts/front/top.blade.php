@@ -32,7 +32,7 @@
   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> الأنشطة والفعاليات </a>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="#"> Calendar</a></li>
-    <li><a class="dropdown-item" href="#"> حفلات تكريم</a></li>
+    <li><a class="dropdown-item" href="{{ route('front.events') }}"> حفلات تكريم</a></li>
  <li><a class="dropdown-item" href="#"> مبادرات</a></li>
     <li><a class="dropdown-item" href="#"> تكريم حجاج </a></li>
  <li><a class="dropdown-item" href="#"> الموظف المتميز </a></li>
