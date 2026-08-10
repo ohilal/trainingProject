@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\Feature\\TDD\\Front\\WelcomeTest::test_homePage_shows_all_departments_on_front_page":3},"times":{"Tests\\Feature\\TDD\\Front\\WelcomeTest::test_homePage_valid":1.408,"Tests\\Feature\\TDD\\Front\\WelcomeTest::test_homePage_shows_all_departments_on_front_page":1.143}}
