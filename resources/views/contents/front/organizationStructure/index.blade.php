@@ -1,4 +1,4 @@
-@extends('layouts.front.app')
+@extends('layouts.front.theme')
 
 @section('title', 'الهيكل التنظيمى - الهيئة العامة للتنمية الصناعية')
 
@@ -25,8 +25,8 @@
         
         <div class="container">
             <div class="justify-content-center">
-                <a data-lightbox="image" href="/uploads/files/structure01.jpg">
-                    <img alt=" الهيكل التنظيمى" src="https://ida.gov.eg/uploads/files/structure01.jpg" style="max-height: 60vw;" />
+                <a data-lightbox="image" href="/front/img/structure01.jpg">
+                    <img alt=" الهيكل التنظيمى" src="/front/img/structure01.jpg" style="max-width: 70vw; margin-top: 5rem;" />
                 </a>
             </div>
 
@@ -36,8 +36,8 @@
                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                         <div class="toggle-header" style="background-color: var(--bs-gray-900); color:#fff;">
                             <div class="toggle-icon">
-                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                             </div>
                             <div class="toggle-title txt-white">رئيس الهيئة</div>
                         </div>
@@ -49,8 +49,8 @@
                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية لشئون مكتب رئيس الهيئة
@@ -74,8 +74,8 @@
                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                         <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                             <div class="toggle-icon">
-                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                             </div>
                                             <div class="toggle-title">
                                                 الإدارة المركزية لنظم المعلومات والتحول الرقمي
@@ -99,8 +99,8 @@
                                         <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                             <div class="toggle-header" style="background-color: var(--bs-gray-500);">
                                                 <div class="toggle-icon">
-                                                    <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                    <i class="toggle-closed uil uil-minus-circle">&nbsp;</i>
+                                                    <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                    <i class="toggle-closed fas fa-minus-circle">&nbsp;</i>
                                                 </div>
                                                 <div class="toggle-title">
                                                     الإدارة المركزية لأقاليم الهيئة
@@ -118,8 +118,8 @@
                                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                                         <div class="toggle-header" style="background-color: var(--bs-gray-300);">
                                                             <div class="toggle-icon">
-                                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                                <i class="toggle-closed uil uil-minus-circle" style="display: none;">&nbsp;</i>
+                                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                                <i class="toggle-closed fas fa-minus-circle" style="display: none;">&nbsp;</i>
                                                             </div>
                                                             <div class="toggle-title">
                                                                 الإدارة العامة لإقليم القاهرة الكبرى
@@ -143,8 +143,8 @@
                                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                                         <div class="toggle-header" style="background-color: var(--bs-gray-300);">
                                                             <div class="toggle-icon">
-                                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                                <i class="toggle-closed uil uil-minus-circle" style="display: none;">&nbsp;</i>
+                                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                                <i class="toggle-closed fas fa-minus-circle" style="display: none;">&nbsp;</i>
                                                             </div>
                                                             <div class="toggle-title">
                                                                 الإدارة العامة لإقليم الدلتا
@@ -167,8 +167,8 @@
                                                     <div class="toggle mb-0 pt-3 ps-3 toggle-active">
                                                         <div class="toggle-header" style="background-color: var(--bs-gray-300);">
                                                             <div class="toggle-icon">
-                                                                <i class="toggle-open uil uil-plus-circle">&nbsp;</i>
-                                                                <i class="toggle-closed uil uil-minus-circle" style="display: none;">&nbsp;</i>
+                                                                <i class="toggle-open fas fa-plus-circle">&nbsp;</i>
+                                                                <i class="toggle-closed fas fa-minus-circle" style="display: none;">&nbsp;</i>
                                                             </div>
                                                             <div class="toggle-title">
                                                                 الإدارة العامة لإقليم الأسكندرية
