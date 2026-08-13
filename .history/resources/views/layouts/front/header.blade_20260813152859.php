@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet"> 
 
     <!-- Icon Font Stylesheet -->
-    <!-- <link href="/public/font/css/all.min.css" rel="stylesheet"> -->
+    <link href="/public/font/css/all.min.css" rel="stylesheet">
  
     <link href="/vendor/font-awesome/all.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">

@@ -13,7 +13,7 @@
 <script src="{{ URL::to('js/sb-admin-2.min.js') }}"></script>
 <script src="{{ URL::to('js/jquery-ui.min.js') }}"></script>
 <script src="{{ URL::to('js/custom.js') }}"></script>
-<script defer src="/vendor/alpinejs/alpinejs.min.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="{{ URL::to('vendor/jQuery-TE/jquery-te-1.4.0.min.js') }}"></script>
 
 @yield('js')

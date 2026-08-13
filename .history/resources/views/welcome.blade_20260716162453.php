@@ -7,7 +7,7 @@
         <title>الإدارة العامة لإدارة وتنمية المواهب</title>
 
         <!-- Fonts -->
-        <link href="/vendor/nunito/nunito.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
  <link href="{{ URL::to('css/normalize.css') }}" rel="stylesheet">
         <!-- Styles -->
 
