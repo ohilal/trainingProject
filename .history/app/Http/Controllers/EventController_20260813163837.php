@@ -16,7 +16,7 @@ class EventController extends Controller
     }
     public function show(Event $event) //type-hinting -- route model binding
     {
-        // $event = Event::findOrFail($event->id);
+        //  $event = Event::findOrFail($event->id);
         return view('contents.front.events.show', ['event' => $event]);
     }
    

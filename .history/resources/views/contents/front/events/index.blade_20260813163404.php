@@ -32,7 +32,7 @@
       </p>
     </div>
     <div class="card-footer"><a href="/front/events/{{ $event['id'] }}" class="btn btn-darkteal float-end">المزيد..</a>
-    <a href="/front/events/{{ $event->id  }}">ttttttttttttt</a>
+    <a href="{{ route('events.show',$event->id ) }}">ttttttttttttt</a>
 </div>
   </div>
 </div>

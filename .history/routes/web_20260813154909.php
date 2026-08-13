@@ -54,8 +54,7 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
     Route::get('/plans', [FrontCourseController::class, 'plans'])->name('plans');
     Route::get('/organizationStructure', [FrontController::class, 'organizationStructure'])->name('organizationStructure');
     Route::get('/events', [EventController::class, 'index'])->name('events');
-
-    Route::get('/events/{id}', [EventController::class, 'show']);
+    Route::get('/events/{id}', [EventController::class, 'show'])->name('event');
     
 });
 
