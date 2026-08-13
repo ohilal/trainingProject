@@ -9,7 +9,7 @@ class EventType extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'EventTypeID',
+        'ID',
         'eventName'
     ];
     public function event()

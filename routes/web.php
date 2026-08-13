@@ -16,6 +16,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Front\CourseController as FrontCourseController;
 use App\Http\Controllers\Front\FrontController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\learn\WorkoutController;
 use App\Http\Controllers\LogController;
@@ -52,7 +53,7 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
     Route::get('/course/{course_id}', [FrontCourseController::class, 'course'])->name('course');
     Route::get('/plans', [FrontCourseController::class, 'plans'])->name('plans');
     Route::get('/organizationStructure', [FrontController::class, 'organizationStructure'])->name('organizationStructure');
-    Route::get('/events', [FrontController::class, 'events'])->name('events');
+    Route::get('/events', [EventController::class, 'index'])->name('events');
 });
 
 

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
 
 class EventController extends Controller
 {
     public function index()
     {
-        return view('contents.front.events.index');
+        
+        $events = Event::orderBy('created_at','desc')->paginate(10);
+        return view('contents.front.events.index', ['events' => $events]);
+
     }
     public function show(Event $event) //type-hinting -- route model binding
     {
@@ -19,4 +23,6 @@ class EventController extends Controller
         $data = $request->all();
         $title= $data['title'];
     }
+    
+
 }

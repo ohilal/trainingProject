@@ -32,6 +32,10 @@ class FrontController extends Controller
     {
         return view('contents.front.organizationStructure.index');
     }
+    // public function events()
+    // {
+    //     return view('contents.front.events.index');
+    // }
 
     
 }
