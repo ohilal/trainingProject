@@ -3,13 +3,7 @@
 
 @section("content")
 <div class="space"></div>
-<div class="container-xxl py-5">
-    <div class="container py-5 px-lg-5">
-        <div class="wow fadeInUp" data-wow-delay="0.1s">
-            <p class=" text-secondary justify-content-center text-nowrap text-center"><span> الأنشطة والفاعاليات</span></p>
-            <h1 class="text-center mb-5">  حفلات تكريم </h1>
-        </div>
-  <div class="card mx-auto col-lg-6 col-md-8 col-sm-10 border-0">
+  <div class="card mx-auto col-lg-6 col-md-8 col-sm-10">
     <img class="card-img-top img-responsive" src="/course/{{$event->image}}" alt="Card image" >
 
     <div class="card-body ">
@@ -22,6 +16,5 @@
     </div>
 </div>
   </div>
- </div>
-
+ 
 @endsection

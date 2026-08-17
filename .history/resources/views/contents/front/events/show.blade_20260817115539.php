@@ -9,7 +9,7 @@
             <p class=" text-secondary justify-content-center text-nowrap text-center"><span> الأنشطة والفاعاليات</span></p>
             <h1 class="text-center mb-5">  حفلات تكريم </h1>
         </div>
-  <div class="card mx-auto col-lg-6 col-md-8 col-sm-10 border-0">
+  <div class="card mx-auto col-lg-6 col-md-8 col-sm-10">
     <img class="card-img-top img-responsive" src="/course/{{$event->image}}" alt="Card image" >
 
     <div class="card-body ">

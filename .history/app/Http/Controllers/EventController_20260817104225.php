@@ -20,14 +20,11 @@ class EventController extends Controller
     //    //$event = Event::findOrFail($event->id);
     //     return view('contents.front.events.show', ['event' => $event]);
     // }
-   public function show($id)
+   
+    public function show(Event $event) 
 {
-    $event = Event::findOrFail($id); // Variable name updated to match
-    
-    return view('contents.front.events.show', compact('event')); // Works perfectly
+    return view('contents.front.events.show', compact('event')); 
 }
-
-
      public function store(Request $request)
     {
         $data = $request->all();

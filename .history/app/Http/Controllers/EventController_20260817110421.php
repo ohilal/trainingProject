@@ -27,7 +27,10 @@ class EventController extends Controller
     return view('contents.front.events.show', compact('event')); // Works perfectly
 }
 
-
+//     public function show(Event $event) 
+// {
+//     return view('contents.front.events.show', compact('event')); 
+// }
      public function store(Request $request)
     {
         $data = $request->all();

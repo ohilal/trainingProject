@@ -20,14 +20,15 @@ class EventController extends Controller
     //    //$event = Event::findOrFail($event->id);
     //     return view('contents.front.events.show', ['event' => $event]);
     // }
-   public function show($id)
-{
-    $event = Event::findOrFail($id); // Variable name updated to match
-    
-    return view('contents.front.events.show', compact('event')); // Works perfectly
-}
+   
+     public function show(string $id): View
+    {
+        // Find the post by ID or throw a 404 error if not found
+        $post = Event::findOrFail($id); 
 
-
+        // Pass the data to the 'posts.show' Blade view
+        return view('contents.front.events.show', compact('event')); 
+    }
      public function store(Request $request)
     {
         $data = $request->all();

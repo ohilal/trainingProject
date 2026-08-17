@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
-use Illuminate\View\View;
 
 class EventController extends Controller
 {
@@ -20,14 +19,13 @@ class EventController extends Controller
     //    //$event = Event::findOrFail($event->id);
     //     return view('contents.front.events.show', ['event' => $event]);
     // }
-   public function show($id)
-{
-    $event = Event::findOrFail($id); // Variable name updated to match
-    
-    return view('contents.front.events.show', compact('event')); // Works perfectly
-}
-
-
+   
+     public function show(Event $event): View
+    {
+        return view('contents.front.events.show', [
+            'event' => $event
+        ]);
+    }
      public function store(Request $request)
     {
         $data = $request->all();
