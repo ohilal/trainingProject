@@ -72,7 +72,7 @@ class EventController extends Controller
         // $post->description = $description;
         // // $post->post_creator = $post_creator;
         // $post->save();
-        Event::create([
+        Post::create([
             'title'=>$title,
             'description'=>$description,
             'image'=>$image,

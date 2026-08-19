@@ -66,13 +66,13 @@ class EventController extends Controller
     $image= request()->image;
     $start_date= request()->start_date;
     $end_date= request()->end_date;
-    $event_type_id= request()->event_type_id;
+    $event_type_id= $request->event_type_id;
         // $post= new Post;
         // $post->title = $title;
         // $post->description = $description;
         // // $post->post_creator = $post_creator;
         // $post->save();
-        Event::create([
+        Post::create([
             'title'=>$title,
             'description'=>$description,
             'image'=>$image,

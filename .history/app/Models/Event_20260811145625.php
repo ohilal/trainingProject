@@ -15,13 +15,13 @@ class Event extends Model
         'image',
         'start_date',
         'end_date',
-        'event_type_id',
+        'eventTypeID',
         'imageFolder',
 
        
     ];
     public function event()
     {
-        return $this->belongsTo(EventType::class, 'event_type_id');
+        return $this->belongsTo(EventType::class, 'eventTypeID');
     }
 }

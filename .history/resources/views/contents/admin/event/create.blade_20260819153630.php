@@ -81,7 +81,7 @@
         <option value="">-- اختر نوع التكريم --</option>
         
         @foreach($eventTypes as $type)
-            <option value="{{ $type->id }}">
+            <option value="{{ $type->event_type_id }}">
                 {{ $type->eventName }} 
                 {{-- Change $type->name to whatever column holds the display text, e.g., $type->title --}}
             </option>

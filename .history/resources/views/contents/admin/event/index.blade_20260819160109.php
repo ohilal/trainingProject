@@ -21,7 +21,7 @@
             @endforeach
       </tbody>
 </table>
-  <!-- @foreach ($events as $event)
+  @foreach ($events as $event)
             
 <div class="col">
   <div class="card ">
@@ -32,8 +32,9 @@
            <i class="fa fa-calendar-alt text-muted"> </i> <small class="text-muted"> {{ $event['start_date'] }}   </small>
 
       <p class="card-text">
-    
-
+        <!-- {{ $event['description'] }} -->
+        <!-- {{ Illuminate\Support\Str::limit(strip_tags($event['description']), 100, '...') }} -->
+        {{ Illuminate\Support\Str::words(strip_tags($event['description']), 20, '...') }}
        
       </p>
     </div>
@@ -41,5 +42,5 @@
   </div>
 </div>
  @endforeach           
-      -->
+     
 @endsection

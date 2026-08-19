@@ -66,7 +66,7 @@
                     </div>
                    <div class="form-group row col-12"> 
                 <label for="main_image" class="col-form-label">  الصورة الرئيسية</label>
-                        <input name="image" type="file" class="form-control-file border col-lg-4" id="main_image"
+                        <input name="main_image" type="file" class="form-control-file border col-lg-4" id="main_image"
                             placeholder="الصورة الرئيسية" value="{{ $event->image ?? '' }}">
                         @error('main_image')
                             <span class="invalid-feedback" role="alert">
@@ -76,23 +76,13 @@
                     </div>
                      <div class="form-group row col-12"> 
                          <label for="eventType" class="col-form-label">   نوع الحدث</label> 
+                         <select  class="form-control col-lg-4" name="eventType" id="eventType" >
                            
-    <select name="event_type_id" id="event_type_id" class="form-control" required name="event_type_id">
-        <option value="">-- اختر نوع التكريم --</option>
-        
-        @foreach($eventTypes as $type)
-            <option value="{{ $type->id }}">
-                {{ $type->eventName }} 
-                {{-- Change $type->name to whatever column holds the display text, e.g., $type->title --}}
-            </option>
-        @endforeach
-        
-    </select>
-    
-    @error('event_type_id')
-        <span class="text-danger">{{ $message }}</span>
-    @enderror
-   
+                              <option selected>اختر نوع الحدث</option>
+  @foreach ($eventTypes as $type)
+    <option value="{{ $type->id }}">{{ $type->eventName }}</option>
+  @endforeach
+        </select>                
     </div>
                     <!-- SAVE BUTTON -->
                     <div class="form-group">

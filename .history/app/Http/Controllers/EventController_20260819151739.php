@@ -59,33 +59,10 @@ class EventController extends Controller
     {
         $this->authorize('event.create');
         Event::create($request->all());
-
-         $title= request()->title;
-    $description= request()->description;
-   
-    $image= request()->image;
-    $start_date= request()->start_date;
-    $end_date= request()->end_date;
-    $event_type_id= request()->event_type_id;
-        // $post= new Post;
-        // $post->title = $title;
-        // $post->description = $description;
-        // // $post->post_creator = $post_creator;
-        // $post->save();
-        Event::create([
-            'title'=>$title,
-            'description'=>$description,
-            'image'=>$image,
-            'start_date'=>$start_date,
-            'end_date'=>$end_date,
-            'event_type_id'=>$event_type_id,
-        ]
-   );
         // return redirect()
         //     ->route("event.index")
         //     ->with('success', __('تم إدخال الحدث بنجاح'));
             return redirect()->route('admin.event.index')->with('success', 'تم إدخال الحدث بنجاح');
     }
-
 
 }
