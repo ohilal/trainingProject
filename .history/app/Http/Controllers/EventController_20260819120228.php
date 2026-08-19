@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Illuminate\View\View;
-use App\Http\Requests\EventRequest;
 
 class EventController extends Controller
 {
@@ -34,24 +33,11 @@ class EventController extends Controller
         return view('contents.admin.event.create');
     }
 
-    //  public function store(Request $request)
-    // {
-    //     $data = $request->all();
-    //     $title= $data['title'];
-    // }
-      /**
-     * Store a newly created resource in storage.
-     *
-     * @param  EventRequest $request
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
-     */
-    public function store(EventRequest $request)
+     public function store(Request $request)
     {
-        $this->authorize('event.create');
-        Event::create($request->all());
-        return redirect()
-            ->route("event.index")
-            ->with('success', __('تم إدخال الحدث بنجاح'));
+        $data = $request->all();
+        $title= $data['title'];
     }
+    
 
 }

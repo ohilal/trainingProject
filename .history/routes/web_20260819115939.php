@@ -128,9 +128,9 @@ Route::prefix('panel')->middleware(['verified'])->group(function () {
     Route::resource('plan', PlanController::class);
     Route::resource('badges', BadgeController::class);
     //
-    Route::resource('event', EventController::class);
-  
-   // Route::get('/event/create', [EventController::class, 'create'])->middleware('verified') ->name('event.create');
+   // Route::resource('event', EventController::class);
+    Route::get('/event/create', [EventController::class,'create'])->name('event.create');
+
 
     // signle functions:
     Route::get('logs', [LogController::class, 'index'])->name('logs');
@@ -174,3 +174,6 @@ Route::prefix('panel')->middleware(['verified'])->group(function () {
     Route::resource('permission', PermissionController::class)->middleware('role:Super-Admin');
     Route::post('role/permission/{role}', [RoleController::class, 'permission'])->name("role_permissions");
 });
+
+Route::get('/admin/event/create', [EventController::class, 'create'])
+    ->name('event.create');

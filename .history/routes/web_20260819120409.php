@@ -128,9 +128,11 @@ Route::prefix('panel')->middleware(['verified'])->group(function () {
     Route::resource('plan', PlanController::class);
     Route::resource('badges', BadgeController::class);
     //
-    Route::resource('event', EventController::class);
+   // Route::resource('event', EventController::class);
   
-   // Route::get('/event/create', [EventController::class, 'create'])->middleware('verified') ->name('event.create');
+    Route::get('/admin/event/create', [EventController::class, 'create'])
+        ->middleware('verified')
+        ->name('event.create');
 
     // signle functions:
     Route::get('logs', [LogController::class, 'index'])->name('logs');
