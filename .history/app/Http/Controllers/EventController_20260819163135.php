@@ -60,7 +60,7 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $this->authorize('event.create');
-
+        Event::create($request->all());
 
  $validated = $request->validated();
 
@@ -70,9 +70,9 @@ class EventController extends Controller
         // Generate a unique name to prevent overwriting
         $imageName = Str::random(40) . '.' . $file->getClientOriginalExtension();
         
-        // Store the file in storage/app/public/files/events
-        $file->move(storage_path('app/public/files/events'), $imageName);
-     
+        // Store the file in storage/app/public/events
+        $file->move(storage_path('app/public/events'), $imageName);
+        
         // Save only the filename to the database
         $validated['image'] = $imageName;
     }

@@ -60,24 +60,32 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $this->authorize('event.create');
+        Event::create($request->all());
 
-
- $validated = $request->validated();
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        
-        // Generate a unique name to prevent overwriting
-        $imageName = Str::random(40) . '.' . $file->getClientOriginalExtension();
-        
-        // Store the file in storage/app/public/files/events
-        $file->move(storage_path('app/public/files/events'), $imageName);
-     
-        // Save only the filename to the database
-        $validated['image'] = $imageName;
-    }
-
-    Event::create($validated);
+//          $title= request()->title;
+//     $description= request()->description;
+   
+//     $image= request()->image;
+//     $start_date= request()->start_date;
+//     $end_date= request()->end_date;
+//     $event_type_id= request()->event_type_id;
+//         // $post= new Post;
+//         // $post->title = $title;
+//         // $post->description = $description;
+//         // // $post->post_creator = $post_creator;
+//         // $post->save();
+//         Event::create([
+//             'title'=>$title,
+//             'description'=>$description,
+//             'image'=>$image,
+//             'start_date'=>$start_date,
+//             'end_date'=>$end_date,
+//             'event_type_id'=>$event_type_id,
+//         ]
+//    );
+        // return redirect()
+        //     ->route("event.index")
+        //     ->with('success', __('تم إدخال الحدث بنجاح'));
             return redirect()->route('admin.event.index')->with('success', 'تم إدخال الحدث بنجاح');
     }
 
