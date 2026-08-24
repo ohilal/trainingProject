@@ -1,0 +1,47 @@
+
+@extends('layouts.admin')
+
+
+@section("content")
+<table class="table table-reponsive table-striped">
+    <thead>
+      <tr>
+        <th>العنوان</th>
+        <th>تاريخ الحدث</th>
+        <th>الصورة الرئيسية</th>
+      </tr>
+    </thead>
+ <tbody> 
+    @foreach ($events as $event)
+      <tr>
+        <td>{{ $event['id'] }}">{{ $event['title'] }} </td>
+        <td>{{ $event['start_date'] }} </td>
+        <td>
+      <img src="{{ asset('storage/files/events/' . $event->image) }}" style="max-width: 50px; ">
+      </td>
+      </tr>           
+            @endforeach
+      </tbody>
+</table>
+  <!-- @foreach ($events as $event)
+            
+<div class="col">
+  <div class="card ">
+    <img class="card-img-top img-responsive" src="/course/file.png" alt="Card image" >
+
+    <div class="card-body ">
+            <div class="card-title h3" data-filter="{{ $event['id'] }}">{{ $event['title'] }} </div>
+           <i class="fa fa-calendar-alt text-muted"> </i> <small class="text-muted"> {{ $event['start_date'] }}   </small>
+
+      <p class="card-text">
+    
+
+       
+      </p>
+    </div>
+    
+  </div>
+</div>
+ @endforeach           
+      -->
+@endsection
