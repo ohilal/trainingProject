@@ -93,9 +93,36 @@ class EventController extends Controller
     // Update the event
     $event->update($validated);
 
-    return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح  ');
+    return redirect()->route('admin.event.index')->with('success', '  ');
+//////////////////////////
+    //     $this->authorize('event.edit');
+    //      $validated = $request->validated();
+    //      if ($request->hasFile('image')) {
+    //     $file = $request->file('image');
+        
+    //     // Generate a unique name to prevent overwriting
+    //     $imageName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        
+        
+            
+    //     // Define the destination path explicitly
+    //     $destinationPath = storage_path('app/public/files/events');
+        
+    //     // Create the directory if it doesn't exist
+    //     if (!File::exists($destinationPath)) {
+    //         File::makeDirectory($destinationPath, 0755, true, true);
+    //     }
+        
+    //     // Move the file physically
+    //     $file->move($destinationPath, $imageName);
+        
+    //     // Save only the filename to the database
+    //     $validated['image'] = $imageName;
+    // }
 
-   
+    // Event::create($validated);
+    //         return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح');
+
     }
     //  public function store(Request $request)
     // {

@@ -72,7 +72,7 @@
         <div class="mb-2">
             <img src="{{ asset('storage/files/events/' . $event->image) }}" 
                  alt="{{ $event->title }}" 
-                 style="max-width: 150px; max-height: 150px; object-fit: cover; border: 1px solid #ddd; padding: 5px;">
+                 style="max-width: 150px; max-height: 200px; object-fit: cover; border: 1px solid #ddd; padding: 5px;">
             <p class="text-muted small mt-1">اختر ملفاً جديداً لاستبدال الصورة الحالية.</p>
         </div>
     @endif
@@ -104,7 +104,7 @@
         <option value="">-- اختر نوع التكريم --</option>
           @foreach($eventTypes as $type)
         <option value="{{ $type->id }}" 
-                        {{ old('event_type_id', $event->event_type_id ?? '') == $type->id ? 'selected' : '' }}>
+            {{ old('event_type_id', $event->event_type_id) == $type->id ? 'selected' : '' }}>
             {{ $type->eventName }}
         </option>
     @endforeach

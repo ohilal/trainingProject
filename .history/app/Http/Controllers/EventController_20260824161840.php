@@ -67,35 +67,39 @@ class EventController extends Controller
 
     public function update(EventRequest $request, $id)
     {
-            $event = Event::findOrFail($id); // Find existing event
-    
-    // Validate
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'event_type_id' => 'required|exists:event_types,id',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        // ... other rules
-    ]);
-
-    // Handle Image Upload
-    if ($request->hasFile('image')) {
-        // Delete old image if exists
-        if ($event->image && File::exists(storage_path('app/public/files/events/' . $event->image))) {
-            File::delete(storage_path('app/public/files/events/' . $event->image));
+        ////
+        //  $this->authorize('department.edit');
+        // $this->service->update($request->all(), $department_id);
+        // return $this->service->redirect('warning');
+        ////
+        $this->authorize('event.edit');
+         $validated = $request->validated();
+         if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        
+        // Generate a unique name to prevent overwriting
+        $imageName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        
+        
+            
+        // Define the destination path explicitly
+        $destinationPath = storage_path('app/public/files/events');
+        
+        // Create the directory if it doesn't exist
+        if (!File::exists($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true, true);
         }
         
-        $file = $request->file('image');
-        $imageName = Str::random(40) . '.' . $file->getClientOriginalExtension();
-        $file->move(storage_path('app/public/files/events'), $imageName);
+        // Move the file physically
+        $file->move($destinationPath, $imageName);
+        
+        // Save only the filename to the database
         $validated['image'] = $imageName;
     }
 
-    // Update the event
-    $event->update($validated);
+    Event::create($validated);
+            return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح');
 
-    return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح  ');
-
-   
     }
     //  public function store(Request $request)
     // {

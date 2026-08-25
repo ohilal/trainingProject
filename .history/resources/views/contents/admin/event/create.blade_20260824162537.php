@@ -64,30 +64,7 @@
                             </span>
                         @enderror
                     </div>
-                    <div class="form-group row col-12"> 
-    <label for="image" class="col-form-label">الصورة الرئيسية</label>
-    
-    {{-- Display Current Image if Editing --}}
-    @if(isset($event) && $event->image)
-        <div class="mb-2">
-            <img src="{{ asset('storage/files/events/' . $event->image) }}" 
-                 alt="{{ $event->title }}" 
-                 style="max-width: 150px; max-height: 150px; object-fit: cover; border: 1px solid #ddd; padding: 5px;">
-            <p class="text-muted small mt-1">اختر ملفاً جديداً لاستبدال الصورة الحالية.</p>
-        </div>
-    @endif
-
-    {{-- File Input --}}
-    <input name="image" type="file" class="form-control-file border col-lg-4" id="image"
-        placeholder="الصورة الرئيسية">
-    
-    @error('image')
-        <span class="invalid-feedback d-block" role="alert">
-            {{ $message }}
-        </span>
-    @enderror
-</div>
-                   <!-- <div class="form-group row col-12"> 
+                   <div class="form-group row col-12"> 
                 <label for="main_image" class="col-form-label">  الصورة الرئيسية</label>
                         <input name="image" type="file" class="form-control-file border col-lg-4" id="image"
                             placeholder="الصورة الرئيسية" value="{{ $event->image ?? '' }}">
@@ -96,7 +73,7 @@
                                 {{ $message }}
                             </span>
                         @enderror
-                    </div> -->
+                    </div>
                      <div class="form-group row col-12"> 
                          <label for="eventType" class="col-form-label">   نوع الحدث</label> 
                            
@@ -104,7 +81,7 @@
         <option value="">-- اختر نوع التكريم --</option>
           @foreach($eventTypes as $type)
         <option value="{{ $type->id }}" 
-                        {{ old('event_type_id', $event->event_type_id ?? '') == $type->id ? 'selected' : '' }}>
+            {{ old('event_type_id', $event->event_type_id) == $type->id ? 'selected' : '' }}>
             {{ $type->eventName }}
         </option>
     @endforeach
@@ -126,7 +103,7 @@
     </div>
                     <!-- SAVE BUTTON -->
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary btn-user col-lg-2 btn-sm "
+                        <input type="submit" class="btn btn-primary btn-user btn-block btn-sm "
                             value="{{ __('حفظ') }}">
                     </div>
                 </form>

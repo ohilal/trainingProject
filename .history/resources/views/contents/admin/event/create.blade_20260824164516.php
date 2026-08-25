@@ -104,7 +104,7 @@
         <option value="">-- اختر نوع التكريم --</option>
           @foreach($eventTypes as $type)
         <option value="{{ $type->id }}" 
-                        {{ old('event_type_id', $event->event_type_id ?? '') == $type->id ? 'selected' : '' }}>
+            {{ old('event_type_id', $event->event_type_id) == $type->id ? 'selected' : '' }}>
             {{ $type->eventName }}
         </option>
     @endforeach

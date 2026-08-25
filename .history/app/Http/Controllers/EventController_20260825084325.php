@@ -94,7 +94,7 @@ class EventController extends Controller
     $event->update($validated);
 
     return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح  ');
-
+//////////////////////////
    
     }
     //  public function store(Request $request)
