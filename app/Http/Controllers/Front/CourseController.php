@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Services\Front\CourseServices;
 use App\Services\Front\HomeServices;
 use App\Models\Department;
+use App\Models\Course;
+use App\Models\Term;
 
 class CourseController extends Controller
 {
@@ -41,6 +43,15 @@ class CourseController extends Controller
         $courseCompactData = $this->courseService->getCourseInfo($id);
 
         return view('contents.front.courses.course', $courseCompactData);
+    }
+
+    public function termSessions(Course $course, Term $term)
+    {
+        abort_unless((int) $term->course_id === (int) $course->id, 404);
+
+        $term->load('Sessions');
+
+        return view('contents.front.courses.term-sessions', compact('course', 'term'));
     }
 
 

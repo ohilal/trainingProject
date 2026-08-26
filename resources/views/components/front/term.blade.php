@@ -6,6 +6,6 @@
         </div>
         <h5 class="mb-3">{{ $term->title }}</h5>
         <p class="m-0">{{ Str::words($term->description, 25, ' ...') }}</p>
-        <a class="btn btn-square" href=""><i class="fa fa-arrow-right"></i></a>
+        <a class="btn btn-square" href="{{ route('front.term.sessions', ['course' => $term->course_id, 'term' => $term->id]) }}" aria-label="{{ __('View sessions') }}"><i class="fa fa-arrow-right"></i></a>
     </div>
 </div>
