@@ -23,8 +23,7 @@
                             <h5 class="mb-2">{{ $session->title }}</h5>
 
                             @foreach ($session->Files as $file)
- 
-                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank" rel="noopener">
+                                <a href="{{ asset($file->file) }}" target="_blank" rel="noopener">
                                     <i class="fa fa-file me-1"></i>{{ $file->title }}
                                 </a>
                             @endforeach
