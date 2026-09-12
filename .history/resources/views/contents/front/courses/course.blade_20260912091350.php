@@ -18,10 +18,10 @@
             @empty
             @endforelse
         </div>
-       <div class="wow fadeInUp" data-wow-delay="0.3s">
+       <div class="wow fadeInUp" data-wow-delay="0.1s">
                     <h3 class="section-title text-secondary justify-content-center mt-2"><span></span>
                 {{ __('تفاصيل الدورة') }}
-                <span></span></h3> 
+                <span></span></p> 
          
           
            

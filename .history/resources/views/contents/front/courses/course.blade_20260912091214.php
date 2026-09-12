@@ -18,10 +18,10 @@
             @empty
             @endforelse
         </div>
-       <div class="wow fadeInUp" data-wow-delay="0.3s">
-                    <h3 class="section-title text-secondary justify-content-center mt-2"><span></span>
-                {{ __('تفاصيل الدورة') }}
-                <span></span></h3> 
+         <h3 class="text-center text-muted">تفاصيل الدورة</h3>
+                    <p class="section-title text-secondary justify-content-center"><span></span>
+                {{ __('Terms') }}
+                <span></span></p> 
          
           
            
@@ -36,7 +36,6 @@
                 <a href="{{ $course->link }}" class="btn btn-darkteal flex-end" target="_blank">رابط الدورة</a>
             
             
-        </div>
         </div>
         </div>
     </div>
