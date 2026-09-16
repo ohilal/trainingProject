@@ -12,7 +12,7 @@
             <h1>{{ $term->title }}</h1>
         </div>
 
-        <div class="row service-item col-lg-5 col-sm-12 g-4 rounded mx-auto justify-content-center">
+        <div class="row service-item col-g-4 mx-auto justify-content-center">
             @forelse ($term->Sessions as $session)
                 <div class="col-lg-6">
                     <div class=" d-flex align-items-center rounded p-4 h-100">

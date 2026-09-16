@@ -27,7 +27,7 @@
         </div>
         </div>
         </div>
-        <div class="wow fadeInUp" data-wow-delay="0.3s mt-2">
+        <div class="wow fadeInUp" data-wow-delay="0.3s ">
             <p class="section-title text-secondary justify-content-center"><span></span>
                 {{ __('أقسام الدورة التدريبية') }}
                 <span></span></p>

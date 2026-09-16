@@ -12,17 +12,15 @@
             <h1>{{ $term->title }}</h1>
         </div>
 
-        <div class="row service-item col-lg-5 col-sm-12 g-4 rounded mx-auto justify-content-center">
+        <div class="row g-4">
             @forelse ($term->Sessions as $session)
                 <div class="col-lg-6">
-                    <div class=" d-flex align-items-center rounded p-4 h-100">
+                    <div class="service-item d-flex align-items-center rounded p-4 h-100">
                         <div class="service-icon flex-shrink-0 me-3">
                             <i class="fa fa-book fa-2x"></i>
                         </div>
-
+                        <div>
                             </div>
-                            </div>
-                            <div class="col-lg-6">
                             <h5 class="mb-2">{{ $session->title }}</h5>
 
                             @foreach ($session->Files as $file)
