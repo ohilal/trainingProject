@@ -14,19 +14,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet"> 
 
     <!-- Icon Font Stylesheet -->
-    <link href="/public/font/css/all.min.css" rel="stylesheet">
+    <!-- <link href="/public/font/css/all.min.css" rel="stylesheet"> -->
  
     <link href="/vendor/font-awesome/all.min.css" rel="stylesheet">
     <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{{ URL::to('front/lib/animate/animate.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::to('front/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::to('/front/lib/animate/animate.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::to('/front/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ URL::to('front/lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
     {{-- <link href="{{ URL::to('front/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
-      <link href="{{ URL::to('front/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
+      <link href="{{ URL::to('/front/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
     <link href="{{ URL::to('front/css/style.css') }}" rel="stylesheet">
