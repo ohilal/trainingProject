@@ -23,12 +23,13 @@
             <i class="fas fa-fw fa-envelope"></i>
             <span>{{ __("الرسائل") }}</span></a>
     </li>
+    @can(menu.education)
      <li class="nav-item">
-        <a class="nav-link" href="{{ route('event.index') }}">
+        <a class="nav-link" href="{{ route('admin.event.index') }}">
             <i class="fas fa-fw fa-calendar"></i>
             <span>{{ __("الفعاليات") }}</span></a>
     </li>
-
+@en
 
     <!-- Divider -->
     <hr class="sidebar-divider">

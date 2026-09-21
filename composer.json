@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "awobaz/compoships": "^2.1",
+        "directorytree/ldaprecord-laravel": "^4.0",
         "doctrine/dbal": "^3.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -16,7 +17,7 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.8",
         "spatie/laravel-activitylog": "^4.4",
-        "spatie/laravel-permission": "^5.4"
+        "spatie/laravel-permission": "^6.25"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -67,6 +68,9 @@
         "preferred-install": "dist",
         "sort-packages": true        
     },
+    
+   
+
     "minimum-stability": "dev",
     "prefer-stable": true
 }

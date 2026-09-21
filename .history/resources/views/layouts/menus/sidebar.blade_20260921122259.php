@@ -23,6 +23,7 @@
             <i class="fas fa-fw fa-envelope"></i>
             <span>{{ __("الرسائل") }}</span></a>
     </li>
+    
      <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.event.index') }}">
             <i class="fas fa-fw fa-calendar"></i>
