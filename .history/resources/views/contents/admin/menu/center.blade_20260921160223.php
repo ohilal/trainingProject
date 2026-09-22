@@ -60,7 +60,7 @@
         <div class="card border-left-primary shadow">
             <div class="card-body">
                 <a href="{{ route('session.index') }}">
-                    <img class="card-img-top" src="{{ asset('img/admin/menu/sessions.png') }}" alt="{{ __('Sessions') }}">
+                    <img class="card-img-top" src="{{ asset('img/admin/menu/sessions.jpg') }}" alt="{{ __('Sessions') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -91,7 +91,7 @@
         <div class="card border-left-primary shadow">
             <div class="card-body">
                 <a href="{{ route('quiz.index') }}">
-                    <img class="card-img-top" src="{{ asset('img/admin/menu/quizNew.png') }}" alt="{{ __('Quiz') }}">
+                    <img class="card-img-top" src="{{ asset('img/admin/menu/quiz.png') }}" alt="{{ __('Quiz') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -106,7 +106,7 @@
         <div class="card border-left-primary shadow">
             <div class="card-body">
                 <a href="{{ route('question.index') }}">
-                    <img class="card-img-top" src="{{ asset('img/admin/menu/questionsNew.png') }}" alt="{{ __('Question') }}">
+                    <img class="card-img-top" src="{{ asset('img/admin/menu/question.png') }}" alt="{{ __('Question') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -132,7 +132,7 @@
         <div class="card">
             <div class="card-body">
                 <a href="{{ route('rubric.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/rubricNew.png') }}" alt="{{ __('rubric') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/rubric.png') }}" alt="{{ __('rubric') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -152,7 +152,7 @@
         <div class="card">
             <div class="card-body">
                 <a href="{{ route('feedback.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/feedbackNew.png') }}" alt="{{ __('feedback') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/feedback.png') }}" alt="{{ __('feedback') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -170,7 +170,7 @@
         <div class="card">
             <div class="card-body">
                 <a href="{{ route('file.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/folders.png') }}" alt="{{ __('file') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/file.png') }}" alt="{{ __('file') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -189,7 +189,7 @@
         <div class="card">
             <div class="card-body">
                 <a href="{{ route('document.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/documentNew.png') }}" alt="{{ __('Document') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/document.png') }}" alt="{{ __('Document') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -210,7 +210,7 @@
             <div class="card-body">
 
                 <a href="{{ route('badges.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badgeNew.png') }}" alt="{{ __('badges') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badge.png') }}" alt="{{ __('badges') }}">
                 </a>
 
             </div>

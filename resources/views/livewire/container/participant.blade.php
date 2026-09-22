@@ -13,7 +13,7 @@
                     {{ $participant->name }}
                 </button>
                 <button type="button" class="badge bg-info position-relative">
-                    {{ $participant->Role()->name }}
+                    {{ $participant->roles->first()?->name ?? 'No Role' }}
                 </button>
 
             </small>

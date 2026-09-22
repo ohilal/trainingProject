@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 class Item extends Component
 {
 
-    public string $title;
+    public string $title = '';
     public string $color = 'primary';
 
 
@@ -16,10 +16,10 @@ class Item extends Component
      *
      * @return void
      */
-    public function __construct(string $title, string $color = 'primary')
+    public function __construct(?string $title = null, string $color = 'primary')
     {
         $this->color = $color;
-        $this->title = $title;
+        $this->title = $title ?? '';
     }
 
     /**

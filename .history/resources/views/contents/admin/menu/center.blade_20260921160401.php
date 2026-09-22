@@ -189,7 +189,7 @@
         <div class="card">
             <div class="card-body">
                 <a href="{{ route('document.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/documentNew.png') }}" alt="{{ __('Document') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/document.png') }}" alt="{{ __('Document') }}">
                 </a>
             </div>
             <div class="card-footer text-center">
@@ -210,7 +210,7 @@
             <div class="card-body">
 
                 <a href="{{ route('badges.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badgeNew.png') }}" alt="{{ __('badges') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badge.png') }}" alt="{{ __('badges') }}">
                 </a>
 
             </div>

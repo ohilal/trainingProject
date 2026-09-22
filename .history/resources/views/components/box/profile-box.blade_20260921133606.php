@@ -11,7 +11,7 @@
     <div class="card-body">
 
         <div class="d-flex flex-column align-items-center text-center">
-            <img src="{{ $user->avatar ? URL::to('img/profiles/' . $user->avatar) : URL::to('img/undraw_profile.svg') }}" alt="{{ $user->name }}" class="rounded" width="150">
+            <img src="{{ URL::to('img/profiles/' {{ $user->av}}) }}" alt="{{ $user->name }}" class="rounded" width="150">
             <div class="mt-3 ">
                 <p class="text-secondary mb-1"><i class="fa fa-envelope"></i> {{ $user->email }}</p>
                 <div class="px-2 rounded mt-4 date "><i class="fa fa-clock"></i> <span class="join">Joined {{ $user->created_at }}</span> </div>

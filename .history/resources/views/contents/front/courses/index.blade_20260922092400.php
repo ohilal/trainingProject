@@ -10,7 +10,7 @@
     <div class="container py-5 px-lg-5">
         <div class="wow fadeInUp" data-wow-delay="0.1s">
 
-            <h1 class="text-center mb-5"> دورات  {{ $department?->title ?? 'الكل' }} </h1>
+            <h1 class="text-center mb-5"> دورات  {{ $department->title ?? 'الكل' }} </h1>
         </div>
         <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.3s">
             <div class="col-12 text-center">     
@@ -36,7 +36,7 @@
     </div>
 </div>  
 <hr/>
-<!-- <h1>Courses in {{ $department?->title }}</h1>
+<!-- <h1>Courses in {{ $department->title }}</h1>
 
 <div class="row g-3 portfolio-container">
     @forelse($courses as $course)

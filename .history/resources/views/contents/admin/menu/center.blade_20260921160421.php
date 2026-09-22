@@ -210,7 +210,7 @@
             <div class="card-body">
 
                 <a href="{{ route('badges.index') }}">
-                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badgeNew.png') }}" alt="{{ __('badges') }}">
+                    <img class="card-img-top img-circle" src="{{ asset('img/admin/menu/badge.png') }}" alt="{{ __('badges') }}">
                 </a>
 
             </div>
