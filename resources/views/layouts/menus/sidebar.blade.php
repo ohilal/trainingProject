@@ -23,13 +23,13 @@
             <i class="fas fa-fw fa-envelope"></i>
             <span>{{ __("الرسائل") }}</span></a>
     </li>
-    @can('menu.events')
+    @hasanyrole('Super-Admin|admin|supervisor')
      <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.event.index') }}">
             <i class="fas fa-fw fa-calendar"></i>
             <span>{{ __("الفعاليات") }}</span></a>
     </li>
-@endcan
+    @endhasanyrole
 
     <!-- Divider -->
     <hr class="sidebar-divider">

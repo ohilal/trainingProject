@@ -16,7 +16,7 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
-            <div class="text-center">
+            <div >
 
                 @if(isset($event))
                     <form class="user" method="POST" enctype="multipart/form-data" action="{{ route('event.update' , $event->id) }}">                    
@@ -28,7 +28,7 @@
                     @csrf
                     <div class="form-group row">
                         <div class="col-sm-6 mb-3 mb-sm-0">
-                            <input name="title" type="text" class="form-control form-control-user" id="title"
+                            <input name="title" type="text" class="form-control form-control-user text-center" id="title"
                                 placeholder="العنوان" value="{{ $event->title ?? '' }}">
                             @error('title')
                                 <span class="invalid-feedback" role="alert">
@@ -47,16 +47,19 @@
                         @enderror
                     </div>
         <div class="form-group row col-12">
-            <label for="" class="col-form-label">تاريخ الحدث</label>
-                        <input name="start_date" type="date" class="form-control col-lg-4 ml-5" id="start_date"
+            <div class="col-lg-6">   
+                <label for="" class="col-form-label">تاريخ الحدث</label>
+                        <input name="start_date" type="date" class="form-control col-lg-6 ml-5" id="start_date"
                             placeholder="تاريخ البداية" value="{{ $event->start_date ?? '' }}">
                         @error('start_date')
                             <span class="invalid-feedback" role="alert">
                                 {{ $message }}
                             </span>
                         @enderror
+                    </div>
+        <div class="col-lg-6">
                  <label for="" class="col-form-label">تاريخ انتهاء الحدث</label>
-                        <input name="end_date" type="date" class="form-control col-lg-4" id="end_date"
+                        <input name="end_date" type="date" class="form-control col-lg-6" id="end_date"
                             placeholder="تاريخ النهاية" value="{{ $event->end_date ?? '' }}">
                         @error('end_date')
                             <span class="invalid-feedback" role="alert">
@@ -64,7 +67,9 @@
                             </span>
                         @enderror
                     </div>
+                </div>
                     <div class="form-group row col-12"> 
+                        <div class="col-lg-6">
     <label for="image" class="col-form-label">الصورة الرئيسية</label>
     
     {{-- Display Current Image if Editing --}}
@@ -78,7 +83,7 @@
     @endif
 
     {{-- File Input --}}
-    <input name="image" type="file" class="form-control-file border col-lg-4" id="image"
+    <input name="image" type="file" class="form-control-file border col-lg-6" id="image"
         placeholder="الصورة الرئيسية">
     
     @error('image')
@@ -87,6 +92,7 @@
         </span>
     @enderror
 </div>
+
                    <!-- <div class="form-group row col-12"> 
                 <label for="main_image" class="col-form-label">  الصورة الرئيسية</label>
                         <input name="image" type="file" class="form-control-file border col-lg-4" id="image"
@@ -97,10 +103,10 @@
                             </span>
                         @enderror
                     </div> -->
-                     <div class="form-group row col-12"> 
+                     <div class="form-group  col-lg-6"> 
                          <label for="eventType" class="col-form-label">   نوع الحدث</label> 
                            
-    <select name="event_type_id" id="event_type_id" class="form-control col-lg-4" required name="event_type_id">
+    <select name="event_type_id" id="event_type_id" class="form-control col-lg-6" required name="event_type_id">
         <option value="">-- اختر نوع التكريم --</option>
           @foreach($eventTypes as $type)
         <option value="{{ $type->id }}" 
@@ -123,7 +129,7 @@
         <span class="text-danger">{{ $message }}</span>
     @enderror
    
-    </div>
+    </div></div>
           {{-- ================= GALLERY (Lightbox2) ================= --}}
 	                    <div class="form-group row col-12 mt-4">
                         <label for="gallery" class="col-form-label">معرض الصور</label>
@@ -213,17 +219,19 @@
 	        if (!confirm('هل أنت متأكد من حذف هذه الصورة؟')) return;
 	
 	        $.ajax({
-            url: "{{ url('event-image') }}/" + id,
-            method: 'POST',
-            data: {
-                _method: 'DELETE',
-                _token: '{{ csrf_token() }}'
-            },
+	            url: '{{ route("event.image.destroy", ":id") }}'.replace(':id', id),
+	            type: 'POST',
+	            data: { _method: 'DELETE', _token: '{{ csrf_token() }}' },
+	            dataType: 'json',
             success: function () {
                 $('#gallery-item-' + id).remove();
-            },
-            error: function () {
-	                alert('تعذر حذف الصورة');
+	            },
+	            error: function (xhr) {
+	                if (xhr.status === 419 || xhr.status === 401) {
+	                    alert('انتهت صلاحية الجلسة، يرجى تحديث الصفحة والمحاولة مرة أخرى');
+                } else {
+	                    alert('تعذر حذف الصورة (خطأ ' + xhr.status + ')');
+	                }
 	            }
 	        });
 	    });

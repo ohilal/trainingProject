@@ -179,8 +179,22 @@ class EventController extends Controller
             ;}
            
     }
-
+ public function destroyImage($id)
+	    {
+	        $this->authorize('event.edit');
+	
+	        $image = EventImage::findOrFail($id);
+	        $path = storage_path('app/public/files/events/' . $image->image);
+	        if (File::exists($path)) {
+	            File::delete($path);
+	        }
+	        $image->delete();
+	
+	        return response()->json(['success' => true]);
+	    }
 }
  
-
+ 
+	
+	
   #  return view('contents.front.events.show', compact('event')); // Works perfectly

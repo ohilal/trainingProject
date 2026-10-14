@@ -12,22 +12,17 @@
             <h1>{{ $term->title }}</h1>
         </div>
 
-        <div class="row service-item col-lg-5 col-sm-12 g-4 rounded mx-auto justify-content-center">
+        <div class="row g-4 justify-content-center">
             @forelse ($term->Sessions as $session)
-                <div class="col-lg-6">
-                    <div class=" d-flex align-items-center rounded p-4 h-100">
-                        <div class="service-icon flex-shrink-0 me-3">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item d-flex flex-column text-center rounded h-100">
+                        <div class="service-icon flex-shrink-0">
                             <i class="fa fa-book fa-2x"></i>
                         </div>
-
-                            </div>
-                            </div>
-                            <div class="col-lg-6">
-                            <h5 class="mb-2">{{ $session->title }}</h5>
-
+                        <h5 class="mb-3">{{ $session->title }}</h5>
+                        <div class="d-flex flex-column gap-2 text-start">
                             @foreach ($session->Files as $file)
- 
-                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank" rel="noopener" class="white">
+                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank" rel="noopener" class="white text-decoration-none">
                                     <i class="fa fa-file me-1"></i>{{ $file->title }}
                                 </a>
                             @endforeach

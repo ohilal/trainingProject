@@ -3,6 +3,7 @@
 namespace Tests\Feature\TDD;
 
 use App\Http\Requests\FileRequest;
+use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\BaseTest;
@@ -70,6 +71,38 @@ class FileManagerTest extends BaseTest
         Storage::disk('public')->put('avatar.txt', '');
         $this->signIn();
         $this->update();
+    }
+
+    public function test_update_changes_title_and_description_with_replacement_file()
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('files/original.txt', 'original');
+        Storage::disk('public')->put('files/replacement.txt', 'replacement');
+
+        $file = File::create([
+            'title' => 'Original title',
+            'description' => 'Original description',
+            'file' => 'files/original.txt',
+            'file_size' => 8,
+            'file_type' => 'txt',
+        ]);
+
+        $this->signIn();
+
+        $this->patch(route('file.update', $file->id), [
+            'title' => 'Updated title',
+            'description' => 'Updated description',
+            'file' => 'files/replacement.txt',
+        ])->assertRedirect(route('file.index'));
+
+        $this->assertDatabaseHas('files', [
+            'id' => $file->id,
+            'title' => 'Updated title',
+            'description' => 'Updated description',
+            'file' => 'files/replacement.txt',
+        ]);
+        Storage::disk('public')->assertMissing('files/original.txt');
+        Storage::disk('public')->assertExists('files/replacement.txt');
     }
 
 

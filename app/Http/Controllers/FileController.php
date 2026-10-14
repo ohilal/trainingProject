@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FileRequest;
 use App\Models\File;
-use App\Traits\UploadFiles;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 
 class FileController extends Controller
 {
-    use UploadFiles;
     /**
      * Display a listing of the resource.
      *
@@ -44,7 +43,14 @@ class FileController extends Controller
     {
 
         $this->authorize('file.create');
-        File::create($this->setData($request));
+        $fileData = $this->getFileData($request->input('file'));
+        if ($fileData === null) {
+            throw ValidationException::withMessages([
+                'file' => __('The selected file does not exist.'),
+            ]);
+        }
+
+        File::create(array_merge($request->only(['title', 'description']), $fileData));
         return redirect()
             ->route("file.index")
             ->with('success', __('file created successfully'));
@@ -52,26 +58,23 @@ class FileController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Get metadata for a file stored on the public disk.
      *
-     * @param  mixed $request
-     * @return array
+     * @param  string $filePath
+     * @return array|null
      */
-    private function setData($request)
+    private function getFileData(string $filePath): ?array
     {
-        
-        if (Storage::exists('public/' . $request->file)) {
-            $path = Storage::path('public/' . $request->file);
-            return [
-                'title' => $request->title,
-                'description' => $request->description,
-                'file' => $request->file,
-                'file_size' => Storage::disk('public')->size($request->file),
-                'file_type' => pathinfo($path, PATHINFO_EXTENSION)
-            ];
+        $disk = Storage::disk('public');
+        if (!$disk->exists($filePath)) {
+            return null;
         }
 
-        return [];
+        return [
+            'file' => $filePath,
+            'file_size' => $disk->size($filePath),
+            'file_type' => pathinfo($disk->path($filePath), PATHINFO_EXTENSION),
+        ];
     }
 
     /**
@@ -98,8 +101,19 @@ class FileController extends Controller
     public function update(FileRequest $request, File $file)
     {
         $this->authorize('file.edit');
-        $this->delete($file->file); // remove old file from storage
-        $file->update($this->setData($request));
+        $data = $request->only(['title', 'description']);
+        $replacementFileData = $this->getFileData($request->input('file'));
+        if ($replacementFileData !== null) {
+            $data = array_merge($data, $replacementFileData);
+        }
+
+        $oldFilePath = $file->file;
+        $file->update($data);
+
+        if (isset($replacementFileData['file']) && $replacementFileData['file'] !== $oldFilePath) {
+            Storage::disk('public')->delete($oldFilePath);
+        }
+
         return redirect()
             ->route("file.index")
             ->with('warning', __('item updated successfully'));
@@ -114,7 +128,7 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         $this->authorize('file.delete');
-        $this->delete($file->file); // remove file from storage
+        Storage::disk('public')->delete($file->file);
         $file->delete();
         return redirect()
             ->route("file.index")

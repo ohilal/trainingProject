@@ -74,7 +74,7 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
 | Web Routes for learner access
 |--------------------------------------------------------------------------
 */
-Route::prefix('learn')->middleware(['verified'])->group(function () {
+Route::prefix('learn')->group(function () {
 
     Route::get('/task/{participant}/{sessionable}', [WorkoutController::class, 'task'])->name('taskLearner');
     Route::post('/task/{participant}/{sessionable}', [WorkoutController::class, 'prepared'])->name('taskLearnerPrepared');
@@ -94,7 +94,7 @@ Route::prefix('learn')->middleware(['verified'])->group(function () {
 | Web Routes for mentors and super-visor access
 |--------------------------------------------------------------------------
 */
-Route::prefix('mentor')->middleware(['verified'])->group(function () {
+Route::prefix('mentor')->group(function () {
 
     Route::get('/learners', [MyLearnerController::class, 'myLearners'])->name('myLearners');
     Route::get('/learner/{user}', [ParticipantController::class, 'participantTerms'])->name('learnerShowTerms');
@@ -111,7 +111,7 @@ Route::prefix('mentor')->middleware(['verified'])->group(function () {
 | Web Routes for only Admin Access
 |--------------------------------------------------------------------------
 */
-Route::prefix('panel')->middleware(['verified'])->group(function () {
+Route::prefix('panel')->group(function () {
 
     // Admin Menu
     Route::get('/menu/education', [CourseManagmentController::class, 'courses'])->name('adminMenuCourse');
@@ -142,7 +142,7 @@ Route::prefix('panel')->middleware(['verified'])->group(function () {
     Route::delete('/event-image/{id}', [EventController::class, 'destroyImage'])->name('event.image.destroy');
    // Route::get('/event/create', [EventController::class, 'create'])->middleware('verified') ->name('event.create');
 // Delete a single gallery image from the event form (lightbox)
-
+    Route::delete('/event-image/{id}', [EventController::class, 'destroyImage']) ->middleware('can:event.edit') ->name('event.image.destroy');
 
     // signle functions:
     Route::get('logs', [LogController::class, 'index'])->name('logs');

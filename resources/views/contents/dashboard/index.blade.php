@@ -9,7 +9,7 @@
     @can('course.index')
     <div class="card">
         <div class="card-header">
-            <h3>@lang('Manage Course')</h3>
+            <h3>@lang('إعدادات الدورات التدريبية')</h3>
         </div>
     </div>
     <div class="row mt-4 mb-4">
@@ -22,8 +22,8 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('department.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                        {{ __('Department') }}
+                    <a href="{{ route('department.index') }}" class="font-weight-bold text-gray-800 h5">
+                        {{ __('التصنيف') }}
                     </a>
                 </div>
             </div>
@@ -37,8 +37,8 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('course.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                        {{ __('Course') }}
+                    <a href="{{ route('course.index') }}" class="font-weight-bold text-gray-800 h5">
+                        {{ __('الدورات') }}
                     </a>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('term.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('term.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('terms') }}
                     </a>
                 </div>
@@ -67,7 +67,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('session.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('session.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('Sessions') }}
                     </a>
                 </div>
@@ -82,7 +82,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3>@lang('Manage Assessment')</h3>
+            <h3>@lang('إعدادات التقييم')</h3>
         </div>
     </div>
 
@@ -98,8 +98,8 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('quiz.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                        {{ __('Quiz') }}
+                    <a href="{{ route('quiz.index') }}" class="font-weight-bold text-gray-800 h5">
+                        {{ __('الاختبارات') }}
                     </a>
                 </div>
             </div>
@@ -113,8 +113,8 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('question.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
-                        {{ __('Question') }}
+                    <a href="{{ route('question.index') }}" class="font-weight-bold text-gray-800 h5">
+                        {{ __('الأسئلة') }}
                     </a>
                 </div>
             </div>
@@ -124,7 +124,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3>@lang('Manage Plugins')</h3>
+            <h3>@lang('إعدادات أخرى ')</h3>
         </div>
     </div>
     @endcan
@@ -139,7 +139,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('rubric.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('rubric.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('rubric') }}
                     </a>
                 </div>
@@ -159,7 +159,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('feedback.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('feedback.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('feedback') }}
                     </a>
                 </div>
@@ -177,7 +177,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('file.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('file.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('Files') }}
                     </a>
                 </div>
@@ -196,7 +196,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('document.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('document.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('document') }}
                     </a>
                 </div>
@@ -218,7 +218,7 @@
 
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('badges.index') }}" class="font-weight-bold text-gray-800 text-uppercase">
+                    <a href="{{ route('badges.index') }}" class="font-weight-bold text-gray-800 h5">
                         {{ __('badges') }}
                     </a>
                 </div>
