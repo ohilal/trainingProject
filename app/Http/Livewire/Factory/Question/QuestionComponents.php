@@ -54,14 +54,15 @@ class QuestionComponents extends Component
 
         $questionObject = QuestionFactory::build($questionType);
         $questionObject->setQuizId($this->quiz->id ?? 0);
-        $questionObject->store([
-            'id' => isset($this->question->id) ? $this->question->id  : null
-        ], [
-            'title' => $this->title,
-            'question_body' => $this->question_body,
-            'answer' => $this->makeAnswerJson(),
-            'question_type_id' => $this->questionTypeId
-        ]);
+        $questionObject->store(
+            isset($this->question->id) ? ['id' => $this->question->id] : null,
+            [
+                'title' => $this->title,
+                'question_body' => $this->question_body,
+                'answer' => $this->makeAnswerJson(),
+                'question_type_id' => $this->questionTypeId
+            ]
+        );
 
         if (isset($this->quiz->id)) {
             return redirect()->to(route('quiz.show', $this->quiz->id));

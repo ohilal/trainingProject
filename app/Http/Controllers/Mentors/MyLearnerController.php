@@ -17,7 +17,12 @@ class MyLearnerController extends Controller
     public function myLearners()
     {
 
-        $participants = Participant::select('user_id')->Learners()->groupby('user_id')->paginate();
+        // $participants = Participant::select('user_id')->Learners()->groupby('user_id')->paginate();
+           $participants = Participant::with('User')
+            ->select('user_id')
+            ->Learners()
+            ->groupby('user_id')
+            ->paginate();
 
         return view('contents.mentors.myLearners.myLearnersIndex', compact(
             'participants'

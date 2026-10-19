@@ -35,9 +35,6 @@
                         <i class="fas fa-plus"></i>
                     </span>
             </button>
-            
-            </form>
-
         </div>
         <div class="card-footer">
             <button wire:click.prevent="store" class="btn btn-primary btn-icon-split">
@@ -48,7 +45,7 @@
             </button>
         </div>
     </div>
-    <form>
+
     
 
 

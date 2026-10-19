@@ -44,6 +44,10 @@ trait WorkoutViewRender
         if (!empty($this->quiz)) {
             $this->quiz->Questions()->create($attributes, ['order' => $this->quiz->Questions()->max('order') + 1]);
         } else {
+            if (empty($ids)) {
+                return Question::create($attributes);
+            }
+
             return Question::updateOrCreate($ids, $attributes);
         }
     }

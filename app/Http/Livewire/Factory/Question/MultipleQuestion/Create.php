@@ -17,6 +17,29 @@ class Create extends QuestionComponents
         }
     }
 
+    public function addNewAnswer(): void
+    {
+        parent::addNewAnswer();
+        $this->correctAnswer[] = '';
+    }
+
+    public function removeAnswer($index): void
+    {
+        $selectedAnswers = [];
+        foreach ($this->answers as $answerIndex => $answer) {
+            if ((int) $answerIndex !== (int) $index) {
+                $selectedAnswers[] = ($this->correctAnswer[$answerIndex] ?? null) === 'answer-' . $answerIndex;
+            }
+        }
+
+        parent::removeAnswer($index);
+
+        $this->correctAnswer = [];
+        foreach ($selectedAnswers as $answerIndex => $isSelected) {
+            $this->correctAnswer[$answerIndex] = $isSelected ? 'answer-' . $answerIndex : '';
+        }
+    }
+
     /**
      * render
      *

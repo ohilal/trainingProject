@@ -16,7 +16,7 @@
                 <textarea class="form-control" id="descriptionofquestion" wire:model="question_body"></textarea>
             </div>
             @forelse($answers as $index => $answer)
-            <div class="form-group">
+            <div class="form-group" wire:key="multiple-answer-{{ $index }}">
             <label for="answer{{ $index }}">answer {{ $loop->iteration }}</label>
             <div class="row">
                 <div class="col-11">
@@ -38,9 +38,6 @@
                         <i class="fas fa-plus"></i>
                     </span>
             </button>
-            
-            </form>
-
         </div>
         <div class="card-footer">
             <button wire:click.prevent="store" class="btn btn-primary btn-icon-split">
@@ -51,9 +48,5 @@
             </button>
         </div>
     </div>
-    <form>
-    
-
-
     @include('livewire.factory.question.multiple-question.review')
 </div>

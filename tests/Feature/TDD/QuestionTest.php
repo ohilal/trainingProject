@@ -9,6 +9,7 @@ use App\Http\Livewire\Factory\Question\ShortAnswerQuestion\Create as ShortAnswer
 use App\Http\Livewire\Factory\Question\TestQuestion\Create;
 use App\Http\Livewire\Factory\Question\TrueFalseQuestion\Create as TrueFalseQuestionCreate;
 use App\Http\Livewire\Factory\Question\UploadFileQuestion\Create as UploadFileQuestionCreate;
+use App\Http\Livewire\Factory\Render;
 use App\Models\Question;
 use Livewire\Livewire;
 use Tests\BaseTest;
@@ -112,6 +113,32 @@ class QuestionTest extends BaseTest
             ->call('store');
 
         $this->assertTrue(Question::whereTitle('multiple A1')->exists());
+    }
+
+    public function test_multiple_question_can_add_an_option()
+    {
+        Livewire::test(MultipleQuestionCreate::class)
+            ->set('title', 'multiple with extra option')
+            ->set('question_body', 'multiple option question body')
+            ->set('questionTypeId', 3)
+            ->call('addNewAnswer')
+            ->assertSet('answers.4', '')
+            ->assertSee('answer 5')
+            ->set('answers.4', 'Extra option')
+            ->call('store');
+
+        $question = Question::whereTitle('multiple with extra option')->firstOrFail();
+        $answerData = json_decode($question->answer, true);
+
+        $this->assertSame('Extra option', $answerData['answers'][4]);
+    }
+
+    public function test_selecting_question_type_renders_its_form()
+    {
+        Livewire::test(Render::class)
+            ->set('questionTypeId', 3)
+            ->call('selectQuestionType')
+            ->assertSee('question multiple:');
     }
 
     /**

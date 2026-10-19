@@ -14,7 +14,7 @@
                 @forelse ($term->Sessions as $session)
                     
                 <x-box.session-item
-                :title="$session->title" :color="'success'">
+                 :title="$session->title ?: 'Session #' . $session->id" :color="'success'">
                 
 
                 @if(Auth::user()->hasRole('Super-Admin') || Auth::user()->hasAnyPermission(['term.edit' , 'session.edit']))
@@ -35,7 +35,7 @@
                     {{ route('deleteSessionAsTerm' ,['term' => $term->id, 'session' => $session->id ]) }}
                 @endslot
                 
-                @endcan
+                @endif
                 
                 
                 <small>
@@ -47,7 +47,7 @@
                  
                 </small>
                
-                </x-box.item>
+                </x-box.session-item>
 
                 @empty
                     
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        @endcan
+         @endif
 
     </div>
 </div>

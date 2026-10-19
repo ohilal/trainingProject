@@ -91,7 +91,12 @@ class EventController extends Controller
     }
 
     // Update the event
+    unset($validated['gallery']);
     $event->update($validated);
+
+    if ($request->hasFile('gallery')) {
+        $this->saveGalleryImages($request->file('gallery'), $event->id);
+    }
 
     return redirect()->route('admin.event.index')->with('success', 'تم تحديث الفعالية بنجاح  ');
 
@@ -143,32 +148,29 @@ class EventController extends Controller
         $validated['image'] = $imageName;
     }
 
-    Event::create($validated);
+    unset($validated['gallery']);
+    $event = Event::create($validated);
       // Save gallery images (lightbox)
-	        $lastEvent = Event::latest('id')->first();
 
-         if ($request->hasFile('gallery')) {
-
-  	            $this->saveGalleryImages($request->file('gallery'), $lastEvent->id);
-
-  	        }
+        if ($request->hasFile('gallery')) {
+            $this->saveGalleryImages($request->file('gallery'), $event->id);
+        }
             return redirect()->route('admin.event.index')->with('success', 'تم إدخال الحدث بنجاح');
     }
     protected function saveGalleryImages(array $files, int $eventId): void
-	    {
-	        $destinationPath = storage_path('app/public/files/events');
-	        if (!File::exists($destinationPath)) {
-	            File::makeDirectory($destinationPath, 0755, true, true);
-	        }
-     foreach ($files as $file) {
-	            $imageName = Str::random(30) . '.' . $file->getClientOriginalExtension();
-	            $file->move($destinationPath, $imageName);
-	            EventImage::create([
-	                'event_id' => $eventId,
-	                'image'    => $imageName,
+    {
+        foreach ($files as $file) {
+            $imageName = Str::random(30) . '.' . $file->getClientOriginalExtension();
+            if (!Storage::disk('public')->putFileAs('files/events', $file, $imageName)) {
+                throw new \RuntimeException('Unable to store event gallery image.');
+            }
+
+            EventImage::create([
+                'event_id' => $eventId,
+                'image' => $imageName,
             ]);
-	        }
-	    }
+        }
+    }
  public function destroy(int $id)
     {
         $this->authorize('event.delete');

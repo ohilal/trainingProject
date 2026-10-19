@@ -5,7 +5,7 @@
 
         @forelse ($term->Participants as $participant)
 
-        <x-box.item :title="$participant->email">
+        <x-box.item :title="$participant->email ?: ($participant->username ?: ($participant->name ?: 'User #' . $participant->id))">
 
             <small>
 
@@ -26,8 +26,7 @@
             </small>
             @endslot
 
-
-            @endcan
+            @endif
         </x-box.item>
 
         @empty
@@ -51,7 +50,7 @@
 
             @forelse ($users as $user)
 
-            <x-box.participanet-item :title="$user->name">
+            <x-box.participanet-item :title="$user->name ?: ($user->email ?: 'User #' . $user->id)">
 
                 @slot('theme')
                 {{ 'bg-dark' }}
@@ -79,7 +78,7 @@
 
 
 
-                </x-box.item>
+                </x-box.participanet-item>
 
 
                 @empty

@@ -28,9 +28,6 @@
             </div>
             @empty 
             @endforelse
-            
-            </form>
-
         </div>
         <div class="card-footer">
             <button wire:click.prevent="store" class="btn btn-primary btn-icon-split">
@@ -41,9 +38,5 @@
             </button>
         </div>
     </div>
-    <form>
-    
-
-
     @include('livewire.factory.question.true-false-question.review')
 </div>

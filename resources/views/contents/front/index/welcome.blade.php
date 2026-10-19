@@ -281,9 +281,9 @@
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="team-item bg-light rounded">
                     <div class="text-center border-bottom p-4">
-                        <img class="img-fluid rounded-circle mb-4" src="front/img/team-1.jpg" alt="">
-                        <h5>John Doe</h5>
-                        <span>Adults Supervisor</span>
+                        <img class="img-fluid rounded-circle mb-4" src="front/img/drDiaa.jpg" alt="">
+                        <h5> د. ضياء حلمى الفقى</h5>
+                        <span>رئيس الاتحاد العربي للتدريب</span>
                     </div>
                     <div class="d-flex justify-content-center p-4">
                         <a class="btn btn-square mx-1" href=""><i class="fab fa-facebook-f"></i></a>

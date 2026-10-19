@@ -51,10 +51,53 @@ class WorkoutController extends Controller
      */
     public function completedAndNext(Workout $workout)
     {
-        if ($workout->is_completed == 0)
-            $workout->Completed();
+        if (!$workout->is_completed) {
+            $workout->update([
+                'is_completed' => 1,
+                'score' => 100,
+                'date_get_score' => now()->toDateString(),
+            ]);
+        }
 
-        return redirect()->back();
+        $sessionable = Sessionable::findOrFail($workout->sessionable_id);
+        $participant = Participant::findOrFail($workout->participant_id);
+
+        $sessionables = Sessionable::where('session_id', $sessionable->session_id)
+            ->orderBy('order')
+            ->orderBy('id')
+            ->get();
+        $currentSessionableIndex = $sessionables->search(function ($item) use ($sessionable) {
+            return (int) $item->id === (int) $sessionable->id;
+        });
+
+        if ($currentSessionableIndex !== false && $sessionables->has($currentSessionableIndex + 1)) {
+            $nextSessionable = $sessionables->get($currentSessionableIndex + 1);
+
+            return redirect()->route('taskLearner', [
+                'participant' => $participant->id,
+                'sessionable' => $nextSessionable->id,
+            ]);
+        }
+
+        $sessions = $participant->Term->Sessions;
+        $currentSessionIndex = $sessions->search(function ($session) use ($sessionable) {
+            return (int) $session->id === (int) $sessionable->session_id;
+        });
+
+        if ($currentSessionIndex !== false) {
+            foreach ($sessions->slice($currentSessionIndex + 1) as $nextSession) {
+                $nextSessionable = $nextSession->Related->first();
+
+                if ($nextSessionable) {
+                    return redirect()->route('taskLearner', [
+                        'participant' => $participant->id,
+                        'sessionable' => $nextSessionable->id,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('learningCourse', ['participant' => $participant->id]);
     }
 
     /**

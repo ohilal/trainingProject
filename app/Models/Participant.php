@@ -21,20 +21,24 @@ class Participant extends Pivot
      * scopeLearners
      *
      * @param  Builder $builder
-     * @return Builder|void|null
+     * @return Builder
      */
     public function scopeLearners(Builder $builder)
     {
-        $user_id = auth()->user()->id;
-        if (!auth()->user()->hasRole(['Super-Admin'])) {
-            return $builder
-                ->where(
-                    function ($q) use ($user_id) {
-                        $q->where('role_id', 4);
-                        $q->whereIn('term_id',  $this->select('term_id')->where('user_id', $user_id));
-                    }
-                );
+        $user = auth()->user();
+        $builder->where(function (Builder $query) {
+            $query->where('role_id', 4)
+                ->orWhereIn('user_id', User::whereHas('roles', function (Builder $roles) {
+                    $roles->where('roles.id', 4);
+                })->select('users.id'));
+                
+        });
+
+        if (!$user->hasRole(['Super-Admin'])) {
+            $builder->whereIn('term_id', $this->newQuery()->select('term_id')->where('user_id', $user->id));
         }
+
+        return $builder;
     }
 
     public function User(): HasOne

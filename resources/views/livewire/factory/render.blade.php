@@ -39,6 +39,6 @@
         'question' => $question,
         'quiz' => $quiz
         ]
-      , key($component))
+      , 'question-form-' . $component)
     @endif
 </div>

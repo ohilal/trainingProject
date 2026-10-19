@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12 mb-2">
             <div class="card border-left-{{ $color}} bg-light shadow">
-                <div class="card-body p-2 text-left">
+                <div class="card-body p-2 text-right">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-uppercase mb-1">
