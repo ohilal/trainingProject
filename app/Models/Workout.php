@@ -49,6 +49,6 @@ class Workout extends Model
 
     public function Participant(): HasOne
     {
-        return $this->hasOne(Participant::class);
+        return $this->hasOne(Participant::class, 'id', 'participant_id');
     }
 }

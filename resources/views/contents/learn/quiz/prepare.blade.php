@@ -23,9 +23,9 @@
 
                 <p>{{ $model->description }}</p>
 
-                <p>@lang('Min Score:') {{ $model->min_pass_score }}</p>
+                <p>@lang('الحد الأدنى للنجاح:') <span class="badge rounded-pill bg-primary h3">{{ $model->min_pass_score }}</span></p>
                 @if($model->duration > 0)
-                <p>@lang('duration:') {{ $model->duration }}</p>
+                <p>@lang('الوقت المحدد للاختبار:') <span class="badge rounded-pill bg-primary h3">{{ $model->duration }}</span></p>
                 @endif
 
                 <form action="{{ route( 'taskLearnerPrepared' ,['participant'=> $participant->id, 'sessionable' => $sessionable->id]) }}" method="POST">

@@ -1,4 +1,4 @@
-<div id="question-{{ $question->id }}" class="question col-12 text-left mt-4 p-4">
+<div id="question-{{ $question->id }}" dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" class="question col-12 {{ App::getLocale() === 'ar' ? 'text-right' : 'text-left' }} mt-4 p-4">
 
     <div class="card shadow p-2">
         <div class="card-header py-3">
@@ -71,5 +71,4 @@
     </div>
 
 </div>
-
 

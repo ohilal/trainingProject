@@ -12,6 +12,23 @@ $(document).ready(function () {
         saveOnly();
     });
 
+    $(".workout_questions").on("submit", function (event) {
+        event.preventDefault();
+
+        var form = this;
+        var submitButton = $(form).find(":submit");
+        submitButton.prop("disabled", true);
+
+        saveQuestionForm(form)
+            .done(function () {
+                advanceToNextQuestion(form);
+            })
+            .fail(showSaveError)
+            .always(function () {
+                submitButton.prop("disabled", false);
+            });
+    });
+
     $("#saveAndClose").click(function (event) {
         event.preventDefault();
 
@@ -62,44 +79,70 @@ function scrollToAnchor(question) {
     $("html,body").animate({ scrollTop: aTag.offset().top }, "slow");
 }
 
-// function saveAndClose() {
-
-//     $.when(
-//         $(".workout_questions").each(function () {
-//             var data = $(this).serialize();
-//             var url = $(this).attr("action");
-    
-//             $.post(url, data, function (data) {});
-//         })
-//        ).then(function () {
-//             window.location.reload();
-//        });
-   
-// }
 function saveAndClose() {
-    var requests = [];
-
-    $(".workout_questions").each(function () {
-        var data = $(this).serialize();
-        var url = $(this).attr("action");
-        requests.push($.post(url, data));
-    });
-
-    $.when.apply($, requests).then(function () {
-        window.location.reload();
-    });
+    saveForms($(".workout_questions").toArray())
+        .done(function () {
+            window.location.href = $("#saveAndClose").data("next-url");
+        })
+        .fail(showSaveError);
 }
 
 function saveOnly() {
-    $(".workout_questions").each(function () {
-        var data = $(this).serialize();
-        var url = $(this).attr("action");
+    var forms = style == "StepByStep"
+        ? $("#questions .question:visible .workout_questions").toArray()
+        : $(".workout_questions").toArray();
 
-        $.post(url, data, function (data) {
-            // Optionally handle individual response if needed
+    saveForms(forms)
+        .done(function () {
+            if (style == "StepByStep" && forms.length > 0) {
+                advanceToNextQuestion(forms[0]);
+            }
+
+            alert(quizSavedMessage);
+        })
+        .fail(showSaveError);
+}
+
+function saveForms(forms) {
+    var sequence = $.Deferred().resolve();
+
+    forms.forEach(function (form) {
+        sequence = sequence.then(function () {
+            return saveQuestionForm(form);
         });
     });
 
-    // Show a success message or visual feedback
-    alert("{{ __('Your answers have been saved successfully!') }}");
+    return sequence;
+}
+
+function saveQuestionForm(form) {
+    return $.ajax({
+        url: $(form).attr("action"),
+        method: $(form).attr("method") || "POST",
+        data: new FormData(form),
+        processData: false,
+        contentType: false
+    });
+}
+
+function advanceToNextQuestion(form) {
+    if (style != "StepByStep") {
+        return;
+    }
+
+    var questions = $("#questions .question");
+    var currentIndex = questions.index($(form).closest(".question"));
+
+    if (currentIndex >= 0 && currentIndex + 1 < questions.length) {
+        var nextQuestionId = questions.eq(currentIndex + 1).attr("id").replace("question-", "");
+        showQuestion(nextQuestionId);
+    }
+}
+
+function showSaveError(xhr) {
+    var message = xhr.responseJSON && xhr.responseJSON.message
+        ? xhr.responseJSON.message
+        : quizSaveErrorMessage;
+
+    alert(message);
 }

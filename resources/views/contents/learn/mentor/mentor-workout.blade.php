@@ -47,7 +47,7 @@
 
                 <div class="dropdown no-arrow">
                     @can('mentor.list')
-                    <x-modules.mentor-comments.new-comment :userId="$workout->user_id" :activableType="'App\Models\Workout'" :activableId="$workout->id" />
+                    <x-modules.mentor-comments.new-comment :userId="$workout->Participant->user_id" :activableType="'App\Models\Workout'" :activableId="$workout->id" />
                     @endcan
 
                 </div>
@@ -57,7 +57,7 @@
                 @livewire('services.mentors.comments',[
                 'activable_id' => $workout->id,
                 'activable_type' => 'App\Models\Workout',
-                'userId' => $workout->user_id
+                'userId' => $workout->Participant->user_id
                 ])
             </div>
         </div>
