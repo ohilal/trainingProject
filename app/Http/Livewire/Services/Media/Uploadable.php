@@ -24,7 +24,7 @@ class Uploadable extends Component
         $this->validate($this->getTargetRule($this->target));
   
         $this->file = $this->file->store($this->path, 'public');
-        
+        $this->dispatchBrowserEvent('file-uploaded', ['path' => $this->file]);
 
     }
 

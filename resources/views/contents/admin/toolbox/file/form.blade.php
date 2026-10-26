@@ -14,7 +14,7 @@
             </div>
         </div>
         <!-- Card Body -->
-        <div class="card-body">
+        <div class="card-body" x-data="{ filePath: @js($file->file ?? '') }" x-on:file-uploaded.window="filePath = $event.detail.path">
 
             @if(isset($file))
             <form class="user" method="POST" action="{{ route('file.update' , $file->id) }}" enctype="multipart/form-data">
@@ -24,6 +24,7 @@
                     @endif
 
                     @csrf
+                    <input name="file" type="hidden" x-bind:value="filePath">
                     <div class="row">
                         <div class="col-sm-6 mb-3 mb-sm-0">
                             <div class="form-group">

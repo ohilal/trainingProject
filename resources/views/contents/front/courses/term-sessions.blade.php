@@ -22,7 +22,7 @@
                         <h5 class="mb-3">{{ $session->title }}</h5>
                         <div class="d-flex flex-column gap-2 text-start">
                             @foreach ($session->Files as $file)
-                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank" rel="noopener" class="white text-decoration-none">
+                                <a href="{{ route('front.course.file', ['path' => $file->file]) }}" target="_blank" rel="noopener" class="white text-decoration-none">
                                     <i class="fa fa-file me-1"></i>{{ $file->title }}
                                 </a>
                             @endforeach

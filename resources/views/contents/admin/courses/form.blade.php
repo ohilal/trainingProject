@@ -65,11 +65,27 @@
                             </span>
                         @enderror
                     </div>
+
+                    <div class="form-group text-right">
+                        <input type="hidden" name="allow_self_enrollment" value="0">
+                        <label>
+                            <input type="checkbox" name="allow_self_enrollment" value="1"
+                                {{ old('allow_self_enrollment', $course->allow_self_enrollment ?? false) ? 'checked' : '' }}>
+                            {{ __('يسمح للمتدربين بالانضمام إلى هذه الدورة بأنفسهم') }}
+                        </label>
+                        <small class="form-text text-muted">
+                            {{ __('إذا لم يتم تحديد هذا الخيار، فيجب على الأدمن تعيين المتدربين في الدورة التدريبية.') }}
+                           <br/> {{ __('If unchecked, an administrator must assign learners to the course.') }}
+                        </small>
+                        @error('allow_self_enrollment')
+                            <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                        @enderror
+                    </div>
    
                     
                     <div class="form-group">
                         <input type="submit" class="btn btn-primary btn-user btn-block"
-                            value="{{ __('Save') }}">
+                            value="{{ __('حفظ') }}">
                     </div>
                 </form>
 

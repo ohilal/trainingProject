@@ -24,7 +24,8 @@
   --white: #fff;
   --gray: #858796;
   --gray-dark: #5a5c69;
-  --primary: #4e73df;
+  /* --primary: #4e73df; */
+   --primary: #22596e;
   --secondary: #858796;
   --success: #1cc88a;
   --info: #36b9cc;
@@ -32,6 +33,7 @@
   --danger: #e74a3b;
   --light: #f8f9fc;
   --dark: #5a5c69;
+  --darkteal: #22596e;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -327,7 +329,13 @@ textarea {
   overflow: auto;
   resize: vertical;
 }
-
+.input-group:has(input[placeholder*="Search"]) button.btn.btn-secondary,
+.input-group:has(input[type="search"]) button.btn.btn-secondary {
+    border-top-left-radius: 0.35rem !important;
+    border-bottom-left-radius: 0.35rem !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
 fieldset {
   min-width: 0;
   padding: 0;
@@ -7039,7 +7047,8 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #4e73df !important;
+  /* background-color: #4e73df !important; */
+  background-color: #22596e !important;
 }
 
 a.bg-primary:hover,
@@ -11258,11 +11267,13 @@ a:focus {
 }
 
 .border-left-primary {
-  border-left: 0.25rem solid #4e73df !important;
+  /* border-left: 0.25rem solid #4e73df !important; */
+   border-left: 0.25rem solid #22596e !important;
 }
 
 .border-bottom-primary {
-  border-bottom: 0.25rem solid #4e73df !important;
+  /* border-bottom: 0.25rem solid #4e73df !important; */
+border-bottom: 0.25rem solid #22596e !important;
 }
 
 .border-left-secondary {

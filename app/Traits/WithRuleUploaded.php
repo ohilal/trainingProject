@@ -11,7 +11,7 @@ trait WithRuleUploaded
 
 
     protected array $files = [
-        'file' => 'required|max:10240', // 1MB Max
+        'file' => 'required|file|max:921600',
     ];
 
     protected array $public = [

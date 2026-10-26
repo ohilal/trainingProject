@@ -55,17 +55,49 @@ class ParticipantInfoGenerator
      */
     public static function getAllTermsForParticipant(User $user, bool $is_mentor = false): Collection
     {
-        $terms = Participant::with('Term', 'Workout')
+        $terms = Participant::with('Term.Department', 'Term.Course', 'Term.Sessions.Related', 'Workout')
             ->where('user_id', $user->id)
             ->get();
 
         foreach ($terms as $term) {
             $term->Term->total_task = $term->Term->all_activities->count();
             $term->Term->task_done = $term->Workout->where('is_completed', '1')->count();
+            $term->next_activity = self::getNextActivity($term);
         }
 
         $terms->is_mentor = $is_mentor;
         return $terms;
+    }
+
+    private static function getNextActivity(Participant $participant): ?array
+    {
+        foreach ($participant->Term->Sessions as $session) {
+            foreach ($session->Related as $sessionable) {
+                $workout = $participant->Workout->firstWhere('sessionable_id', $sessionable->id);
+
+                if ($workout && $workout->is_completed) {
+                    continue;
+                }
+
+                $activity = $sessionable->Model;
+
+                if (!$activity) {
+                    continue;
+                }
+
+                return [
+                    'title' => $activity->title ?? class_basename($sessionable->sessionable_type),
+                    'url' => route('taskLearner', [
+                        'participant' => $participant->id,
+                        'sessionable' => $sessionable->id,
+                    ]),
+                    'session_title' => $session->title,
+                    'estimated_minutes' => $activity->duration ?? null,
+                ];
+            }
+        }
+
+        return null;
     }
 
 

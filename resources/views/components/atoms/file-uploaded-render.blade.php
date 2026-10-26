@@ -3,7 +3,7 @@
     @if($fileType == 'image')
 
     @if($preview)
-    <img src="{{ asset('storage/'. $file) }}" class="img-fluid">
+    <img src="{{ route('file.preview', ['path' => $file]) }}" class="img-fluid">
     @else
     <div class="btn btn-circle btn-primary btn-sm text-white">
         <i class="fas fa-images"></i>
@@ -16,7 +16,7 @@
     @if($fileType == 'video')
 
     @if($preview)
-    <img src="{{ asset('storage/'. $file) }}" class="img-fluid">
+    <img src="{{ route('file.preview', ['path' => $file]) }}" class="img-fluid">
     @else
     <i class="fas fa-file-image fa-5x"></i>
     @endif
@@ -27,7 +27,7 @@
     @if($fileType == 'audio')
 
     @if($preview)
-    <img src="{{ asset('storage/'. $file) }}" class="img-fluid">
+    <img src="{{ route('file.preview', ['path' => $file]) }}" class="img-fluid">
     @else
     <i class="fas fa-file-image fa-5x"></i>
     @endif

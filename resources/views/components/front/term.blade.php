@@ -5,7 +5,7 @@
             {!! "<h3 class='text-white'>$iteration</h3>" ?? '<i class="fa fa-search fa-2x"></i>' !!}
         </div>
         <h5 class="mb-3">{{ $term->title }}</h5>
-        <p class="m-0">{{ Str::words($term->description, 25, ' ...') }}</p>
+        <div class="m-0">{!! $term->description !!}</div>
         <a class="btn btn-square" href="{{ route('front.term.sessions', ['course' => $term->course_id, 'term' => $term->id]) }}" aria-label="{{ __('View sessions') }}"><i class="fa fa-arrow-right"></i></a>
     </div>
 </div>

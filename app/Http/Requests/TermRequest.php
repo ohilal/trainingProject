@@ -26,7 +26,8 @@ class TermRequest extends FormRequest
         return [
             'title' => 'required',
             'department_id' => 'required',
-            'course_id' => 'required'
+            'course_id' => 'required',
+            'is_published' => 'sometimes|boolean',
         ];
     }
 }

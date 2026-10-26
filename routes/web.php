@@ -57,6 +57,13 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
     Route::get('/courses', [FrontCourseController::class, 'courses'])->name('courses');
     Route::get('/course/{course_id}', [FrontCourseController::class, 'course'])->name('course');
     Route::get('/course/{course}/term/{term}/sessions', [FrontCourseController::class, 'termSessions'])->name('term.sessions');
+    Route::post('/course/{course}/join', [FrontCourseController::class, 'join'])
+        ->middleware('auth')
+        ->name('course.join');
+    Route::get('/course-file/{path}', [FrontCourseController::class, 'file'])
+        ->where('path', '.*')
+        ->middleware('auth')
+        ->name('course.file');
     Route::get('/plans', [FrontCourseController::class, 'plans'])->name('plans');
     Route::get('/organizationStructure', [FrontController::class, 'organizationStructure'])->name('organizationStructure');
     Route::get('/events', [EventController::class, 'index'])->name('events');
@@ -128,6 +135,10 @@ Route::prefix('panel')->group(function () {
     Route::resource('term', TermController::class);
     Route::resource('session', SessionController::class);
     Route::resource('file', FileController::class);
+    Route::get('/file-preview/{path}', [FileController::class, 'preview'])
+        ->where('path', '.*')
+        ->middleware('auth')
+        ->name('file.preview');
     Route::resource('activity', ActivityController::class);
     Route::resource('document', DocumentController::class);
     Route::resource('quiz', QuizController::class);

@@ -4,7 +4,7 @@
 @section("content")
 
 <!-- Create Form Card -->
-<div class="col-12">
+<div class="col-12 text-right direction-rtl">
     <div class="card shadow mb-4 border-bottom-primary">
         <!-- Card Header - Dropdown -->
         <div
@@ -63,11 +63,23 @@
                             </span>
                         @enderror
                     </div>
+
+                    <div class="form-group text-right direction-rtl">
+                        <input type="hidden" name="is_published" value="0">
+                        <label class="text-right">
+                            <input type="checkbox" name="is_published" value="1"
+                                {{ old('is_published', $term->is_published ?? true) ? 'checked' : '' }}>
+                            {{ __('انشر هذا الفصل على صفحة الدورة التدريبية ') }}
+                        </label>
+                        @error('is_published')
+                            <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                        @enderror
+                    </div>
    
                
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary btn-user btn-block"
-                            value="{{ __('Save') }}">
+                        <input type="submit" class="btn btn-primary btn-user btn-block  btn-sm col-lg-2 mx-auto"
+                            value="{{ __('حفظ') }}">
                     </div>
                 </form>
 

@@ -36,7 +36,11 @@ class CourseRepository extends BaseRepository implements CourseInterfaceReposito
      */
     public function getCourseInfo($course_id)
     {
-        return Course::with("Terms")->findorfail($course_id);
+        return Course::with([
+            'Terms' => function ($query) {
+                $query->where('is_published', true);
+            },
+        ])->findOrFail($course_id);
     }
 
 

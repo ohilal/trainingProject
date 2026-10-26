@@ -35,12 +35,12 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
-        {{ __('Course Management') }}
+        {{ __('إعدادات الدورات ') }}
     </div>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('myCourse') }}">
             <i class="fas fa-fw fa-book-reader"></i>
-            <span>{{ __("My Course") }}</span></a>
+            <span>{{ __("دوراتى التدريبية") }}</span></a>
     </li>
 
     <!-- Divider -->
@@ -51,19 +51,19 @@
     @can('menu.education')
     <!-- Heading -->
     <div class="sidebar-heading">
-        {{ __('Education') }}
+        {{ __('التعليم') }}
     </div>
 
     @can('mentor.list')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#MentorsCollapse" aria-expanded="true" aria-controls="ACLCollapse">
             <i class="fas fa-fw fa-clipboard"></i>
-            <span>Learners</span>
+            <span>المتدربين</span>
         </a>
         <div id="MentorsCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
 
-                <a class="collapse-item" href="{{ route('myLearners') }}">{{ __('My Learners') }}</a>
+                <a class="collapse-item" href="{{ route('myLearners') }}">{{ __('طلابى') }}</a>
 
             </div>
 
@@ -76,7 +76,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('adminMenuCourse') }}">
             <i class="fas fa-fw fa-chalkboard-teacher"></i>
-            <span>{{ __("Education Center") }}</span></a>
+            <span>{{ __("إعدادت الدورات التدريبية") }}</span></a>
     </li>
     @endcan
 
@@ -90,7 +90,7 @@
 
     @role('Super-Admin')
 
-    <div class="sidebar-heading">
+    <!-- <div class="sidebar-heading">
         {{ __('Financial') }}
     </div>
     <li class="nav-item">
@@ -104,7 +104,7 @@
 
             </div>
         </div>
-    </li>
+    </li> -->
 
 
     <div class="sidebar-heading">
@@ -114,13 +114,13 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#ACLCollapse" aria-expanded="true" aria-controls="ACLCollapse">
             <i class="fas fa-fw fa-users-cog"></i>
-            <span>ACL</span>
+            <span> إعدادات النظام </span>
         </a>
         <div id="ACLCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('user.index') }}">{{ __('User') }}</a>
-                <a class="collapse-item" href="{{ route('role.index') }}">{{ __('Role') }}</a>
-                <a class="collapse-item" href="{{ route('permission.index') }}">{{ __('Permission') }}</a>
+                <a class="collapse-item" href="{{ route('user.index') }}">{{ __('المستخدمون') }}</a>
+                <a class="collapse-item" href="{{ route('role.index') }}">{{ __('الأدوار') }}</a>
+                <a class="collapse-item" href="{{ route('permission.index') }}">{{ __('الصلاحيات') }}</a>
             </div>
         </div>
     </li>

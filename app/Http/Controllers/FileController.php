@@ -77,6 +77,17 @@ class FileController extends Controller
         ];
     }
 
+    public function preview(string $path)
+    {
+        $user = auth()->user();
+        abort_unless($user->can('file.create') || $user->can('file.edit'), 403);
+
+        $disk = Storage::disk('public');
+        abort_unless($disk->exists($path), 404);
+
+        return $disk->response($path);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -103,9 +114,12 @@ class FileController extends Controller
         $this->authorize('file.edit');
         $data = $request->only(['title', 'description']);
         $replacementFileData = $this->getFileData($request->input('file'));
-        if ($replacementFileData !== null) {
-            $data = array_merge($data, $replacementFileData);
+        if ($replacementFileData === null) {
+            throw ValidationException::withMessages([
+                'file' => __('The selected file does not exist.'),
+            ]);
         }
+        $data = array_merge($data, $replacementFileData);
 
         $oldFilePath = $file->file;
         $file->update($data);

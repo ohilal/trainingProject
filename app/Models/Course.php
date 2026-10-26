@@ -15,6 +15,10 @@ class Course extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'allow_self_enrollment' => 'boolean',
+    ];
+
 
     public function Department(): BelongsTo
     {
