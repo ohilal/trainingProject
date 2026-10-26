@@ -50,7 +50,9 @@ class LdapService
                 $escapedUsername
             );
             
-            $result = ldap_search($this->connection, $this->baseDn, $filter);
+            $attributes = ['objectguid', 'entryuuid', 'mail', 'displayname', 'cn', 'department', 'distinguishedname'];
+
+            $result = @ldap_search($this->connection, $this->baseDn, $filter, $attributes);
             
             if ($result === false) {
                 return null; // User not found
@@ -78,6 +80,8 @@ class LdapService
                 'guid' => $guid,
                 'email' => $userEntry['mail'][0] ?? null,
                 'full_name' => $userEntry['displayname'][0] ?? $userEntry['cn'][0] ?? $username,
+                'department' => $this->extractDepartment($userEntry),
+                'dn' => $userDn,
             ];
 
         } catch (Exception $e) {
@@ -89,6 +93,34 @@ class LdapService
                 @ldap_unbind($this->connection);
             }
         }
+    }
+
+    /**
+     * Determine the learner's department from Active Directory.
+     *
+     * Prefers the mapped "department" attribute; otherwise parses the
+     * closest OU= component of the user's distinguished name, e.g.
+     * "CN=Ali Ali,OU=Finance,OU=Users,DC=ida,DC=local" => "Finance".
+     */
+    private function extractDepartment(array $entry): ?string
+    {
+        if (!empty($entry['department'][0])) {
+            return trim($entry['department'][0]);
+        }
+
+        $dn = $entry['distinguishedname'][0] ?? ($entry['dn'] ?? null);
+
+        if (!$dn) {
+            return null;
+        }
+
+        foreach (explode(',', $dn) as $component) {
+            if (preg_match('/^\s*ou=([^=]+)/i', $component, $matches)) {
+                return str_replace(['\\,', '\\+', '\\"', '\\\\', '\\;', '\\<', '\\>', '\\ '], [',', '+', '"', '\\', ';', '<', '>', ' '], trim($matches[1]));
+            }
+        }
+
+        return null;
     }
 
     private function normalizeGuid(?string $value): ?string

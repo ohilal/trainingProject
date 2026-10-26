@@ -22,6 +22,8 @@ class User extends Authenticatable
         'ldap_id',
         'guid',
         'is_ldap_user',
+        'ad_department',
+        'ad_dn',
     ];
 
     /**

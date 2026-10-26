@@ -125,6 +125,9 @@ Route::prefix('panel')->group(function () {
     Route::get('/menu/plugins', [CourseManagmentController::class, 'plugins'])->name('adminMenuPlugins');
 
     Route::get('/dashboard', [GeneralController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+        ->middleware(['auth', 'role:Super-Admin|Admin'])
+        ->name('admin.analytics');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::patch('/setting/{user}', [SettingController::class, 'update'])->name('setting.update');

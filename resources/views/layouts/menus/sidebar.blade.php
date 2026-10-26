@@ -25,6 +25,11 @@
     </li>
     @hasanyrole('Super-Admin|admin|supervisor')
      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.analytics') }}">
+            <i class="fas fa-fw fa-chart-line"></i>
+            <span>{{ __("التحليلات") }}</span></a>
+    </li>
+     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.event.index') }}">
             <i class="fas fa-fw fa-calendar"></i>
             <span>{{ __("الفعاليات") }}</span></a>
