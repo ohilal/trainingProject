@@ -25,6 +25,11 @@ class Course extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class);
+    }
+
     public function Terms(): HasMany
     {
         return $this->hasMany(Term::class);

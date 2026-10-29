@@ -39,6 +39,7 @@ class CourseRepository extends BaseRepository implements CourseInterfaceReposito
     public function getCourseInfo($course_id)
     {
         return Course::with([
+            'author',
             'Terms' => function ($query) {
                 $query->where('is_published', true);
             },

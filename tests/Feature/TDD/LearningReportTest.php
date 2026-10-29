@@ -27,7 +27,8 @@ class LearningReportTest extends BaseTest
             ->assertSee('Learning report')
             ->assertSee('Course overview')
             ->assertSee('Most viewed courses')
-            ->assertSee('Department score rankings');
+            ->assertSee('Department score rankings')
+            ->assertSee('LDAP OU');
     }
 
     public function test_student_cannot_view_learning_report()

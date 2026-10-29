@@ -22,6 +22,7 @@ class User extends Authenticatable
         'ldap_id',
         'guid',
         'is_ldap_user',
+        'ldap_ou',
     ];
 
     /**

@@ -185,7 +185,9 @@ class LearningReportService
                 ? round(($completedCount / $totalActivities) * 100, 1)
                 : 0;
             $ldapOu = $enrollment->ldap_ou ?: (
-                $enrollment->is_ldap_user ? 'Awaiting AD sign-in' : 'Not an AD account'
+                $enrollment->is_ldap_user
+                    ? 'OU not found in LDAP user DN'
+                    : 'Not an AD account'
             );
 
             $row = [

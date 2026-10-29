@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Education;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
+use App\Models\Author;
 use App\Services\Back\Educations\CourseAdminService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
@@ -48,7 +51,20 @@ class CourseController extends Controller
     public function store(CourseRequest $request)
     {
         $this->authorize('course.create');
-        $this->service->store($request->all());
+        $newAuthorImage = null;
+
+        try {
+            DB::transaction(function () use ($request, &$newAuthorImage) {
+                $this->service->store($this->courseData($request, $newAuthorImage));
+            });
+        } catch (\Throwable $exception) {
+            if ($newAuthorImage) {
+                Storage::disk('public')->delete($newAuthorImage);
+            }
+
+            throw $exception;
+        }
+
         return $this->service->redirect();
     }
 
@@ -75,8 +91,60 @@ class CourseController extends Controller
     public function update(CourseRequest $request, $course_id)
     {
         $this->authorize('course.edit');
-        $this->service->update($request->all(), $course_id);
+        $newAuthorImage = null;
+
+        try {
+            DB::transaction(function () use ($request, $course_id, &$newAuthorImage) {
+                $this->service->update($this->courseData($request, $newAuthorImage), $course_id);
+            });
+        } catch (\Throwable $exception) {
+            if ($newAuthorImage) {
+                Storage::disk('public')->delete($newAuthorImage);
+            }
+
+            throw $exception;
+        }
+
         return $this->service->redirect('warning');
+    }
+
+    private function courseData(CourseRequest $request, ?string &$newAuthorImage): array
+    {
+        $courseData = $request->validated();
+        $authorId = $courseData['author_id'] ?? null;
+        $authorSelectionProvided = array_key_exists('author_id', $courseData);
+
+        if (!$authorId && !empty($courseData['author_name'])) {
+            if ($request->hasFile('author_image')) {
+                $newAuthorImage = $request->file('author_image')->store('course/authors', 'public');
+
+                if ($newAuthorImage === false) {
+                    throw new \RuntimeException('Unable to store course author image.');
+                }
+            }
+
+            $author = Author::create([
+                'name' => $courseData['author_name'],
+                'image' => $newAuthorImage,
+                'bio' => $courseData['author_bio'] ?? null,
+                'organization' => $courseData['author_organization'] ?? null,
+            ]);
+            $authorId = $author->id;
+        }
+
+        unset(
+            $courseData['author_id'],
+            $courseData['author_name'],
+            $courseData['author_image'],
+            $courseData['author_bio'],
+            $courseData['author_organization']
+        );
+
+        if ($authorSelectionProvided || $authorId) {
+            $courseData['author_id'] = $authorId;
+        }
+
+        return $courseData;
     }
 
     /**

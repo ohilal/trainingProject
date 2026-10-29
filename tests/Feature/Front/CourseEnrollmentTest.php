@@ -3,6 +3,7 @@
 namespace Tests\Feature\Front;
 
 use App\Models\Course;
+use App\Models\Author;
 use App\Models\File;
 use App\Models\Role;
 use App\Models\Session;
@@ -20,6 +21,25 @@ class CourseEnrollmentTest extends TestCase
     {
         $this->get(route('front.course.file', ['path' => 'files/material.pdf']))
             ->assertRedirect(route('login'));
+    }
+
+    public function test_course_page_shows_author_name_and_image()
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('course/authors/author.png', 'image');
+        $author = Author::create([
+            'name' => 'Course Author',
+            'image' => 'course/authors/author.png',
+            'bio' => 'Course author bio',
+            'organization' => 'Training Organization',
+        ]);
+        $course = Course::factory()->create(['author_id' => $author->id]);
+
+        $this->get(route('front.course', $course))
+            ->assertOk()
+            ->assertSee('Course Author')
+            ->assertSee('Training Organization')
+            ->assertSee('/storage/course/authors/author.png', false);
     }
 
     public function test_learner_can_join_all_published_terms_and_access_course_files()

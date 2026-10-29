@@ -72,6 +72,16 @@ public function register(): void
                         'ldap_id' => $ldapUser['ldap_id'],
                         'guid' => $ldapUser['guid'],
                         'is_ldap_user' => true,
+                        'ldap_ou' => $ldapUser['organizational_unit'],
+                    ]);
+                } else {
+                    $user->update([
+                        'name' => $ldapUser['full_name'] ?? $ldapUser['username'],
+                        'email' => $ldapUser['email'],
+                        'ldap_id' => $ldapUser['ldap_id'],
+                        'guid' => $ldapUser['guid'],
+                        'is_ldap_user' => true,
+                        'ldap_ou' => $ldapUser['organizational_unit'],
                     ]);
                 }
 

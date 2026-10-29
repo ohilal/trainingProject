@@ -2,6 +2,7 @@
 
 namespace App\Services\Back\Educations;
 
+use App\Models\Author;
 use App\Repositories\Contracts\CourseInterfaceRepository;
 use App\Repositories\Contracts\DepartmentInterfaceRepository;
 use App\Services\Back\Services;
@@ -32,7 +33,10 @@ class CourseAdminService extends Services
      */
     public function create()
     {
-        return ['departments' => $this->departmentRepository->getAllByTitleAndId()];
+        return [
+            'departments' => $this->departmentRepository->getAllByTitleAndId(),
+            'authors' => Author::orderBy('name')->get(),
+        ];
     }
 
     /**
@@ -43,9 +47,13 @@ class CourseAdminService extends Services
     public function edit(
         $course_id
     ) {
+        $course = $this->repository->findById($course_id);
+        $course->load('author');
+
         return [
-            'course' => $this->repository->findById($course_id),
-            'departments' => $this->departmentRepository->getAllByTitleAndId()
+            'course' => $course,
+            'departments' => $this->departmentRepository->getAllByTitleAndId(),
+            'authors' => Author::orderBy('name')->get(),
         ];
     }
 }

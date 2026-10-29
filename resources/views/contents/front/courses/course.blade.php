@@ -20,6 +20,21 @@
                </div>
                   <div class="col-lg-8 align-self-center">
                      <h5 class="h3  text-darkteal">{{ $course->title }}</h5>
+                     @if($course->author)
+                        <div class="d-flex align-items-center mb-3">
+                            @if($course->author->image)
+                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($course->author->image) }}"
+                                    alt="{{ $course->author->name }}"
+                                    class="rounded-circle mr-2" width="48" height="48" style="object-fit: cover;">
+                            @endif
+                            <div>
+                                <span class="text-secondary">{{ $course->author->name }}</span>
+                                @if($course->author->organization)
+                                    <div class="small text-muted">{{ $course->author->organization }}</div>
+                                @endif
+                            </div>
+                        </div>
+                     @endif
                  {!! $course->description !!}
                      
                 <!-- <a href="{{ $course->link }}" class="btn btn-darkteal flex-end" target="_blank">رابط الدورة</a> -->

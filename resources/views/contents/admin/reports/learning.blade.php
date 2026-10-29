@@ -4,12 +4,12 @@
 <div class="row mb-4">
     <div class="col-12">
         <h1 class="h3 mb-1 text-gray-800">{{ __('Learning report') }}</h1>
-        <p class="text-muted mb-0">{{ __('Course attendance, learner progress, activity starts, completions, and scores by Active Directory OU.') }}</p>
+        <p class="text-muted mb-0">{{ __('Course attendance, learner progress, activity starts, completions, and scores by LDAP OU.') }}</p>
     </div>
 </div>
 
 <div class="alert alert-info">
-    {{ __('Active Directory OU values are refreshed when learners sign in. Existing LDAP learners need to sign in once for their OU to appear.') }}
+    {{ __('LDAP OU values are refreshed when learners sign in. Existing LDAP learners should sign in again to refresh this value.') }}
 </div>
 
 <div class="card shadow mb-4">
@@ -52,13 +52,13 @@
         <table class="table table-bordered table-sm mb-0">
             <thead>
                 <tr>
-                    <th>{{ __('Course') }}</th>
-                    <th>{{ __('Department') }}</th>
-                    <th>{{ __('Learners') }}</th>
-                    <th>{{ __('Learners started') }}</th>
-                    <th>{{ __('Average progress') }}</th>
-                    <th>{{ __('Activity starts') }}</th>
-                    <th>{{ __('Completed enrollments') }}</th>
+                    <th>{{ __('الدورة التدريبية') }}</th>
+                    <th>{{ __('البرنامج التدريبى') }}</th>
+                    <th>{{ __('المتدربون') }}</th>
+                    <th>{{ __('المتدربون الذين بدأوا') }}</th>
+                    <th>{{ __('متوسط التقدم') }}</th>
+                    <th>{{ __('بدء النشاط') }}</th>
+                    <th>{{ __('الدورات المكتملة') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,7 +122,7 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                    <thead><tr><th>{{ __('Course') }}</th><th>{{ __('Learners') }}</th><th>{{ __('Activity starts') }}</th></tr></thead>
+                    <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('المتدربون') }}</th><th>{{ __('بدء النشاط') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_viewed_courses'] as $course)
                         <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['active_learner_count'] }}</td><td>{{ $course['activity_starts'] }}</td></tr>
@@ -142,7 +142,7 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                    <thead><tr><th>{{ __('Course') }}</th><th>{{ __('Completed enrollments') }}</th><th>{{ __('Completion rate') }}</th></tr></thead>
+                    <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('الدورات المكتملة') }}</th><th>{{ __('معدل الإكمال') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_completed_courses'] as $course)
                         <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['completed_enrollments'] }}</td><td>{{ $course['completion_rate'] }}%</td></tr>
@@ -165,12 +165,12 @@
         <table class="table table-bordered mb-0">
             <thead>
                 <tr>
-                    <th>{{ __('Active Directory OU') }}</th>
-                    <th>{{ __('Learners') }}</th>
-                    <th>{{ __('Learning average') }}</th>
-                    <th>{{ __('Top learning learner') }}</th>
-                    <th>{{ __('Quiz average') }}</th>
-                    <th>{{ __('Top quiz learner') }}</th>
+                    <th>{{ __('LDAP OU') }}</th>
+                    <th>{{ __('المتدربون') }}</th>
+                    <th>{{ __('متوسط التعلم') }}</th>
+                    <th>{{ __('أفضل متدرب في التعلم') }}</th>
+                    <th>{{ __('متوسط الاختبارات') }}</th>
+                    <th>{{ __('أفضل متدرب في الاختبارات') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -211,13 +211,13 @@
         <table class="table table-bordered table-sm mb-0">
             <thead>
                 <tr>
-                    <th>{{ __('Learner') }}</th>
-                    <th>{{ __('Active Directory OU') }}</th>
-                    <th>{{ __('Course') }}</th>
-                    <th>{{ __('Course department') }}</th>
-                    <th>{{ __('Attendance') }}</th>
-                    @if($report['selected_activity'] !== null)<th>{{ __('Selected activity') }}</th>@endif
-                    <th>{{ __('Progress') }}</th>
+                    <th>{{ __('المتدرب') }}</th>
+                    <th>{{ __('LDAP OU') }}</th>
+                    <th>{{ __('الدورة التدريبية') }}</th>
+                    <th>{{ __('قسم الدورة') }}</th>
+                    <th>{{ __('الحضور') }}</th>
+                    @if($report['selected_activity'] !== null)<th>{{ __('النشاط المحدد') }}</th>@endif
+                    <th>{{ __('الإنجاز') }}</th>
                     <th>{{ __('Activity starts') }}</th>
                     <th>{{ __('Learning score') }}</th>
                     <th>{{ __('Quiz score') }}</th>

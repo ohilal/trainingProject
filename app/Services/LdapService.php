@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class LdapService
 {
@@ -70,6 +71,7 @@ class LdapService
             }
 
             $guid = $this->normalizeGuid($userEntry['objectguid'][0] ?? null);
+            $organizationalUnit = $this->getOrganizationalUnit($userDn);
 
             // Success! Return relevant data
             return [
@@ -78,6 +80,7 @@ class LdapService
                 'guid' => $guid,
                 'email' => $userEntry['mail'][0] ?? null,
                 'full_name' => $userEntry['displayname'][0] ?? $userEntry['cn'][0] ?? $username,
+                'organizational_unit' => $organizationalUnit,
             ];
 
         } catch (Exception $e) {
@@ -89,6 +92,36 @@ class LdapService
                 @ldap_unbind($this->connection);
             }
         }
+    }
+
+    private function getOrganizationalUnit(string $distinguishedName): ?string
+    {
+        $components = ldap_explode_dn($distinguishedName, 0);
+        if ($components === false) {
+            Log::warning('Unable to parse LDAP user distinguished name');
+
+            return null;
+        }
+
+        $organizationalUnits = [];
+        for ($index = 0; $index < $components['count']; $index++) {
+            if (preg_match('/^OU=(.*)$/i', $components[$index], $matches)) {
+                $organizationalUnits[] = $this->decodeDistinguishedNameValue($matches[1]);
+            }
+        }
+
+        if ($organizationalUnits === []) {
+            return null;
+        }
+
+        return implode(' / ', array_reverse($organizationalUnits));
+    }
+
+    private function decodeDistinguishedNameValue(string $value): string
+    {
+        return preg_replace_callback('/\\\\([0-9A-Fa-f]{2})/', function (array $matches) {
+            return chr(hexdec($matches[1]));
+        }, $value);
     }
 
     private function normalizeGuid(?string $value): ?string

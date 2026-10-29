@@ -19,10 +19,10 @@
             <div class="text-center">
 
                 @if(isset($course))
-                    <form class="user" method="POST" action="{{ route('course.update' , $course->id) }}">                    
+                    <form class="user" method="POST" enctype="multipart/form-data" action="{{ route('course.update' , $course->id) }}">
                      @method('patch')
                 @else
-                    <form class="user" method="POST" action="{{ route('course.store') }}">
+                    <form class="user" method="POST" enctype="multipart/form-data" action="{{ route('course.store') }}">
                 @endif
                 
                     @csrf
@@ -43,6 +43,59 @@
                                 <span class="invalid-feedback" role="alert">
                                     {{ $message }}
                                 </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="author_id">{{ __('Course author') }}</label>
+                        <select name="author_id" id="author_id" class="form-control">
+                            <option value="">{{ __('Create a new author or leave unassigned') }}</option>
+                            @foreach($authors as $author)
+                                <option value="{{ $author->id }}"
+                                    {{ (string) old('author_id', $course->author_id ?? '') === (string) $author->id ? 'selected' : '' }}>
+                                    {{ $author->name }}{{ $author->organization ? ' - ' . $author->organization : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('author_id')
+                            <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                        @enderror
+                        <small class="form-text text-muted">
+                            {{ __('Select an existing author, or leave this blank and enter new author details below.') }}
+                        </small>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <label for="author_name">{{ __('New author name') }}</label>
+                            <input name="author_name" type="text" class="form-control" id="author_name"
+                                value="{{ old('author_name') }}">
+                            @error('author_name')
+                                <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="author_image">{{ __('New author image') }}</label>
+                            <input name="author_image" type="file" class="form-control-file" id="author_image"
+                                accept="image/*">
+                            @error('author_image')
+                                <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <label for="author_organization">{{ __('Author organization') }}</label>
+                            <input name="author_organization" type="text" class="form-control" id="author_organization"
+                                value="{{ old('author_organization') }}">
+                            @error('author_organization')
+                                <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="author_bio">{{ __('Author bio') }}</label>
+                            <textarea name="author_bio" class="form-control" id="author_bio">{{ old('author_bio') }}</textarea>
+                            @error('author_bio')
+                                <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>

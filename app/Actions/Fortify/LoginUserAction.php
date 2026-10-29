@@ -57,6 +57,7 @@ class LoginUserAction
                 $user->update([
                     'email' => $ldapUser['email'],
                     'ldap_id' => $ldapUser['ldap_id'],
+                    'is_ldap_user' => true,
                     'ldap_ou' => $ldapUser['organizational_unit'],
                 ]);
             }
