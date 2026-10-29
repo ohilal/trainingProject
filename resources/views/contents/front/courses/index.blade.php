@@ -18,7 +18,7 @@
         </div>
         <div class="row g-3 ">
             <!-- course Start -->
-                 @if(count($courses) > 1)
+                 @if(count($courses) > 0)
                 <div class="container-xxl py-5">
                     <div class="container py-5 px-lg-5">
                         <div class="row g-4">
@@ -30,6 +30,8 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    <p class="text-center">لا توجد دورات في هذا القسم حالياً.</p>
                 @endif
             <!-- course End -->
        </div>

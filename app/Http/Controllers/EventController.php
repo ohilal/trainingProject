@@ -15,11 +15,19 @@ use Illuminate\Support\Facades\File;
 class EventController extends Controller
 {
      protected $service;
-    public function index()
+    public function index(Request $request)
     {
-        
-        $events = Event::orderBy('start_date','desc')->paginate(10);
-        return view('contents.front.events.index', ['events' => $events]);
+        $validated = $request->validate([
+            'event_type_id' => ['sometimes', 'integer', 'exists:event_types,id'],
+        ]);
+        $eventTypeId = $validated['event_type_id'] ?? null;
+        $eventType = $eventTypeId ? EventType::findOrFail($eventTypeId) : null;
+
+        $events = Event::when($eventTypeId, function ($query) use ($eventTypeId) {
+            $query->where('event_type_id', $eventTypeId);
+        })->orderBy('start_date', 'desc')->paginate(10)->withQueryString();
+
+        return view('contents.front.events.index', compact('events', 'eventType'));
 
     }
     // public function show(Event $event) //type-hinting -- route model binding

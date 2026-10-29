@@ -35,12 +35,15 @@
  <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> الأنشطة والفعاليات </a>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#"> Calendar</a></li>
-    <li><a class="dropdown-item" href="{{ route('front.events') }}"> حفلات تكريم</a></li>
- <li><a class="dropdown-item" href="#"> مبادرات</a></li>
-    <li><a class="dropdown-item" href="#"> تكريم حجاج </a></li>
- <li><a class="dropdown-item" href="#"> الموظف المتميز </a></li>
-</ul>
+    @forelse ($eventTypes as $eventType)
+      <li>
+        <a class="dropdown-item" href="{{ route('front.events', ['event_type_id' => $eventType->id]) }}">
+          {{ $eventType->eventName }}
+        </a>
+      </li>
+    @empty
+    @endforelse
+  </ul>
 </li>
 
             <a href="{{ route('front.organizationStructure') }}" class="nav-item nav-link">دليل مهام الإدارات</a>

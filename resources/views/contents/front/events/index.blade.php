@@ -10,7 +10,7 @@
     <div class="container py-5 px-lg-5">
         <div class="wow fadeInUp" data-wow-delay="0.1s">
             <p class="section-title text-secondary justify-content-center text-nowrap"><span> الأنشطة والفاعاليات</span></p>
-            <h1 class="text-center mb-5">  حفلات تكريم </h1>
+            <h1 class="text-center mb-5">{{ $eventType ? $eventType->eventName : 'حفلات تكريم' }}</h1>
         </div>
         <!----------------------------------->
         <div class="row row-cols-1 row-cols-md-3 g-4">

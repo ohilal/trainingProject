@@ -6,6 +6,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Department;
+use App\Models\EventType;
 use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,9 +37,12 @@ class AppServiceProvider extends ServiceProvider
                 ?>
             ";
         });
-       // Only load departments when rendering the frontend navigation
+       // Load frontend navigation data only when the navigation is rendered.
            View::composer('layouts.front.top', function ($view) {
-            $view->with('departments', Department::all());
+            $view->with([
+                'departments' => Department::all(),
+                'eventTypes' => EventType::all(),
+            ]);
         });
     }
    

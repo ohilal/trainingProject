@@ -47,40 +47,22 @@ class CourseController extends Controller
     public function course($id)
     {
         $courseCompactData = $this->courseService->getCourseInfo($id);
-        $user = auth()->user();
-        $userId = $user ? $user->id : null;
-        $course = $courseCompactData['course'];
-        $isAssignedToCourse = $userId !== null
-            && $course->Terms()
-                ->whereHas('Participants', function ($query) use ($userId) {
-                    $query->where('users.id', $userId);
-                })
-                ->exists();
-        $hasIncompleteSelfEnrollment = false;
 
-        if ($userId !== null && $course->allow_self_enrollment) {
-            $termCount = $course->Terms()->count();
-            $assignedLearnerTermCount = $course->Terms()
-                ->whereHas('Participants', function ($query) use ($userId) {
-                    $query->where('users.id', $userId)
-                        ->where('term_user.role_id', self::LEARNER_ROLE_ID);
-                })
-                ->count();
-
-            $hasIncompleteSelfEnrollment = $assignedLearnerTermCount > 0
-                && $assignedLearnerTermCount < $termCount;
-        }
-
-        return view('contents.front.courses.course', array_merge(
-            $courseCompactData,
-            compact('isAssignedToCourse', 'hasIncompleteSelfEnrollment')
-        ));
+        return view('contents.front.courses.course', $courseCompactData);
     }
 
     public function termSessions(Course $course, Term $term)
     {
         abort_unless((int) $term->course_id === (int) $course->id, 404);
         abort_unless((bool) $term->is_published, 404);
+        abort_unless(
+            auth()->user()->can('file.index') ||
+                $term->Participants()
+                    ->where('users.id', auth()->id())
+                    ->wherePivot('role_id', self::LEARNER_ROLE_ID)
+                    ->exists(),
+            403
+        );
 
         $term->load('Sessions');
 
@@ -92,7 +74,9 @@ class CourseController extends Controller
         abort_unless((bool) $course->is_published, 404);
         abort_unless($course->allow_self_enrollment, 403);
 
-        $terms = $course->Terms()->get();
+        $terms = $course->Terms()
+            ->where('is_published', true)
+            ->get();
 
         if ($terms->isEmpty()) {
             return redirect()
@@ -107,20 +91,10 @@ class CourseController extends Controller
             ]);
         }
 
-        $publishedTerm = $terms->first(function (Term $term) {
-            return (bool) $term->is_published;
-        });
-
-        if (!$publishedTerm) {
-            return redirect()
-                ->route('front.course', $course->id)
-                ->with('warning', __('You have joined the course, but there are no published terms available yet.'));
-        }
-
         return redirect()
             ->route('front.term.sessions', [
                 'course' => $course->id,
-                'term' => $publishedTerm->id,
+                'term' => $terms->first()->id,
             ])
             ->with('success', __('You have joined the course.'));
     }

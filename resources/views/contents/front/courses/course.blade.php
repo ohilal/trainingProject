@@ -21,7 +21,7 @@
                   <div class="col-lg-8 align-self-center">
                      <h5 class="h3  text-darkteal">{{ $course->title }}</h5>
                  {!! $course->description !!}
-
+                     
                 <!-- <a href="{{ $course->link }}" class="btn btn-darkteal flex-end" target="_blank">رابط الدورة</a> -->
             
             
@@ -29,14 +29,12 @@
         </div>
         @if($course->allow_self_enrollment)
             @auth
-                @if(!$isAssignedToCourse || $hasIncompleteSelfEnrollment)
-                    <div class="text-center mt-4">
-                        <form method="POST" action="{{ route('front.course.join', $course->id) }}">
-                            @csrf
-                            <button type="submit" class="btn btn-darkteal rounded">{{ __('اشترك فى هذه الدورة') }}</button>
-                        </form>
-                    </div>
-                @endif
+                <div class="text-center mt-4">
+                    <form method="POST" action="{{ route('front.course.join', $course->id) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-darkteal rounded">{{ __('اشترك فى هذه الدورة') }}</button>
+                    </form>
+                </div>
             @else
                 <p class="text-center mt-4">
                     <a href="{{ route('login') }}">{{ __('برجاء تسجيل الدخول للاشتراك في هذه الدورة.') }}</a>

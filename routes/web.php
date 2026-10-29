@@ -20,6 +20,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\learn\WorkoutController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\LearningReportController;
 use App\Http\Controllers\Mentors\MentorCommentsController;
 use App\Http\Controllers\Mentors\MyLearnerController;
 use App\Http\Controllers\Panel\MyCourseController;
@@ -56,7 +57,9 @@ Route::group(['prefix' => 'front', 'as' => 'front.'], function () {
 
     Route::get('/courses', [FrontCourseController::class, 'courses'])->name('courses');
     Route::get('/course/{course_id}', [FrontCourseController::class, 'course'])->name('course');
-    Route::get('/course/{course}/term/{term}/sessions', [FrontCourseController::class, 'termSessions'])->name('term.sessions');
+    Route::get('/course/{course}/term/{term}/sessions', [FrontCourseController::class, 'termSessions'])
+        ->middleware('auth')
+        ->name('term.sessions');
     Route::post('/course/{course}/join', [FrontCourseController::class, 'join'])
         ->middleware('auth')
         ->name('course.join');
@@ -125,6 +128,9 @@ Route::prefix('panel')->group(function () {
     Route::get('/menu/plugins', [CourseManagmentController::class, 'plugins'])->name('adminMenuPlugins');
 
     Route::get('/dashboard', [GeneralController::class, 'dashboard'])->name('dashboard');
+    Route::get('/reports/learning', [LearningReportController::class, 'index'])
+        ->middleware(['auth', 'can:menu.education'])
+        ->name('reports.learning');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::patch('/setting/{user}', [SettingController::class, 'update'])->name('setting.update');

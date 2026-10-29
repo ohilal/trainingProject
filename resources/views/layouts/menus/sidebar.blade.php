@@ -79,6 +79,12 @@
             <span>{{ __("إعدادت الدورات التدريبية") }}</span></a>
     </li>
     @endcan
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('reports.learning') }}">
+            <i class="fas fa-fw fa-chart-line"></i>
+            <span>{{ __('Learning report') }}</span>
+        </a>
+    </li>
 
     @endcan
 

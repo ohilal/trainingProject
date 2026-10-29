@@ -32,7 +32,9 @@ class TermRepository extends BaseRepository implements TermInterfaceRepository
      */
     public function getAllWith($relations)
     {
-        return Course::with($relations)->get();
+        return Course::with($relations)
+            ->orderByDesc('updated_at')
+            ->get();
     }
 
 

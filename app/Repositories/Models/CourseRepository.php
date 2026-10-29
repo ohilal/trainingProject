@@ -24,7 +24,9 @@ class CourseRepository extends BaseRepository implements CourseInterfaceReposito
      */
     public function getAllWith($relations)
     {
-        return Course::with($relations)->get();
+        return Course::with($relations)
+            ->orderByDesc('updated_at')
+            ->get();
     }
 
 
@@ -51,6 +53,16 @@ class CourseRepository extends BaseRepository implements CourseInterfaceReposito
      */
     public function getAllByTitleAndId()
     {
-        return $this->model::pluck('title', 'id');
+        return $this->model::orderByDesc('updated_at')
+            ->pluck('title', 'id');
+    }
+
+    public function paginate($perPage = 0)
+    {
+        if ($perPage > 0) {
+            $this->perPage = $perPage;
+        }
+
+        return $this->model::orderByDesc('updated_at')->paginate($this->perPage);
     }
 }

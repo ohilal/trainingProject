@@ -18,8 +18,8 @@
                 {{-- <p class="section-title text-white h5 mb-4">روابط سريعة<span></span></p> --}}
                 <p><a class="btn btn-link" href="">عن التطبيق</a></p>
                <p> <a class="btn btn-link" href="">اتصل بنا</a></p>
-                <p><a class="btn btn-link" href="صوصية</a></p>
-                <!-- <a class="btn btn-link" href="">الشروط وال_conditions</a> -->
+                <p><a class="btn btn-link" href="">سياسة الخصوصية</a></p>
+                <a class="btn btn-link"  href=""> الشروط والأحكام</a> 
                 <!-- <a class="btn btn-link" href="">الوظائف</a> -->
             </div>
             <div class="col-md-6 col-lg-3">

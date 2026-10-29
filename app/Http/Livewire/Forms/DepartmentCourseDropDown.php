@@ -21,13 +21,17 @@ class DepartmentCourseDropDown extends Component
     {
         
         $this->departments = Department::all();
-        $this->courses = Course::where('department_id', $this->department_id)->get();
+        $this->courses = Course::where('department_id', $this->department_id)
+            ->orderByDesc('updated_at')
+            ->get();
     }
 
 
     public function selectDepartment(): void
     {
-        $this->courses = Course::where('department_id', $this->department_id)->get();
+        $this->courses = Course::where('department_id', $this->department_id)
+            ->orderByDesc('updated_at')
+            ->get();
     }
 
     /**

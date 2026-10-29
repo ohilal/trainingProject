@@ -19,7 +19,7 @@ class Department extends Model
     // }
 public function courses(): HasMany
 {
-    return $this->hasMany(Course::class);
+    return $this->hasMany(Course::class)->orderByDesc('updated_at');
 }
     public function Term(): HasMany
     {
