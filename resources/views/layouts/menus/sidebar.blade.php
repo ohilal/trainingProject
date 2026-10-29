@@ -30,6 +30,11 @@
             <span>{{ __("التحليلات") }}</span></a>
     </li>
      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.reports.learning') }}">
+            <i class="fas fa-fw fa-graduation-cap"></i>
+            <span>{{ __("تقرير التعلم") }}</span></a>
+    </li>
+     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.event.index') }}">
             <i class="fas fa-fw fa-calendar"></i>
             <span>{{ __("الفعاليات") }}</span></a>

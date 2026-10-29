@@ -128,6 +128,9 @@ Route::prefix('panel')->group(function () {
     Route::get('/analytics', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
         ->middleware(['auth', 'role:Super-Admin|Admin'])
         ->name('admin.analytics');
+    Route::get('/reports/learning', [\App\Http\Controllers\Admin\LearningReportController::class, 'index'])
+        ->middleware(['auth', 'role:Super-Admin|Admin'])
+        ->name('admin.reports.learning');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::patch('/setting/{user}', [SettingController::class, 'update'])->name('setting.update');
