@@ -7,6 +7,40 @@
         'attending'   => ['badge' => 'info',    'text' => __('Attending')],
         'not_started' => ['badge' => 'secondary', 'text' => __('Not started')],
     ];
+
+    // Chart data prepared in PHP (avoids multi-line @json([...]) Blade parsing issues).
+    $reportData = [
+        'mostViewed'    => collect($report['most_viewed_courses'])->map(fn ($c) => [
+            'title'    => $c['course_title'],
+            'starts'   => $c['activity_starts'],
+            'learners' => $c['active_learner_count'],
+        ])->values()->all(),
+        'mostCompleted' => collect($report['most_completed_courses'])->map(fn ($c) => [
+            'title'    => $c['course_title'],
+            'rate'     => $c['completion_rate'],
+            'done'     => $c['completed_enrollments'],
+            'learners' => $c['learner_count'],
+        ])->values()->all(),
+        'attendance'    => [
+            ['label' => __('Not started'), 'value' => collect($report['rows'])->where('attendance_status', 'not_started')->count(), 'color' => '#d1d3e2'],
+            ['label' => __('Attending'),   'value' => collect($report['rows'])->where('attendance_status', 'attending')->count(),   'color' => '#36b9cc'],
+            ['label' => __('Completed'),   'value' => collect($report['rows'])->where('attendance_status', 'completed')->count(),   'color' => '#1cc88a'],
+        ],
+        'departments'   => collect($report['department_rankings'])->take(10)->map(fn ($d) => [
+            'name'     => $d['name'],
+            'learners' => $d['learner_count'],
+            'learning' => $d['learning_score'],
+            'quiz'     => $d['quiz_score'],
+        ])->values()->all(),
+        'topLearners'   => collect($report['rows'])
+            ->groupBy('user_id')
+            ->map(fn ($r) => [
+                'name'  => $r->first()['learner_name'],
+                'ou'    => $r->first()['ldap_ou'],
+                'score' => round((float) $r->avg('learning_score'), 1),
+            ])
+            ->sortByDesc('score')->take(10)->values()->all(),
+    ];
 @endphp
 
 <div class="row mb-4">
@@ -338,23 +372,7 @@
     }
 
     // ---------- Data injected from PHP ----------
-    var data = @json([
-        'mostViewed'   => collect($report['most_viewed_courses'])->map(fn ($c) => ['title' => $c['course_title'], 'starts' => $c['activity_starts'], 'learners' => $c['active_learner_count']])->values()->all(),
-        'mostCompleted'=> collect($report['most_completed_courses'])->map(fn ($c) => ['title' => $c['course_title'], 'rate' => $c['completion_rate'], 'done' => $c['completed_enrollments'], 'learners' => $c['learner_count']])->values()->all(),
-        'attendance'   => [
-            ['label' => __('Not started'), 'value' => collect($report['rows'])->where('attendance_status', 'not_started')->count(), 'color' => '#d1d3e2'],
-            ['label' => __('Attending'),   'value' => collect($report['rows'])->where('attendance_status', 'attending')->count(),   'color' => '#36b9cc'],
-            ['label' => __('Completed'),   'value' => collect($report['rows'])->where('attendance_status', 'completed')->count(),   'color' => '#1cc88a'],
-        ],
-        'departments'  => collect($report['department_rankings'])->take(10)->map(fn ($d) => [
-            'name' => $d['name'], 'learners' => $d['learner_count'],
-            'learning' => $d['learning_score'], 'quiz' => $d['quiz_score'],
-        ])->values()->all(),
-        'topLearners'  => collect($report['rows'])
-            ->groupBy('user_id')
-            ->map(fn ($r) => ['name' => $r->first()['learner_name'], 'ou' => $r->first()['ldap_ou'], 'score' => round($r->avg('learning_score'), 1)])
-            ->sortByDesc('score')->take(10)->values()->all(),
-    ]);
+    var data = @json($reportData);
 
     var built = {};
     function build(id) { if (charts[id] && !built[id]) { charts[id](); built[id] = true; } }
