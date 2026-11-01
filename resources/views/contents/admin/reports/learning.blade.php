@@ -23,7 +23,7 @@
 {{-- ============================ Filters ============================ --}}
 <div class="card shadow mb-4">
     <div class="card-body">
-        <form method="GET" action="{{ route('reports.learning') }}" class="form-row align-items-end">
+        <form method="GET" action="{{ route('admin.reports.learning') }}" class="form-row align-items-end">
             <div class="form-group col-md-4">
                 <label for="attendance">{{ __('Attendance') }}</label>
                 <select name="attendance" id="attendance" class="form-control">
@@ -46,7 +46,7 @@
             </div>
             <div class="form-group col-md-3">
                 <button type="submit" class="btn btn-primary">{{ __('Apply filters') }}</button>
-                <a href="{{ route('reports.learning') }}" class="btn btn-light">{{ __('Reset') }}</a>
+                <a href="{{ route('admin.reports.learning') }}" class="btn btn-light">{{ __('Reset') }}</a>
             </div>
         </form>
     </div>
