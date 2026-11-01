@@ -203,3 +203,18 @@ Route::prefix('panel')->group(function () {
     Route::resource('permission', PermissionController::class)->middleware('role:Super-Admin');
     Route::post('role/permission/{role}', [RoleController::class, 'permission'])->name("role_permissions");
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Report aliases (public route names used by the learning report views)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:Super-Admin|Admin'])
+    ->prefix('reports')
+    ->name('reports.')
+    ->group(function () {
+        Route::get('/learning', [\App\Http\Controllers\LearningReportController::class, 'index'])
+            ->name('learning');
+    });
+

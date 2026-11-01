@@ -17,6 +17,7 @@
 <script src="{{ URL::to('vendor/jQuery-TE/jquery-te-1.4.0.min.js') }}"></script>
 
 @yield('js')
+@stack('js')
 <script src="{{ URL::to('front/lib/lightbox/js/lightbox.min.js') }}"></script>
 <script>
     lightbox.option({ resizeDuration: 200, wrapAround: true, albumLabel: 'صورة %1 من %2' });

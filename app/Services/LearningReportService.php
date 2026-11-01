@@ -2,390 +2,362 @@
 
 namespace App\Services;
 
-use App\Models\Role;
-use App\Models\Sessionable;
-use App\Models\Workout;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Builds the data array consumed by contents/admin/reports/learning.blade.php.
+ *
+ * Schema mapping (this platform):
+ *  - "Course"      -> courses (+ terms: course_terms table is named `terms`)
+ *  - "Activity"    -> a session attached to a term via session_term, made
+ *                    learnable through sessionables; learner progress over an
+ *                    activity is tracked in `workouts` (one row per
+ *                    participant+sessionable view).
+ *  - "Attendance"  -> derived from workouts.is_completed / existence of rows
+ *                    for every sessionable of the selected activities.
+ *  - "LDAP OU"     -> users.ad_department (parsed from the AD distinguished
+ *                    name at LDAP sign-in).
+ *  - "Quiz score"  -> workout_quiz_logs.score averaged per learner.
+ *
+ * All queries are MSSQL-compatible: no LIMIT (top-N done collection-side),
+ * deterministic ordering, no GROUP BY alias references.
+ */
 class LearningReportService
 {
-    public function build(string $attendanceFilter = 'all', ?int $activityFilter = null): array
+    /** Learner role id (kept consistent with AdminDashboardService). */
+    protected int $learnerRoleId = 4;
+
+    /** @var string all|not_started|attending|completed */
+    protected string $attendanceFilter;
+
+    /** @var int|null selected activity (session) id */
+    protected ?int $selectedActivity;
+
+    public function __construct(?string $attendanceFilter = 'all', ?int $selectedActivity = null)
     {
-        $studentRoleId = Role::where('name', 'student')->value('id');
-        $enrollments = collect();
+        $allowed = ['all', 'not_started', 'attending', 'completed'];
+        $this->attendanceFilter = in_array($attendanceFilter, $allowed, true) ? $attendanceFilter : 'all';
+        $this->selectedActivity = $selectedActivity ?: null;
+    }
 
-        if ($studentRoleId) {
-            $enrollments = DB::table('term_user as participant')
-                ->join('users', 'users.id', '=', 'participant.user_id')
-                ->join('terms', 'terms.id', '=', 'participant.term_id')
-                ->join('courses', 'courses.id', '=', 'terms.course_id')
-                ->leftJoin('departments', 'departments.id', '=', 'courses.department_id')
-                ->where('participant.role_id', $studentRoleId)
-                ->select([
-                    'participant.id as participant_id',
-                    'participant.term_id',
-                    'participant.user_id',
-                    'users.name as learner_name',
-                    'users.ldap_ou',
-                    'users.is_ldap_user',
-                    'terms.title as term_title',
-                    'courses.id as course_id',
-                    'courses.title as course_title',
-                    'departments.title as course_department',
-                ])
-                ->orderBy('courses.title')
-                ->orderBy('users.name')
-                ->get();
-        }
-
-        $activityLinks = DB::table('session_term')
-            ->join('sessionables', 'sessionables.session_id', '=', 'session_term.session_id')
-            ->whereNull('sessionables.deleted_at')
-            ->select([
-                'session_term.term_id',
-                'sessionables.id as sessionable_id',
-                'sessionables.sessionable_type',
-            ])
-            ->get();
-
-        $activityIds = $activityLinks->pluck('sessionable_id')->unique()->values();
-        $sessionables = $activityIds->isEmpty()
-            ? collect()
-            : Sessionable::whereIn('id', $activityIds)->get()->keyBy('id');
-        $activityTitles = [];
-
-        foreach ($sessionables->groupBy('sessionable_type') as $type => $typedSessionables) {
-            if (!class_exists($type)) {
-                continue;
-            }
-
-            $model = new $type();
-            $relatedActivities = DB::table($model->getTable())
-                ->whereIn('id', $typedSessionables->pluck('sessionable_id'))
-                ->get(['id', 'title'])
-                ->keyBy('id');
-
-            foreach ($typedSessionables as $sessionable) {
-                $relatedActivity = $relatedActivities->get($sessionable->sessionable_id);
-                if ($relatedActivity) {
-                    $activityTitles[$sessionable->id] = $relatedActivity->title;
-                }
-            }
-        }
-
-        $activityOptions = $activityIds->map(function ($id) use ($sessionables, $activityTitles) {
-            $sessionable = $sessionables->get($id);
-            $type = $sessionable ? class_basename($sessionable->sessionable_type) : 'Activity';
-            $title = $activityTitles[$id] ?? $type;
-
-            return [
-                'id' => (int) $id,
-                'label' => $title . ' (' . $type . ')',
-            ];
-        })->sortBy('label')->values();
-
-        $activitiesByTerm = $activityLinks
-            ->groupBy('term_id')
-            ->map(function (Collection $links) {
-                return $links->pluck('sessionable_id')->unique()->values()->all();
-            });
-
-        $participantIds = $enrollments->pluck('participant_id')->unique()->values();
-        $workoutsByParticipant = $participantIds->isEmpty()
-            ? collect()
-            : Workout::whereIn('participant_id', $participantIds)
-                ->get(['participant_id', 'sessionable_id', 'is_completed', 'score'])
-                ->groupBy('participant_id');
-
-        $courses = DB::table('courses')
-            ->leftJoin('departments', 'departments.id', '=', 'courses.department_id')
-            ->select([
-                'courses.id',
-                'courses.title',
-                'departments.title as department_title',
-            ])
-            ->orderBy('courses.title')
-            ->get();
-
-        $courseStats = [];
-        foreach ($courses as $course) {
-            $courseStats[$course->id] = [
-                'course_id' => (int) $course->id,
-                'course_title' => $course->title,
-                'department' => $course->department_title,
-                'enrollments' => 0,
-                'learners' => [],
-                'active_learners' => [],
-                'activity_starts' => 0,
-                'completed_enrollments' => 0,
-                'progress_total' => 0,
-            ];
-        }
-
-        $rows = [];
-        foreach ($enrollments as $enrollment) {
-            $activityIdsForTerm = $activitiesByTerm->get($enrollment->term_id, []);
-            if ($activityFilter !== null && !in_array($activityFilter, $activityIdsForTerm)) {
-                continue;
-            }
-
-            $participantWorkouts = $workoutsByParticipant->get($enrollment->participant_id, collect())
-                ->keyBy('sessionable_id');
-            $startedCount = 0;
-            $completedCount = 0;
-            $learningScoreSum = 0;
-            $learningScoreCount = 0;
-            $quizScoreSum = 0;
-            $quizScoreCount = 0;
-
-            foreach ($activityIdsForTerm as $sessionableId) {
-                $workout = $participantWorkouts->get($sessionableId);
-                if (!$workout) {
-                    continue;
-                }
-
-                $startedCount++;
-                if (!$workout->is_completed) {
-                    continue;
-                }
-
-                $completedCount++;
-                $sessionable = $sessionables->get($sessionableId);
-                $isQuiz = $sessionable
-                    && strtolower(class_basename($sessionable->sessionable_type)) === 'quiz';
-
-                if ($isQuiz) {
-                    $quizScoreSum += (int) $workout->score;
-                    $quizScoreCount++;
-                } else {
-                    $learningScoreSum += (int) $workout->score;
-                    $learningScoreCount++;
-                }
-            }
-
-            $totalActivities = count($activityIdsForTerm);
-            $attendanceStatus = $totalActivities > 0 && $completedCount === $totalActivities
-                ? 'completed'
-                : ($startedCount > 0 ? 'attending' : 'not_started');
-
-            if ($attendanceFilter !== 'all' && $attendanceStatus !== $attendanceFilter) {
-                continue;
-            }
-
-            $selectedActivityStatus = null;
-            if ($activityFilter !== null) {
-                $activityWorkout = $participantWorkouts->get($activityFilter);
-                $selectedActivityStatus = !$activityWorkout
-                    ? 'not_started'
-                    : ($activityWorkout->is_completed ? 'completed' : 'attending');
-            }
-
-            $progress = $totalActivities > 0
-                ? round(($completedCount / $totalActivities) * 100, 1)
-                : 0;
-            $ldapOu = $enrollment->ldap_ou ?: (
-                $enrollment->is_ldap_user
-                    ? 'OU not found in LDAP user DN'
-                    : 'Not an AD account'
-            );
-
-            $row = [
-                'participant_id' => (int) $enrollment->participant_id,
-                'user_id' => (int) $enrollment->user_id,
-                'learner_name' => $enrollment->learner_name,
-                'ldap_ou' => $ldapOu,
-                'course_id' => (int) $enrollment->course_id,
-                'course_title' => $enrollment->course_title,
-                'course_department' => $enrollment->course_department,
-                'term_title' => $enrollment->term_title,
-                'attendance_status' => $attendanceStatus,
-                'activity_status' => $selectedActivityStatus,
-                'completed_activities' => $completedCount,
-                'total_activities' => $totalActivities,
-                'activity_starts' => $startedCount,
-                'progress' => $progress,
-                'learning_score' => $learningScoreCount > 0
-                    ? round($learningScoreSum / $learningScoreCount, 1)
-                    : null,
-                'quiz_score' => $quizScoreCount > 0
-                    ? round($quizScoreSum / $quizScoreCount, 1)
-                    : null,
-                'learning_score_sum' => $learningScoreSum,
-                'learning_score_count' => $learningScoreCount,
-                'quiz_score_sum' => $quizScoreSum,
-                'quiz_score_count' => $quizScoreCount,
-            ];
-            $rows[] = $row;
-
-            $courseStats[$enrollment->course_id]['enrollments']++;
-            $courseStats[$enrollment->course_id]['learners'][$enrollment->user_id] = true;
-            $courseStats[$enrollment->course_id]['activity_starts'] += $startedCount;
-            $courseStats[$enrollment->course_id]['progress_total'] += $progress;
-            if ($startedCount > 0) {
-                $courseStats[$enrollment->course_id]['active_learners'][$enrollment->user_id] = true;
-            }
-            if ($attendanceStatus === 'completed') {
-                $courseStats[$enrollment->course_id]['completed_enrollments']++;
-            }
-        }
-
-        $courseStats = array_values(array_map(function (array $course) {
-            $course['learner_count'] = count($course['learners']);
-            $course['active_learner_count'] = count($course['active_learners']);
-            $course['average_progress'] = $course['enrollments'] > 0
-                ? round($course['progress_total'] / $course['enrollments'], 1)
-                : 0;
-            $course['completion_rate'] = $course['enrollments'] > 0
-                ? round(($course['completed_enrollments'] / $course['enrollments']) * 100, 1)
-                : 0;
-            unset($course['learners'], $course['active_learners'], $course['progress_total']);
-
-            return $course;
-        }, $courseStats));
-
-        $mostViewed = array_values(array_filter($courseStats, function (array $course) {
-            return $course['active_learner_count'] > 0;
-        }));
-        usort($mostViewed, function (array $left, array $right) {
-            return ($right['active_learner_count'] <=> $left['active_learner_count'])
-                ?: ($right['activity_starts'] <=> $left['activity_starts']);
-        });
-
-        $mostCompleted = array_values(array_filter($courseStats, function (array $course) {
-            return $course['completed_enrollments'] > 0;
-        }));
-        usort($mostCompleted, function (array $left, array $right) {
-            return ($right['completed_enrollments'] <=> $left['completed_enrollments'])
-                ?: ($right['completion_rate'] <=> $left['completion_rate']);
-        });
-
-        /** @var array<string, array{learners: array<int, array{name: string, learning_sum: int, learning_count: int, quiz_sum: int, quiz_count: int}>}> $departments */
-        $departments = [];
-        foreach ($rows as $row) {
-            $departmentName = $row['ldap_ou'];
-            if (!isset($departments[$departmentName])) {
-                $departments[$departmentName] = ['learners' => []];
-            }
-
-            if (!isset($departments[$departmentName]['learners'][$row['user_id']])) {
-                $departments[$departmentName]['learners'][$row['user_id']] = [
-                    'name' => $row['learner_name'],
-                    'learning_sum' => 0,
-                    'learning_count' => 0,
-                    'quiz_sum' => 0,
-                    'quiz_count' => 0,
-                ];
-            }
-
-            $learner = &$departments[$departmentName]['learners'][$row['user_id']];
-            $learner['learning_sum'] += $row['learning_score_sum'];
-            $learner['learning_count'] += $row['learning_score_count'];
-            $learner['quiz_sum'] += $row['quiz_score_sum'];
-            $learner['quiz_count'] += $row['quiz_score_count'];
-            unset($learner);
-        }
-
-        /** @var list<array{name: string, learner_count: int, learning_score: float|null, top_learning_learner: array{name: string, score: float}|null, quiz_score: float|null, top_quiz_learner: array{name: string, score: float}|null}> $departmentStats */
-        $departmentStats = [];
-        foreach ($departments as $departmentName => $department) {
-            /** @var list<float> $learningScores */
-            $learningScores = [];
-            /** @var list<float> $quizScores */
-            $quizScores = [];
-            /** @var array{name: string, score: float}|null $topLearningLearner */
-            $topLearningLearner = null;
-            /** @var array{name: string, score: float}|null $topQuizLearner */
-            $topQuizLearner = null;
-
-            foreach ($department['learners'] as $learner) {
-                $learnerLearningScore = $learner['learning_count'] > 0
-                    ? round($learner['learning_sum'] / $learner['learning_count'], 1)
-                    : null;
-                $learnerQuizScore = $learner['quiz_count'] > 0
-                    ? round($learner['quiz_sum'] / $learner['quiz_count'], 1)
-                    : null;
-
-                if ($learnerLearningScore !== null) {
-                    $learningScores[] = $learnerLearningScore;
-                    if ($topLearningLearner === null || $learnerLearningScore > $topLearningLearner['score']) {
-                        $topLearningLearner = ['name' => $learner['name'], 'score' => $learnerLearningScore];
-                    }
-                }
-
-                if ($learnerQuizScore !== null) {
-                    $quizScores[] = $learnerQuizScore;
-                    if ($topQuizLearner === null || $learnerQuizScore > $topQuizLearner['score']) {
-                        $topQuizLearner = ['name' => $learner['name'], 'score' => $learnerQuizScore];
-                    }
-                }
-            }
-
-            $departmentStats[] = [
-                'name' => $departmentName,
-                'learner_count' => count($department['learners']),
-                'learning_score' => $learningScores
-                    ? round(array_sum($learningScores) / count($learningScores), 1)
-                    : null,
-                'top_learning_learner' => $topLearningLearner,
-                'quiz_score' => $quizScores
-                    ? round(array_sum($quizScores) / count($quizScores), 1)
-                    : null,
-                'top_quiz_learner' => $topQuizLearner,
-            ];
-        }
-
-        usort($departmentStats, function (array $left, array $right) {
-            return ($right['learning_score'] <=> $left['learning_score'])
-                ?: ($right['quiz_score'] <=> $left['quiz_score']);
-        });
-        /** @var list<array{name: string, learner_count: int, learning_score: float|null, top_learning_learner: array{name: string, score: float}|null, quiz_score: float|null, top_quiz_learner: array{name: string, score: float}|null}> $learningDepartments */
-        $learningDepartments = array_values(array_filter($departmentStats, function (array $department) {
-            return $department['learning_score'] !== null;
-        }));
-        /** @var list<array{name: string, learner_count: int, learning_score: float|null, top_learning_learner: array{name: string, score: float}|null, quiz_score: float|null, top_quiz_learner: array{name: string, score: float}|null}> $quizDepartments */
-        $quizDepartments = array_values(array_filter($departmentStats, function (array $department) {
-            return $department['quiz_score'] !== null;
-        }));
-
-        $learnerIds = [];
-        $attendingLearnerIds = [];
-        $progressTotal = 0;
-        $activityStarts = 0;
-        $completedEnrollments = 0;
-        foreach ($rows as $row) {
-            $learnerIds[$row['user_id']] = true;
-            if ($row['attendance_status'] === 'attending') {
-                $attendingLearnerIds[$row['user_id']] = true;
-            }
-            $progressTotal += $row['progress'];
-            $activityStarts += $row['activity_starts'];
-            if ($row['attendance_status'] === 'completed') {
-                $completedEnrollments++;
-            }
-        }
+    /**
+     * Full report payload for the blade view.
+     */
+    public function build(): array
+    {
+        $context = $this->context();
+        $rows = $this->buildRows($context);
 
         return [
-            'rows' => $rows,
-            'activities' => $activityOptions->all(),
-            'selected_activity' => $activityFilter,
-            'attendance_filter' => $attendanceFilter,
-            'summary' => [
-                'learners' => count($learnerIds),
-                'attending_learners' => count($attendingLearnerIds),
-                'enrollments' => count($rows),
-                'completed_enrollments' => $completedEnrollments,
-                'average_progress' => count($rows) > 0
-                    ? round($progressTotal / count($rows), 1)
-                    : 0,
-                'activity_starts' => $activityStarts,
-            ],
-            'courses' => $courseStats,
-            'most_viewed_courses' => array_slice($mostViewed, 0, 5),
-            'most_completed_courses' => array_slice($mostCompleted, 0, 5),
-            'department_rankings' => $departmentStats,
-            'top_learning_department' => $learningDepartments[0] ?? null,
-            'top_quiz_department' => $quizDepartments[0] ?? null,
+            'attendance_filter'      => $this->attendanceFilter,
+            'selected_activity'      => $this->selectedActivity,
+            'activities'             => $this->activities(),
+            'summary'                => $this->summaryFromRows($rows),
+            'courses'                => $this->courseOverview($context, $rows),
+            'most_viewed_courses'    => $this->rankCourses($context, $rows, 'starts'),
+            'most_completed_courses' => $this->rankCourses($context, $rows, 'completed'),
+            'department_rankings'    => $this->departmentRankings($rows),
+            'rows'                   => $rows,
         ];
+    }
+
+    /**
+     * Activity dropdown: sessions attached to at least one term.
+     */
+    public function activities(): array
+    {
+        $rows = DB::table('sessions as s')
+            ->join('session_term as st', 'st.session_id', '=', 's.id')
+            ->join('terms as t', 't.id', '=', 'st.term_id')
+            ->orderBy('s.title')
+            ->get(['s.id', 's.title', 't.title as term_title']);
+
+        // One dropdown entry per session (activity), labelled "Activity — Term".
+        return $rows->unique('id')
+            ->map(fn ($a) => [
+                'id'    => (int) $a->id,
+                'label' => trim($a->title.' — '.$a->term_title, ' —'),
+            ])
+            ->sortBy('label')
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Shared lookup context used by all sections of the report.
+     */
+    protected function context(): array
+    {
+        // Every sessionable that belongs to a term, with its session/activity title.
+        $activityQuery = DB::table('sessionables as sb')
+            ->join('session_term as st', 'st.session_id', '=', 'sb.session_id')
+            ->join('terms as t', 't.id', '=', 'st.term_id')
+            ->join('sessions as s', 's.id', '=', 'sb.session_id')
+            ->whereNull('sb.deleted_at')
+            ->orderBy('st.term_id')
+            ->orderBy('sb.order')
+            ->get(['sb.id as sessionable_id', 'st.term_id', 'sb.session_id', 's.title as activity_title']);
+
+        if ($this->selectedActivity !== null) {
+            $activityQuery = $activityQuery->where('session_id', $this->selectedActivity);
+        }
+
+        $activitiesByTerm = $activityQuery->groupBy('term_id');
+
+        // Workouts (learner activity records) joined to their participants.
+        $workoutQuery = DB::table('workouts as w')
+            ->join('term_user as tu', 'tu.id', '=', 'w.participant_id')
+            ->join('users as u', 'u.id', '=', 'tu.user_id')
+            ->where('w.is_mentor', false)
+            ->get([
+                'w.id as workout_id',
+                'w.sessionable_id',
+                'w.participant_id',
+                'w.is_completed',
+                'tu.user_id',
+                'tu.term_id',
+                'u.name as learner_name',
+                'u.ldap_ou',
+                DB::raw('CASE WHEN w.date_last_view IS NOT NULL THEN DATEDIFF(minute, w.date_first_view, w.date_last_view) ELSE 0 END as minutes'),
+            ]);
+
+        if ($this->selectedActivity !== null) {
+            $workoutQuery = $workoutQuery->filter(fn ($w) => $this->sessionableIsSelected((int) $w->sessionable_id));
+        }
+
+        $workoutsByParticipant = $workoutQuery->groupBy('participant_id');
+
+        // Quiz score per workout = average of its question-level scores.
+        $quizByWorkout = [];
+        $logs = DB::table('workout_quiz_logs')
+            ->where('is_mentor', false)
+            ->whereNotNull('score')
+            ->get(['workout_id', 'score'])
+            ->groupBy('workout_id');
+        foreach ($logs as $wid => $group) {
+            $quizByWorkout[(int) $wid] = round((float) $group->avg('score'), 2);
+        }
+
+        $enrollments = DB::table('term_user as tu')
+            ->join('users as u', 'u.id', '=', 'tu.user_id')
+            ->join('terms as t', 't.id', '=', 'tu.term_id')
+            ->join('courses as c', 'c.id', '=', 't.course_id')
+            ->where('tu.role_id', $this->learnerRoleId)
+            ->orderBy('c.title')
+            ->orderBy('u.name')
+            ->get(['tu.id as participant_id', 'tu.term_id', 'u.id as user_id', 'u.name', 'u.ldap_ou', 't.title as term_title', 'c.id as course_id', 'c.title as course_title',
+                'c.department_id as course_department_id']);
+
+        if ($this->selectedActivity !== null) {
+            $termsWithActivity = $activityQuery->pluck('term_id')->unique()->all();
+            $enrollments = $enrollments->whereIn('term_id', $termsWithActivity);
+        }
+
+        $departments = DB::table('departments')->pluck('title', 'id');
+
+        return compact(
+            'activitiesByTerm',
+            'workoutsByParticipant',
+            'quizByWorkout',
+            'enrollments',
+            'departments'
+        );
+    }
+
+    /**
+     * Cache of sessionable_id -> session_id for the activity filter.
+     */
+    protected array $sessionableSessionMap = [];
+
+    protected function sessionableIsSelected(int $sessionableId): bool
+    {
+        if (!$this->sessionableSessionMap) {
+            $this->sessionableSessionMap = DB::table('sessionables')
+                ->join('session_term', 'session_term.session_id', '=', 'sessionables.session_id')
+                ->pluck('sessionables.session_id', 'sessionables.id')
+                ->toArray();
+        }
+
+        return ($this->sessionableSessionMap[$sessionableId] ?? null) === $this->selectedActivity;
+    }
+
+    /**
+     * Per-learner, per-course-term detail rows (filtered by attendance).
+     */
+    protected function buildRows(array $context): array
+    {
+        $rows = [];
+
+        foreach ($context['enrollments'] as $e) {
+            $activities = $context['activitiesByTerm'][$e->term_id] ?? collect();
+            $totalActivities = $activities->count();
+
+            $participantWorkouts = $context['workoutsByParticipant'][$e->participant_id] ?? collect();
+
+            // Only count workouts on the filtered activity set when a filter is active.
+            if ($this->selectedActivity !== null) {
+                $relevantSessionables = $activities->pluck('sessionable_id')->all();
+                $participantWorkouts = $participantWorkouts->whereIn('sessionable_id', $relevantSessionables);
+            }
+
+            $starts = $participantWorkouts->count();
+            $done = $participantWorkouts->filter(fn ($w) => (bool) $w->is_completed)->count();
+
+            $progress = $totalActivities > 0 ? (int) round(min($done, $totalActivities) / $totalActivities * 100) : 0;
+
+            if ($starts === 0) {
+                $status = 'not_started';
+            } elseif ($totalActivities > 0 && $done >= $totalActivities) {
+                $status = 'completed';
+            } else {
+                $status = 'attending';
+            }
+
+            if ($this->attendanceFilter !== 'all' && $this->attendanceFilter !== $status) {
+                continue;
+            }
+
+            // Quiz score: average across this enrollment's workout quiz logs.
+            $workoutIds = $participantWorkouts->pluck('workout_id')->all();
+            $scores = collect($workoutIds)->map(fn ($id) => $context['quizByWorkout'][$id] ?? null)->filter();
+            $quizScore = $scores->isNotEmpty() ? round((float) $scores->avg(), 1) : null;
+
+            // Learning score: completion progress blended with quiz performance.
+            $learningScore = $quizScore !== null
+                ? (int) round($progress * 0.5 + $quizScore * 0.5)
+                : $progress;
+
+            $minutes = (int) round($participantWorkouts->sum('minutes'));
+
+            $rows[] = [
+                'learner_name'         => $e->name,
+                'user_id'              => (int) $e->user_id,
+                'ldap_ou'              => $e->ldap_ou ?: __('Unassigned'),
+                'course_title'         => $e->course_title,
+                'course_id'            => (int) $e->course_id,
+                'term_title'           => $e->term_title,
+                'term_id'              => (int) $e->term_id,
+                'course_department'    => $context['departments'][$e->course_department_id] ?? null,
+                'attendance_status'    => $status,
+                'activity_status'      => $status,
+                'progress'             => $progress,
+                'completed_activities' => min($done, $totalActivities),
+                'total_activities'     => $totalActivities,
+                'activity_starts'      => $starts,
+                'minutes_watched'      => $minutes,
+                'learning_score'       => $learningScore,
+                'quiz_score'           => $quizScore,
+            ];
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Summary cards computed from the filtered rows.
+     */
+    protected function summaryFromRows(array $rows): array
+    {
+        $collection = collect($rows);
+
+        return [
+            'learners'              => $collection->pluck('user_id')->unique()->count(),
+            'attending_learners'    => $collection->where('attendance_status', 'attending')->pluck('user_id')->unique()->count(),
+            'average_progress'      => count($rows) ? (int) round($collection->avg('progress')) : 0,
+            'completed_enrollments' => $collection->where('attendance_status', 'completed')->count(),
+        ];
+    }
+
+    /**
+     * Course overview table — every course, including those with no activity.
+     */
+    protected function courseOverview(array $context, array $rows): array
+    {
+        $courses = DB::table('courses')
+            ->leftJoin('departments', 'departments.id', '=', 'courses.department_id')
+            ->orderBy('courses.title')
+            ->get(['courses.id', 'courses.title', 'departments.title as department']);
+
+        $rowsByCourse = collect($rows)->groupBy('course_id');
+
+        $out = [];
+
+        foreach ($courses as $course) {
+            $courseRows = $rowsByCourse->get($course->id, collect());
+
+            $out[] = [
+                'course_title'          => $course->title,
+                'department'            => $course->department,
+                'learner_count'         => $courseRows->pluck('user_id')->unique()->count(),
+                'active_learner_count'  => $courseRows->where('activity_starts', '>', 0)->pluck('user_id')->unique()->count(),
+                'average_progress'      => $courseRows->isNotEmpty() ? (int) round($courseRows->avg('progress')) : 0,
+                'activity_starts'       => (int) $courseRows->sum('activity_starts'),
+                'completed_enrollments' => $courseRows->where('attendance_status', 'completed')->count(),
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Most viewed / most completed rankings built from the same overview data.
+     */
+    protected function rankCourses(array $context, array $rows, string $metric, int $limit = 8): array
+    {
+        $overview = $this->courseOverview($context, $rows);
+
+        $ranked = collect($overview)
+            ->map(function ($c) {
+                $c['completion_rate'] = $c['learner_count'] > 0
+                    ? (int) round($c['completed_enrollments'] / $c['learner_count'] * 100)
+                    : 0;
+
+                return $c;
+            });
+
+        if ($metric === 'starts') {
+            $ranked = $ranked
+                ->sortByDesc('activity_starts')
+                ->filter(fn ($c) => $c['activity_starts'] > 0 || $c['active_learner_count'] > 0);
+        } else {
+            $ranked = $ranked
+                ->sortByDesc('completed_enrollments')
+                ->filter(fn ($c) => $c['completed_enrollments'] > 0);
+        }
+
+        return $ranked->take($limit)->values()->all();
+    }
+
+    /**
+     * Department (LDAP OU) rankings: learners, learning & quiz averages, best learners.
+     */
+    protected function departmentRankings(array $rows): array
+    {
+        return collect($rows)
+            ->groupBy('ldap_ou')
+            ->map(function ($deptRows, $title) {
+                // Collapse multiple course enrollments into per-learner averages.
+                $perLearner = $deptRows->groupBy('user_id')->map(fn ($r) => [
+                    'name'  => $r->first()['learner_name'],
+                    'learn' => $r->avg('learning_score'),
+                    'quiz'  => $r->filter(fn ($x) => $x['quiz_score'] !== null)->avg('quiz_score'),
+                ]);
+
+                $topLearn = $perLearner->sortByDesc('learn')->first();
+                $quizLearners = $perLearner->filter(fn ($l) => $l['quiz'] !== null);
+                $topQuiz = $quizLearners->sortByDesc('quiz')->first();
+
+                return [
+                    'name'                 => $title,
+                    'learner_count'        => $perLearner->count(),
+                    'learning_score'       => $perLearner->avg('learn') !== null ? round((float) $perLearner->avg('learn'), 1) : null,
+                    'quiz_score'           => $quizLearners->isNotEmpty() ? round((float) $quizLearners->avg('quiz'), 1) : null,
+                    'top_learning_learner' => $topLearn ? ['name' => $topLearn['name'], 'score' => round((float) $topLearn['learn'], 1)] : null,
+                    'top_quiz_learner'     => $topQuiz ? ['name' => $topQuiz['name'], 'score' => round((float) $topQuiz['quiz'], 1)] : null,
+                ];
+            })
+            ->sortByDesc(fn ($d) => ($d['learning_score'] ?? 0) + ($d['quiz_score'] ?? 0))
+            ->values()
+            ->all();
     }
 }

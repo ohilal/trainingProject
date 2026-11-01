@@ -82,7 +82,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('reports.learning') }}">
             <i class="fas fa-fw fa-chart-line"></i>
-            <span>{{ __('Learning report') }}</span>
+            <span>{{ __('تقرير إحصائى') }}</span>
         </a>
     </li>
 
