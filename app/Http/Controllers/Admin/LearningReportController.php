@@ -3,31 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\AdminDashboardService;
+use App\Services\LearningReportService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class LearningReportController extends Controller
 {
     /**
-     * Redesigned "Learning" admin report:
-     * courses, attendees, progress, most viewed / most completed courses,
-     * Active Directory department (OU) breakdown and top scoring departments/learners,
-     * all visualised with Chart.js.
+     * Learning report: course attendance, learner progress, activity starts,
+     * completions and scores by LDAP OU — with Chart.js visualisations.
      */
-    public function index(AdminDashboardService $dashboard): View
+    public function index(Request $request): View
     {
-        $payload = Cache::remember('admin.reports.learning', now()->addMinutes(10), function () use ($dashboard) {
-            return [
-                'summary'       => $dashboard->summary(),
-                'courseStats'   => $dashboard->courseStats(),
-                'mostViewed'    => $dashboard->mostViewedCourses(),
-                'mostCompleted' => $dashboard->mostCompletedCourses(),
-                'departments'   => $dashboard->departmentBreakdown(),
-                'topLearners'   => $dashboard->topLearners(),
-            ];
+        $attendance = (string) $request->query('attendance', 'all');
+        $activity   = $request->query('activity') ? (int) $request->query('activity') : null;
+
+        $cacheKey = 'reports.learning.'.$attendance.'.'.($activity ?? 'all');
+
+        $report = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($attendance, $activity) {
+            return (new LearningReportService($attendance, $activity))->build();
         });
 
-        return view('contents.admin.reports.learning', $payload);
+        return view('contents.admin.reports.learning', ['report' => $report]);
     }
 }
