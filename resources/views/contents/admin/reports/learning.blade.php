@@ -13,7 +13,11 @@
         return implode(' / ', array_slice($sections, -2));
     };
 @endphp
-
+<style>
+    body {
+        font-size: 0.9rem;
+    }
+</style>
 <div class="row mb-4">
     <div class="col-12">
         <h1 class="h3 mb-1 text-gray-800">{{ __('تقرير إحصائى') }}</h1>
@@ -24,7 +28,41 @@
 <div class="alert alert-info">
     {{ __('يتم تحديث قيم القسم عند تسجيل دخول المتعلمين. Existing LDAP learners should sign in again to refresh this value.') }}
 </div>
-
+{{-- ============================ Summary cards ============================ --}}
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body pr-2">
+                <div class="text-sm font-weight-bold text-primary text-uppercase mb-1">{{ __('المتدربون') }}</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['learners'] }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body pr-2">
+                <div class="text-sm font-weight-bold text-info text-uppercase mb-1">{{ __('المتدربون الحاضرون') }}</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['attending_learners'] }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body pr-2">
+                <div class="text-sm font-weight-bold text-success text-uppercase mb-1">{{ __('متوسط الإنجاز') }}</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['average_progress'] }}%</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body pr-2">
+                <div class="text-sm font-weight-bold text-warning text-uppercase mb-1">{{ __('التسجيلات المكتملة') }}</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['completed_enrollments'] }}</div>
+            </div>
+        </div>
+    </div>
+</div>
 {{-- ============================ Filters ============================ --}}
 <div class="card shadow mb-4">
     <div class="card-body pr-2">
@@ -122,41 +160,7 @@
     </div>
 </div>
 
-{{-- ============================ Summary cards ============================ --}}
-<div class="row">
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-primary text-uppercase mb-1">{{ __('المتدربون') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['learners'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-info text-uppercase mb-1">{{ __('المتدربون الحاضرون') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['attending_learners'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-success text-uppercase mb-1">{{ __('متوسط الإنجاز') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['average_progress'] }}%</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-warning text-uppercase mb-1">{{ __('التسجيلات المكتملة') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['completed_enrollments'] }}</div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 {{-- ============================ Attendance donut + rankings ============================ --}}
 <div class="row">
@@ -213,24 +217,21 @@
     </div>
 </div>
 
+
 {{-- ============================ Department score rankings ============================ --}}
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
-        <div>
+        
             <h5 class="m-0 font-weight-bold text-primary">{{ __('الدرجات حسب البرنامج التدريبى') }}</h5>
             <small class="text-muted">{{ __('   متوسط الدرجات من قِبل المتدربين الذين أكملوا جميع الأنشطة في  الدورة التدريبية.') }}</small>
-        </div>
-        <button class="btn btn-md btn-outline-success collapsed" data-toggle="collapse" data-target="#chartDeptWrap" aria-expanded="false">
-            <i class="fas fa-chart-bar "></i> {{ __('رسم بيانى') }}
-        </button>
-    </div>
-    <div id="chartDeptWrap" class="collapse">
-        <div class="card-body">
-            <div style="position:relative; height:320px;"><canvas id="chartDepartments"></canvas></div>
-        </div>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-bordered mb-0 table-striped table-hover js-learning-report-table">
+       </div>
+       </div>
+    <div class="row mt-4">
+  
+    <div class="col-lg-6 col-sm-12 mb-4">
+        <div class="card shadow table-responsive h-100">
+            <div class="card-body">
+                <table class="table table-bordered mb-0 table-striped table-hover js-learning-report-table">
             <thead class="table-info">
                 <tr>
                     <th>{{ __('الإدارة ') }}</th>
@@ -267,7 +268,17 @@
                 <tr><td colspan="6" class="text-center text-muted">{{ __('No learner score data matches these filters.') }}</td></tr>
                 @endforelse
             </tbody>
-        </table>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-12 mb-4">
+        <div id="chartDeptWrap" class="card shadow h-100">
+            <div class="card-header">رسم بيانى</div>
+            <div class="card-body">
+                <div style="position:relative; height:320px;"><canvas id="chartDepartments"></canvas></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -393,7 +404,7 @@
         }
     }
 
-    $('#chartOverviewWrap, #chartDeptWrap, #chartLearnersWrap').on('shown.bs.collapse', function (e) {
+    $('#chartOverviewWrap, #chartLearnersWrap').on('shown.bs.collapse', function (e) {
         build(e.target.id);
     });
 
@@ -545,6 +556,8 @@
         }
     });
     }; /* end top-learners builder */
+
+    build('chartDeptWrap');
 
 })();
 </script>
