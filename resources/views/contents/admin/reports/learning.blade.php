@@ -43,19 +43,54 @@
     ];
 @endphp
 
+<style>
+    /* ---- Learning report visual enhancements (sb-admin-2 theme) ---- */
+    .lr-page-head {
+        background: linear-gradient(135deg, #4e73df 0%, #2b56c4 60%, #224abe 100%);
+        border-radius: .5rem;
+    }
+    .lr-icon-badge { width: 42px; height: 42px; box-shadow: 0 .25rem .4rem rgba(0,0,0,.18); }
+    .lr-stat-card { transition: transform .15s ease, box-shadow .15s ease; }
+    .lr-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1.2rem rgba(58,59,69,.25) !important; }
+    .lr-icon-watermark { font-size: 3.2rem; opacity: .18; flex-shrink: 0; }
+    .card-header.lr-chart-header { position: relative; overflow: hidden; }
+    .card-header.lr-chart-header::after {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #4e73df, #36b9cc, #1cc88a);
+    }
+    .table thead th { background-color: #f8f9fc; white-space: nowrap; }
+    .table-hover tbody tr:hover { background-color: rgba(78,115,223,.05); }
+    .lr-rank {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 26px; height: 26px; border-radius: 50%; font-size: .72rem; font-weight: 700; color: #fff;
+    }
+    .lr-rank-1 { background: linear-gradient(180deg, #f6c23e, #dda20a); }
+    .lr-rank-2 { background: linear-gradient(180deg, #b6c2d9, #858796); }
+    .lr-rank-3 { background: linear-gradient(180deg, #d99a6c, #b87333); }
+    .lr-rank-n { background: #dde3ec; color: #5a5c69; }
+    .lr-medal { color: #dda20a; }
+</style>
+
 <div class="row mb-4">
-    <div class="col-12">
-        <h1 class="h3 mb-1 text-gray-800">{{ __('Learning report') }}</h1>
-        <p class="text-muted mb-0">{{ __('Course attendance, learner progress, activity starts, completions, and scores by LDAP OU.') }}</p>
+    <div class="col-12 lr-page-head text-white shadow py-4 px-4 d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="h3 mb-1 text-white"><i class="fas fa-chart-pie mr-2"></i>{{ __('Learning report') }}</h1>
+            <p class="mb-0" style="opacity:.85;">{{ __('Course attendance, learner progress, activity starts, completions, and scores by LDAP OU.') }}</p>
+        </div>
+        <i class="fas fa-graduation-cap" style="font-size:3rem; opacity:.25;"></i>
     </div>
 </div>
 
-<div class="alert alert-info">
-    {{ __('LDAP OU values are refreshed when learners sign in. Existing LDAP learners should sign in again to refresh this value.') }}
+<div class="alert alert-info d-flex align-items-center">
+    <i class="fas fa-info-circle fa-lg mr-2"></i>
+    <span>{{ __('LDAP OU values are refreshed when learners sign in. Existing LDAP learners should sign in again to refresh this value.') }}</span>
 </div>
 
 {{-- ============================ Filters ============================ --}}
 <div class="card shadow mb-4">
+    <div class="card-header lr-chart-header py-3 bg-white">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-filter mr-1"></i> {{ __('Filters') }}</h6>
+    </div>
     <div class="card-body">
         <form method="GET" action="{{ route('admin.reports.learning') }}" class="form-row align-items-end">
             <div class="form-group col-md-4">
@@ -79,8 +114,8 @@
                 </select>
             </div>
             <div class="form-group col-md-3">
-                <button type="submit" class="btn btn-primary">{{ __('Apply filters') }}</button>
-                <a href="{{ route('admin.reports.learning') }}" class="btn btn-light">{{ __('Reset') }}</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i>{{ __('Apply filters') }}</button>
+                <a href="{{ route('admin.reports.learning') }}" class="btn btn-light"><i class="fas fa-undo mr-1"></i>{{ __('Reset') }}</a>
             </div>
         </form>
     </div>
@@ -88,9 +123,9 @@
 
 {{-- ============================ Course overview ============================ --}}
 <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+    <div class="card-header lr-chart-header py-3 bg-white d-flex justify-content-between align-items-center">
         <div>
-            <h6 class="m-0 font-weight-bold text-primary">{{ __('Course overview') }}</h6>
+            <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-book-open mr-1"></i> {{ __('Course overview') }}</h6>
             <small class="text-muted">{{ __('All courses are listed, including courses with no learner activity.') }}</small>
         </div>
         <button class="btn btn-sm btn-outline-primary collapsed" data-toggle="collapse" data-target="#chartOverviewWrap" aria-expanded="false">
@@ -152,47 +187,39 @@
 </div>
 
 {{-- ============================ Summary cards ============================ --}}
+@php
+    $summaryCards = [
+        ['value' => $report['summary']['learners'],              'label' => __('Learners'),             'icon' => 'fa-users',      'gradient' => 'bg-gradient-primary', 'icon_bg' => 'bg-primary'],
+        ['value' => $report['summary']['attending_learners'],    'label' => __('Attending learners'),   'icon' => 'fa-user-graduate','gradient' => 'bg-gradient-info',  'icon_bg' => 'bg-info'],
+        ['value' => $report['summary']['average_progress'] . '%','label' => __('Average progress'),     'icon' => 'fa-chart-line', 'gradient' => 'bg-gradient-success', 'icon_bg' => 'bg-success'],
+        ['value' => $report['summary']['completed_enrollments'], 'label' => __('Completed enrollments'),'icon' => 'fa-clipboard-check','gradient' => 'bg-gradient-warning','icon_bg' => 'bg-warning'],
+    ];
+@endphp
 <div class="row">
+    @foreach($summaryCards as $card)
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ __('Learners') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['learners'] }}</div>
+        <div class="card {{ $card['gradient'] }} text-white shadow h-100 border-0 overflow-hidden lr-stat-card">
+            <div class="card-body d-flex align-items-center justify-content-between position-relative">
+                <div class="lr-stat-text">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle lr-icon-badge {{ $card['icon_bg'] }} mb-2">
+                        <i class="fas {{ $card['icon'] }} fa-sm text-white"></i>
+                    </div>
+                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="opacity:.9;">{{ $card['label'] }}</div>
+                    <div class="h4 mb-0 font-weight-bold text-white">{{ $card['value'] }}</div>
+                </div>
+                <i class="fas {{ $card['icon'] }} lr-icon-watermark text-white"></i>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ __('Attending learners') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['attending_learners'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">{{ __('Average progress') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['average_progress'] }}%</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">{{ __('Completed enrollments') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['completed_enrollments'] }}</div>
-            </div>
-        </div>
-    </div>
+    @endforeach
 </div>
 
 {{-- ============================ Attendance donut + rankings ============================ --}}
 <div class="row">
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">{{ __('Attendance status') }}</h6>
+            <div class="card-header lr-chart-header py-3 bg-white">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-user-check mr-1"></i> {{ __('Attendance status') }}</h6>
                 <small class="text-muted">{{ __('Learner/course-term rows matching the filters.') }}</small>
             </div>
             <div class="card-body">
@@ -202,18 +229,25 @@
     </div>
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">{{ __('Most viewed courses') }}</h6>
+            <div class="card-header lr-chart-header py-3 bg-white">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-eye mr-1"></i> {{ __('Most viewed courses') }}</h6>
                 <small class="text-muted">{{ __('Ranked by learners who started an activity; activity starts are shown separately.') }}</small>
             </div>
             <div class="table-responsive">
-                <table class="table table-sm mb-0">
+                <table class="table table-sm table-hover mb-0">
                     <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('المتدربون') }}</th><th>{{ __('بدء النشاط') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_viewed_courses'] as $course)
-                        <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['active_learner_count'] }}</td><td>{{ $course['activity_starts'] }}</td></tr>
+                        <tr>
+                            <td>
+                                <span class="lr-rank {{ $loop->index < 3 ? 'lr-rank-' . ($loop->index + 1) : 'lr-rank-n' }} mr-1">{{ $loop->iteration }}</span>
+                                {{ $course['course_title'] }}
+                            </td>
+                            <td>{{ $course['active_learner_count'] }}</td>
+                            <td><span class="badge badge-light border"><i class="fas fa-play fa-xs text-primary mr-1"></i>{{ $course['activity_starts'] }}</span></td>
+                        </tr>
                         @empty
-                        <tr><td colspan="3" class="text-center text-muted">{{ __('No activity starts match these filters.') }}</td></tr>
+                        <tr><td colspan="3" class="text-center text-muted py-3"><i class="fas fa-inbox d-block mb-1"></i>{{ __('No activity starts match these filters.') }}</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -222,18 +256,32 @@
     </div>
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">{{ __('Most completed courses') }}</h6>
+            <div class="card-header lr-chart-header py-3 bg-white">
+                <h6 class="m-0 font-weight-bold text-success"><i class="fas fa-trophy mr-1"></i> {{ __('Most completed courses') }}</h6>
                 <small class="text-muted">{{ __('Ranked by learners who completed every activity in their course term.') }}</small>
             </div>
             <div class="table-responsive">
-                <table class="table table-sm mb-0">
+                <table class="table table-sm table-hover mb-0">
                     <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('الدورات المكتملة') }}</th><th>{{ __('معدل الإكمال') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_completed_courses'] as $course)
-                        <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['completed_enrollments'] }}</td><td>{{ $course['completion_rate'] }}%</td></tr>
+                        <tr>
+                            <td>
+                                @if($loop->first)<i class="fas fa-medal lr-medal mr-1"></i>@else<span class="lr-rank {{ $loop->index < 3 ? 'lr-rank-' . ($loop->index + 1) : 'lr-rank-n' }} mr-1">{{ $loop->iteration }}</span>@endif
+                                {{ $course['course_title'] }}
+                            </td>
+                            <td>{{ $course['completed_enrollments'] }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 mr-2" style="height:8px; min-width:50px;">
+                                        <div class="progress-bar bg-gradient-success" style="width: {{ $course['completion_rate'] }}%"></div>
+                                    </div>
+                                    <small>{{ $course['completion_rate'] }}%</small>
+                                </div>
+                            </td>
+                        </tr>
                         @empty
-                        <tr><td colspan="3" class="text-center text-muted">{{ __('No completed courses match these filters.') }}</td></tr>
+                        <tr><td colspan="3" class="text-center text-muted py-3"><i class="fas fa-inbox d-block mb-1"></i>{{ __('No completed courses match these filters.') }}</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -244,9 +292,9 @@
 
 {{-- ============================ Department score rankings ============================ --}}
 <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+    <div class="card-header lr-chart-header py-3 bg-white d-flex justify-content-between align-items-center">
         <div>
-            <h6 class="m-0 font-weight-bold text-primary">{{ __('Department score rankings') }}</h6>
+            <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-sitemap mr-1"></i> {{ __('Department score rankings') }}</h6>
             <small class="text-muted">{{ __('Average scores are calculated per learner from completed learning activities and quizzes.') }}</small>
         </div>
         <button class="btn btn-sm btn-outline-primary collapsed" data-toggle="collapse" data-target="#chartDeptWrap" aria-expanded="false">
@@ -302,8 +350,8 @@
 
 {{-- ============================ Learner course details ============================ --}}
 <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-        <h6 class="m-0 font-weight-bold text-primary">{{ __('Learner course details') }}</h6>
+    <div class="card-header lr-chart-header py-3 bg-white d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-user-clock mr-1"></i> {{ __('Learner course details') }}</h6>
         <button class="btn btn-sm btn-outline-primary collapsed" data-toggle="collapse" data-target="#chartLearnersWrap" aria-expanded="false">
             <i class="fas fa-chart-bar fa-sm"></i> {{ __('Top 10 learners chart') }}
         </button>
@@ -385,7 +433,7 @@
 
     var palette = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#6f42c1', '#fd7e14', '#20c9a6'];
 
-    // ---------- 1. Most viewed courses (horizontal bars) ----------
+    // ---------- 1. Overview panel: most viewed (bars) + most completed (doughnut), built lazily on expand ----------
     charts['chartOverviewWrap'] = function () {
     new Chart(document.getElementById('chartMostViewed').getContext('2d'), {
         type: 'horizontalBar',
@@ -413,10 +461,6 @@
         }
     });
 
-    }; /* end lazy overview charts */
-
-    // ---------- 2. Most completed courses (doughnut of rates) ----------
-    charts['chartOverviewWrap2'] = null;
     new Chart(document.getElementById('chartMostCompleted').getContext('2d'), {
         type: 'doughnut',
         data: {
@@ -439,6 +483,7 @@
             }
         }
     });
+    }; /* end lazy overview charts */
 
     // ---------- 3. Attendance status (donut) ----------
     new Chart(document.getElementById('chartAttendance').getContext('2d'), {
@@ -529,19 +574,22 @@
     });
     }; /* end top-learners builder */
 
-    // Build charts that live in initially-open cards immediately.
+    // Build charts that live in initially-open cards immediately;
+    // charts inside collapsed panels are built lazily on first expand.
     build('chartOverviewWrap');
-    // Charts inside collapsed panels are built lazily on first expand;
-    // the attendance donut is always visible so it was built above inline.
-    if (document.getElementById('chartMostCompleted')) {
-        // second chart of the overview panel shares the same lazy trigger:
-        var prev = charts['chartOverviewWrap'];
-        charts['chartOverviewWrap'] = function () {
-            prev();
-            var el = document.getElementById('chartMostCompleted');
-            if (el && !el.dataset.built) { el.dataset.built = '1'; window.__buildMostCompleted && window.__buildMostCompleted(); }
-        };
-    }
+
+    // Redraw visible charts when a collapse animation finishes or the window resizes.
+    $('.collapse').on('shown.bs.collapse', function () {
+        Object.keys(built).forEach(function (id) {
+            var canvas = document.querySelector('#' + id + ' canvas');
+            if (!canvas) return;
+            var inst = Chart.getChart ? Chart.getChart(canvas) : Chart.instances[canvas.id];
+            if (inst) inst.resize();
+        });
+    });
+    window.addEventListener('resize', function () {
+        Object.values(Chart.instances || {}).forEach(function (c) { try { c.resize(); } catch (e) {} });
+    });
 })();
 </script>
 @endpush
