@@ -21,7 +21,7 @@ class LearningReportController extends Controller
         $attendance = (string) $request->query('attendance', 'all');
         $activity   = $request->query('activity') ? (int) $request->query('activity') : null;
 
-        $cacheKey = 'reports.learning.'.$attendance.'.'.($activity ?? 'all');
+        $cacheKey = 'reports.learning.course-completion-v2.'.$attendance.'.'.($activity ?? 'all');
 
         $report = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($attendance, $activity) {
             return (new LearningReportService($attendance, $activity))->build();

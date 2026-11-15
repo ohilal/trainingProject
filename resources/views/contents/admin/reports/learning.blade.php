@@ -3,9 +3,9 @@
 @section('content')
 @php
     $attendanceLabels = [
-        'completed'   => ['badge' => 'success', 'text' => __('Completed')],
-        'attending'   => ['badge' => 'info',    'text' => __('Attending')],
-        'not_started' => ['badge' => 'secondary', 'text' => __('Not started')],
+        'completed'   => ['badge' => 'success', 'text' => __('تم الانتهاء')],
+        'attending'   => ['badge' => 'info',    'text' => __('جارى الدراسة')],
+        'not_started' => ['badge' => 'secondary', 'text' => __('لم يبدأ الدراسة')],
     ];
     $formatLdapOu = static function ($value) {
         $sections = array_map('trim', explode('/', (string) $value));
@@ -14,54 +14,74 @@
     };
 @endphp
 <style>
-    body {
-        font-size: 0.9rem;
+    body { font-size: .85rem; }
+    /* ---- Learning report visual enhancements (sb-admin-2 theme) ---- */
+    .lr-page-head {
+        background: linear-gradient(135deg, var(--darkteal) 0%, var(--bs-gray) 60%, var(--darkteal) 100%);
+        border-radius: .5rem;
     }
+    .lr-icon-badge { width: 42px; height: 42px; box-shadow: 0 .25rem .4rem rgba(0,0,0,.18); }
+    .lr-stat-card { transition: transform .15s ease, box-shadow .15s ease; }
+    .lr-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1.2rem rgba(58,59,69,.25) !important; }
+    .lr-icon-watermark { font-size: 5.2rem; opacity: .18; flex-shrink: 0; }
+    .card-header.lr-chart-header { position: relative; overflow: hidden; }
+    .card-header.lr-chart-header::after {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, var(--darkteal), #36b9cc, #1cc88a);
+    }
+    .table thead th { background-color: #f8f9fc; white-space: nowrap; }
+    .table-hover tbody tr:hover { background-color: rgba(78,115,223,.05); }
+    .lr-rank {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 26px; height: 26px; border-radius: 50%; font-size: .72rem; font-weight: 700; color: #fff;
+    }
+    .lr-rank-1 { background: linear-gradient(180deg, #f6c23e, #dda20a); }
+    .lr-rank-2 { background: linear-gradient(180deg, #b6c2d9, #858796); }
+    .lr-rank-3 { background: linear-gradient(180deg, #d99a6c, #b87333); }
+    .lr-rank-n { background: #dde3ec; color: #5a5c69; }
+    .lr-medal { color: #dda20a; }
 </style>
 <div class="row mb-4">
-    <div class="col-12">
-        <h1 class="h3 mb-1 text-gray-800">{{ __('تقرير إحصائى') }}</h1>
-        <p class="text-muted mb-0">{{ __('حضور الدورات التدريبية، وتقدم المتعلمين، وبدء الأنشطة، وإتمامها، والدرجات، مصنفةً حسب الإدارة.') }}</p>
+       <div class="col-12 lr-page-head text-white shadow py-4 px-4 d-flex align-items-center justify-content-between">
+         <h1 class="h3 mb-1 text-white"><i class="fas fa-chart-pie mr-2"></i>{{ __('تقرير إحصائى') }}</h1>
+        <p class="text-light mb-0 text-right">{{ __('حضور الدورات التدريبية، وتقدم المتعلمين، وبدء الأنشطة، وإتمامها، والدرجات، مصنفةً حسب الإدارة.') }}</p>
+     <i class="fas fa-graduation-cap" style="font-size:3.5rem; opacity:.25;"></i>
     </div>
+  
 </div>
 
 <div class="alert alert-info">
     {{ __('يتم تحديث قيم القسم عند تسجيل دخول المتعلمين. Existing LDAP learners should sign in again to refresh this value.') }}
 </div>
+
 {{-- ============================ Summary cards ============================ --}}
+@php
+    $summaryCards = [
+        ['value' => $report['summary']['learners'],              'label' => __('المتدربون'),             'icon' => 'fa-users',      'gradient' => 'bg-gradient-primary', 'icon_bg' => 'bg-primary'],
+        ['value' => $report['summary']['attending_learners'],    'label' => __('المتدربون الحاضرون'),   'icon' => 'fa-user-graduate','gradient' => 'bg-gradient-info',  'icon_bg' => 'bg-info'],
+        ['value' => $report['summary']['average_progress'] . '%','label' => __('متوسط الإنجاز'),     'icon' => 'fa-chart-line', 'gradient' => 'bg-gradient-success', 'icon_bg' => 'bg-success'],
+        ['value' => $report['summary']['completed_enrollments'], 'label' => __('التسجيلات المكتملة'),'icon' => 'fa-clipboard-check','gradient' => 'bg-gradient-warning','icon_bg' => 'bg-warning'],
+    ];
+@endphp
 <div class="row">
+    @foreach($summaryCards as $card)
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-primary text-uppercase mb-1">{{ __('المتدربون') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['learners'] }}</div>
+        <div class="card {{ $card['gradient'] }} text-white shadow h-100 border-0 overflow-hidden lr-stat-card">
+            <div class="card-body d-flex align-items-center justify-content-between position-relative">
+                <div class="lr-stat-text">
+                 
+                    <div class="h4 font-weight-bold text-uppercase mb-1 pt-2 pr-2" style="opacity:.9;">
+                       <div class="d-inline-flex align-items-center justify-content-center rounded-circle lr-icon-badge {{ $card['icon_bg'] }} mb-2">
+                        <i class="fas {{ $card['icon'] }} fa-sm text-white"></i>
+                    </div>
+                    {{ $card['label'] }}</div>
+                    <div class="h2 mb-0 font-weight-bold text-white pr-2">{{ $card['value'] }}</div>
+                </div>
+                <i class="fas {{ $card['icon'] }} lr-icon-watermark text-white"></i>
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-info text-uppercase mb-1">{{ __('المتدربون الحاضرون') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['attending_learners'] }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-success text-uppercase mb-1">{{ __('متوسط الإنجاز') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['average_progress'] }}%</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body pr-2">
-                <div class="text-sm font-weight-bold text-warning text-uppercase mb-1">{{ __('التسجيلات المكتملة') }}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $report['summary']['completed_enrollments'] }}</div>
-            </div>
-        </div>
-    </div>
+    @endforeach
 </div>
 {{-- ============================ Filters ============================ --}}
 <div class="card shadow mb-4">
@@ -70,16 +90,16 @@
             <div class="form-group col-md-4">
                 <label for="attendance">{{ __('الحضور') }}</label>
                 <select name="attendance" id="attendance" class="form-control">
-                    <option value="all" {{ $report['attendance_filter'] === 'all' ? 'selected' : '' }}>{{ __('All attendance') }}</option>
-                    <option value="not_started" {{ $report['attendance_filter'] === 'not_started' ? 'selected' : '' }}>{{ __('Not started') }}</option>
-                    <option value="attending" {{ $report['attendance_filter'] === 'attending' ? 'selected' : '' }}>{{ __('Attending') }}</option>
-                    <option value="completed" {{ $report['attendance_filter'] === 'completed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                    <option value="all" {{ $report['attendance_filter'] === 'all' ? 'selected' : '' }}>{{ __('كل الحضور') }}</option>
+                    <option value="not_started" {{ $report['attendance_filter'] === 'not_started' ? 'selected' : '' }}>{{ __('لم يبدأ') }}</option>
+                    <option value="attending" {{ $report['attendance_filter'] === 'attending' ? 'selected' : '' }}>{{ __('جارى الدراسة') }}</option>
+                    <option value="completed" {{ $report['attendance_filter'] === 'completed' ? 'selected' : '' }}>{{ __('مكتمل') }}</option>
                 </select>
             </div>
             <div class="form-group col-md-5">
-                <label for="activity">{{ __('Activity') }}</label>
+                <label for="activity">{{ __('النشاط') }}</label>
                 <select name="activity" id="activity" class="form-control">
-                    <option value="">{{ __('All activities') }}</option>
+                    <option value="">{{ __('جميع الأنشطة') }}</option>
                     @foreach($report['activities'] as $activity)
                     <option value="{{ $activity['id'] }}" {{ $report['selected_activity'] === $activity['id'] ? 'selected' : '' }}>
                         {{ $activity['label'] }}
@@ -167,7 +187,9 @@
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
             <div class="card-header py-3">
-                <h5 class="m-0 font-weight-bold text-primary">{{ __('حالة الحضور') }}</h5>
+                <h5 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-user-check mr-1"></i>
+                {{ __('حالة الحضور') }}</h5>
                 <small class="text-muted">{{ __('Learner/course-term rows matching the filters.') }}</small>
             </div>
             <div class="card-body">
@@ -178,17 +200,25 @@
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
             <div class="card-header py-3">
-                <h5 class="m-0 font-weight-bold text-primary">{{ __('الأكثر مشاهدة') }}</h5>
+                <h5 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-eye mr-1"></i>{{ __('الأكثر مشاهدة') }}</h5>
                 <small class="text-muted">{{ __('Ranked by learners who started an activity; activity starts are shown separately.') }}</small>
             </div>
             <div class="table-responsive">
-                <table class="table table-sm mb-0 js-learning-report-table table-striped table-hover">
-                    <thead  style="background-color: var(--darkteal) !important;" class="table-primary"><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('المتدربون') }}</th><th>{{ __('بدء النشاط') }}</th></tr></thead>
+                 <table class="table table-sm table-hover mb-0">
+                    <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('المتدربون') }}</th><th>{{ __('بدء النشاط') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_viewed_courses'] as $course)
-                        <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['active_learner_count'] }}</td><td>{{ $course['activity_starts'] }}</td></tr>
+                        <tr>
+                            <td>
+                                <span class="lr-rank {{ $loop->index < 3 ? 'lr-rank-' . ($loop->index + 1) : 'lr-rank-n' }} mr-1">{{ $loop->iteration }}</span>
+                                {{ $course['course_title'] }}
+                            </td>
+                            <td>{{ $course['active_learner_count'] }}</td>
+                            <td><span class="badge badge-light border"><i class="fas fa-play fa-xs text-primary mr-1"></i>{{ $course['activity_starts'] }}</span></td>
+                        </tr>
                         @empty
-                        <tr><td colspan="3" class="text-center text-muted">{{ __('No activity starts match these filters.') }}</td></tr>
+                        <tr><td colspan="3" class="text-center text-muted py-3"><i class="fas fa-inbox d-block mb-1"></i>{{ __('No activity starts match these filters.') }}</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -198,17 +228,32 @@
     <div class="col-lg-4 mb-4">
         <div class="card shadow h-100">
             <div class="card-header py-3">
-                <h5 class="m-0 font-weight-bold text-success">{{ __('الدورات المكتملة') }}</h5>
-                <small class="text-muted">{{ __('Ranked by learners who completed every activity in their course term.') }}</small>
+                <h5 class="m-0 font-weight-bold text-success">
+                <i class="fas fa-trophy mr-1"></i>{{ __('الدورات المكتملة') }}</h5>
+                <small class="text-muted">{{ __('Ranked by learners who completed every activity across all terms in the course.') }}</small>
             </div>
             <div class="table-responsive">
-                <table class="table table-sm mb-0 js-learning-report-table table-striped">
-                    <thead class="table-success"><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('الدورات المكتملة') }}</th><th>{{ __('معدل الإكمال') }}</th></tr></thead>
+                <table class="table table-sm table-hover mb-0">
+                    <thead><tr><th>{{ __('الدورة التدريبية') }}</th><th>{{ __('المتدربون الذين أكملوا الدورة') }}</th><th>{{ __('معدل الإكمال') }}</th></tr></thead>
                     <tbody>
                         @forelse($report['most_completed_courses'] as $course)
-                        <tr><td>{{ $course['course_title'] }}</td><td>{{ $course['completed_enrollments'] }}</td><td>{{ $course['completion_rate'] }}%</td></tr>
+                        <tr>
+                            <td>
+                                @if($loop->first)<i class="fas fa-medal lr-medal mr-1"></i>@else<span class="lr-rank {{ $loop->index < 3 ? 'lr-rank-' . ($loop->index + 1) : 'lr-rank-n' }} mr-1">{{ $loop->iteration }}</span>@endif
+                                {{ $course['course_title'] }}
+                            </td>
+                            <td>{{ $course['completed_enrollments'] }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 mr-2" style="height:8px; min-width:50px;">
+                                        <div class="progress-bar bg-gradient-success" style="width: {{ $course['completion_rate'] }}%"></div>
+                                    </div>
+                                    <small>{{ $course['completion_rate'] }}%</small>
+                                </div>
+                            </td>
+                        </tr>
                         @empty
-                        <tr><td colspan="3" class="text-center text-muted">{{ __('No completed courses match these filters.') }}</td></tr>
+                        <tr><td colspan="3" class="text-center text-muted py-3"><i class="fas fa-inbox d-block mb-1"></i>{{ __('لا توجد دورات مكتملة حتى الآن') }}</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -297,12 +342,12 @@
     </div>
     <div class="table-responsive">
         <table class="table table-bordered table-sm mb-0 table-striped table-hover js-learning-report-table">
-            <thead>
-                <tr>
+            <thead >
+                <tr >
                     <th>{{ __('المتدرب') }}</th>
                     <th>{{ __('الإدارة') }}</th>
                     <th>{{ __('الدورة التدريبية') }}</th>
-                    <th>{{ __('قسم الدورة') }}</th>
+                    <th>{{ __(' البرنامج') }}</th>
                     <th>{{ __('الحضور') }}</th>
                     @if($report['selected_activity'] !== null)<th>{{ __('النشاط المحدد') }}</th>@endif
                     <th>{{ __('الإنجاز') }}</th>
@@ -358,9 +403,9 @@
             'learners' => $c['learner_count'],
         ])->values()->all(),
         'attendance' => [
-            ['label' => __('Not started'), 'value' => collect($report['rows'])->where('attendance_status', 'not_started')->count(), 'color' => '#d1d3e2'],
-            ['label' => __('Attending'), 'value' => collect($report['rows'])->where('attendance_status', 'attending')->count(), 'color' => '#36b9cc'],
-            ['label' => __('Completed'), 'value' => collect($report['rows'])->where('attendance_status', 'completed')->count(), 'color' => '#1cc88a'],
+            ['label' => __('لم يبدأ الدراسة'), 'value' => collect($report['rows'])->where('attendance_status', 'not_started')->count(), 'color' => '#d1d3e2'],
+            ['label' => __('جارى الدراسة'), 'value' => collect($report['rows'])->where('attendance_status', 'attending')->count(), 'color' => '#36b9cc'],
+            ['label' => __('تم الانتهاء'), 'value' => collect($report['rows'])->where('attendance_status', 'completed')->count(), 'color' => '#1cc88a'],
         ],
         'departments' => collect($report['department_rankings'])->take(10)->map(fn ($d) => [
             'name' => $formatLdapOu($d['name']),
@@ -491,14 +536,14 @@
             labels: data.departments.map(function (d) { return d.name; }),
             datasets: [
                 {
-                    label: @json(__('Learners')),
+                    label: @json(__('المتدربون')),
                     type: 'bar',
                     data: data.departments.map(function (d) { return d.learners; }),
                     backgroundColor: 'rgba(78,115,223,.6)',
                     yAxisID: 'yLearners',
                 },
                 {
-                    label: @json(__('Average learning score (%)')),
+                    label: @json(__('متوسط درجة التعلم (%)')),
                     type: 'line',
                     data: data.departments.map(function (d) { return d.learning; }),
                     borderColor: '#1cc88a',
@@ -507,7 +552,7 @@
                     yAxisID: 'yScore',
                 },
                 {
-                    label: @json(__('Average quiz score (%)')),
+                    label: @json(__('متوسط درجة الاختبار (%)')),
                     type: 'line',
                     data: data.departments.map(function (d) { return d.quiz; }),
                     borderColor: '#f6c23e',

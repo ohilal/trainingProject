@@ -9,7 +9,7 @@
             <!-- Card Header - Dropdown -->
             <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">{{ __("settings") }}</h6>
+                <h6 class="m-0 font-weight-bold text-primary">{{ __("الإعدادات") }}</h6>
 
             </div>
             <!-- Card Body -->
@@ -18,11 +18,11 @@
                     @method('patch')
                     @csrf
                     <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                            <label for="theme">{{ __("theme") }}</label>
-                            <select name="theme" id="theme" class="form-control">
-                                <option value="default">default</option>
-                                <option value="dark">dark</option>
+                        <div class="col-sm-6 mb-3 mb-sm-0 pr-5">
+                            <label for="theme">{{ __("إعدادات المظهر/ theme") }}</label>
+                            <select name="theme" id="theme" class="form-control col-lg-4 col-sm-12">
+                                <option value="default">الافتراضى/ default</option>
+                                <option value="dark"> الداكن/ dark/</option>
                             </select>
                           
                         </div>
@@ -30,8 +30,8 @@
                     
                
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary btn-user btn-block"
-                            value="{{ __('Save') }}">
+                        <input type="submit" class="btn btn-primary btn-user btn-block col-2"
+                            value="{{ __('حفظ') }}">
                     </div>
                 </form>
                 

@@ -26,7 +26,7 @@
 
                                 <div class="col-4">
                                     
-                                    <h6 class="font-weight-bold text-dark">{{ __('نسبة الإنجاز') }}</h6>
+                                    <h6 class="font-weight-bold ">{{ __('نسبة الإنجاز') }}</h6>
                                     <hr />
                                     <label>{{ __('الإنجاز:') }}</label>
                                     <x-atoms.progress :color="'primary'" :fill="$session->workout_completed ?? 0" :count="$session->Related->count()" />

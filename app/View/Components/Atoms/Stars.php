@@ -8,6 +8,7 @@ class Stars extends Component
 {
 
     public int $score;
+    public float $rating;
 
     /**
      * Create a new component instance.
@@ -17,6 +18,7 @@ class Stars extends Component
     public function __construct(int $score)
     {
         $this->score = $score;
+        $this->rating = round(max(0, min(100, $score)) / 10) / 2;
     }
 
     /**

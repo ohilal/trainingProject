@@ -572,7 +572,7 @@ background: linear-gradient(45deg,rgba(180, 203, 226, 1) 0%, rgba(163, 193, 194,
     height: 100%;
     top: 0;
     left: 0;
-    background: rgba(98, 34, 204, .9);
+    background: #22596e95;
     transition: .5s;
     opacity: 0;
 }

@@ -329,7 +329,7 @@ textarea {
   overflow: auto;
   resize: vertical;
 }
-.input-group:has(input[placeholder*="Search"]) button.btn.btn-secondary,
+.input-group:has(input[placeholder*="البحث"]) button.btn.btn-secondary,
 .input-group:has(input[type="search"]) button.btn.btn-secondary {
     border-top-left-radius: 0.35rem !important;
     border-bottom-left-radius: 0.35rem !important;
@@ -11126,8 +11126,8 @@ a:focus {
 }
 
 .bg-gradient-primary {
-  background-color: #4e73df;
-  background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+  background-color: var(--darkteal);
+  background-image: linear-gradient(0deg, var(--darkteal) 5%, var(--secondary) 100%);
   background-size: cover;
 }
 

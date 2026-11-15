@@ -59,16 +59,16 @@
             <p class="text-center mt-4">{{ __('يجب أن يتم تعيين الدارسين إلى هذه الدورة بواسطة المسؤول.') }}</p>
         @endif
         </div>
-        <div class="wow fadeInUp" data-wow-delay="0.3s mt-2">
+       
+        
+            @forelse ($course->Terms as $term)
+         <div class="row g-4 mx-auto justify-content-center">
+                <div class="wow fadeInUp" data-wow-delay="0.3s mt-2">
             <p class="section-title text-secondary justify-content-center"><span></span>
                 {{ __('أقسام الدورة التدريبية') }}
                 <span></span></p>
-            <!-- <h1 class="text-center mb-5">الحلول التي نقدمها
-               ()
-            </h1> -->
+
         </div>
-        <div class="row g-4 mx-auto justify-content-center">
-            @forelse ($course->Terms as $term)
             <x-front.term :term="$term" :iteration="$loop->iteration"/>
             @empty
             @endforelse

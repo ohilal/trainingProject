@@ -52,7 +52,7 @@
 
                                 @if(!$terms->is_mentor)
                                 <div class="col-4">
-                                    <h6 class="font-weight-bold text-dark">{{ __(' التالى') }}</h6>
+                                    <h6 class="font-weight-bold ">{{ __(' التالى') }}</h6>
                                     @if($term->next_activity)
                                     <p class="text-dark">
                                         <i class="fa fa-flag-checkered"></i>

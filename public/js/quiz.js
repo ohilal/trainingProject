@@ -21,7 +21,7 @@ $(document).ready(function () {
 
         saveQuestionForm(form)
             .done(function () {
-                advanceToNextQuestion(form);
+                advanceToNextQuestion();
             })
             .fail(showSaveError)
             .always(function () {
@@ -95,7 +95,7 @@ function saveOnly() {
     saveForms(forms)
         .done(function () {
             if (style == "StepByStep" && forms.length > 0) {
-                advanceToNextQuestion(forms[0]);
+                advanceToNextQuestion();
             }
 
             alert(quizSavedMessage);
@@ -125,17 +125,21 @@ function saveQuestionForm(form) {
     });
 }
 
-function advanceToNextQuestion(form) {
+function advanceToNextQuestion() {
     if (style != "StepByStep") {
         return;
     }
 
     var questions = $("#questions .question");
-    var currentIndex = questions.index($(form).closest(".question"));
+    var steps = $("#btnQuestions .btnQuestion");
+    var activeStep = steps.filter(".process-step-active");
+    var currentIndex = steps.index(activeStep);
 
     if (currentIndex >= 0 && currentIndex + 1 < questions.length) {
-        var nextQuestionId = questions.eq(currentIndex + 1).attr("id").replace("question-", "");
-        showQuestion(nextQuestionId);
+        var nextQuestionId = questions.eq(currentIndex + 1).attr("id");
+        if (nextQuestionId) {
+            showQuestion(nextQuestionId.replace("question-", ""));
+        }
     }
 }
 

@@ -89,24 +89,31 @@ class LearningReportService
     protected function context(): array
     {
         // Every sessionable that belongs to a term, with its session/activity title.
-        $activityQuery = DB::table('sessionables as sb')
+        $allActivities = DB::table('sessionables as sb')
             ->join('session_term as st', 'st.session_id', '=', 'sb.session_id')
             ->join('terms as t', 't.id', '=', 'st.term_id')
             ->join('sessions as s', 's.id', '=', 'sb.session_id')
             ->whereNull('sb.deleted_at')
             ->orderBy('st.term_id')
             ->orderBy('sb.order')
-            ->get(['sb.id as sessionable_id', 'st.term_id', 'sb.session_id', 's.title as activity_title']);
+            ->get(['sb.id as sessionable_id', 'st.term_id', 't.course_id', 'sb.session_id', 's.title as activity_title']);
 
+        $activityQuery = $allActivities;
         if ($this->selectedActivity !== null) {
             $activityQuery = $activityQuery->where('session_id', $this->selectedActivity);
         }
 
         $activitiesByTerm = $activityQuery->groupBy('term_id');
+        $activitiesByCourse = $allActivities->groupBy('course_id');
 
         // Workouts (learner activity records) joined to their participants.
+        $minutesExpression = DB::connection()->getDriverName() === 'sqlite'
+            ? 'CASE WHEN w.date_last_view IS NOT NULL THEN (julianday(w.date_last_view) - julianday(w.date_first_view)) * 1440 ELSE 0 END'
+            : 'CASE WHEN w.date_last_view IS NOT NULL THEN DATEDIFF(minute, w.date_first_view, w.date_last_view) ELSE 0 END';
+
         $workoutQuery = DB::table('workouts as w')
             ->join('term_user as tu', 'tu.id', '=', 'w.participant_id')
+            ->join('terms as t', 't.id', '=', 'tu.term_id')
             ->join('users as u', 'u.id', '=', 'tu.user_id')
             ->where('w.is_mentor', false)
             ->get([
@@ -116,10 +123,13 @@ class LearningReportService
                 'w.is_completed',
                 'tu.user_id',
                 'tu.term_id',
+                't.course_id',
                 'u.name as learner_name',
                 'u.ldap_ou',
-                DB::raw('CASE WHEN w.date_last_view IS NOT NULL THEN DATEDIFF(minute, w.date_first_view, w.date_last_view) ELSE 0 END as minutes'),
+                DB::raw($minutesExpression.' as minutes'),
             ]);
+
+        $workoutsByCourseAndLearner = $workoutQuery->groupBy(['course_id', 'user_id']);
 
         if ($this->selectedActivity !== null) {
             $workoutQuery = $workoutQuery->filter(fn ($w) => $this->sessionableIsSelected((int) $w->sessionable_id));
@@ -157,7 +167,9 @@ class LearningReportService
 
         return compact(
             'activitiesByTerm',
+            'activitiesByCourse',
             'workoutsByParticipant',
+            'workoutsByCourseAndLearner',
             'quizByWorkout',
             'enrollments',
             'departments'
@@ -286,6 +298,7 @@ class LearningReportService
             $courseRows = $rowsByCourse->get($course->id, collect());
 
             $out[] = [
+                'course_id'             => (int) $course->id,
                 'course_title'          => $course->title,
                 'department'            => $course->department,
                 'learner_count'         => $courseRows->pluck('user_id')->unique()->count(),
@@ -307,9 +320,30 @@ class LearningReportService
         $overview = $this->courseOverview($context, $rows);
 
         $ranked = collect($overview)
-            ->map(function ($c) {
-                $c['completion_rate'] = $c['learner_count'] > 0
-                    ? (int) round($c['completed_enrollments'] / $c['learner_count'] * 100)
+            ->map(function ($c) use ($context, $rows) {
+                $courseRows = collect($rows)->where('course_id', $c['course_id']);
+                $learnerIds = $courseRows->pluck('user_id')->unique();
+                $activities = $context['activitiesByCourse'][$c['course_id']] ?? collect();
+                $completedLearners = $learnerIds->filter(function ($userId) use ($context, $activities, $c) {
+                    if ($activities->isEmpty()) {
+                        return false;
+                    }
+
+                    $learnerWorkouts = $context['workoutsByCourseAndLearner'][$c['course_id']][$userId] ?? collect();
+                    $completedActivityKeys = $learnerWorkouts
+                        ->filter(fn ($workout) => (bool) $workout->is_completed)
+                        ->mapWithKeys(fn ($workout) => [
+                            $workout->term_id.':'.$workout->sessionable_id => true,
+                        ]);
+
+                    return $activities->every(fn ($activity) => $completedActivityKeys->has(
+                        $activity->term_id.':'.$activity->sessionable_id
+                    ));
+                })->count();
+
+                $c['completed_enrollments'] = $completedLearners;
+                $c['completion_rate'] = $learnerIds->isNotEmpty()
+                    ? (int) round($completedLearners / $learnerIds->count() * 100)
                     : 0;
 
                 return $c;

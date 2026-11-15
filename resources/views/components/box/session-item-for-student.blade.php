@@ -26,12 +26,12 @@
 
                                 <div class="col-4">
                                     
-                                    <h6 class="font-weight-bold text-dark">{{ __('نسبة الإنجاز') }}</h6>
+                                    <h6 class="font-weight-bold ">{{ __('نسبة الإنجاز') }}</h6>
                                     <hr />
-                                    <label>{{ __('الإنجاز:') }}</label>
+                                    <label class="text-warning">{{ __('الإنجاز:') }}</label>
                                     <x-atoms.progress :color="'primary'" :fill="$session->workout_completed ?? 0" :count="$session->Related->count()" />
                                     <hr />
-                                    <span> متوسط التقييم:</span>
+                                    <span class="text-muted">{{ __('متوسط التقييم:') }}</span>
                                     <x-atoms.stars :score="$session->workout_score ?? 0" />
 
                                 </div>
