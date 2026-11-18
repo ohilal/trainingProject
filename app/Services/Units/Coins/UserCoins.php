@@ -30,15 +30,24 @@ class UserCoins
     {
 
 
-        $badge = Badge::where('min_coins', '>=', $user->coins)
-            ->where('max_coins', '<', $user->coins)
+          // Tier whose [min, max) range contains the user's coin balance.
+        $badge = Badge::where('min_coins', '<=', $user->coins)
+            ->where('max_coins', '>', $user->coins)
+            ->orderBy('min_coins', 'desc')
             ->first();
 
-        if (empty($badge))
-            $badge = Badge::orderby('max_coins', 'desc')->first();
+        // Gap between tiers: fall back to the highest badge the user has earned.
+        if (empty($badge)) {
+            $badge = Badge::where('min_coins', '<=', $user->coins)
+                ->orderBy('min_coins', 'desc')
+                ->first();
+        }
 
-        if (empty($badge))
-            $badge = Badge::factory()->create();
+        // Balance below every tier (or table empty): lowest tier / null.
+        // Never create factory rows here — that would pollute production data.
+        if (empty($badge)) {
+            $badge = Badge::orderBy('min_coins', 'asc')->first();
+        }
 
         return $badge;
     }

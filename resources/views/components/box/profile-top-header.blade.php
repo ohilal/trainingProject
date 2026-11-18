@@ -1,12 +1,20 @@
-<div class="row">
 
-    <div class="col-4">
+@props([
+    'user',
+    'activable_id' => null,
+    'activable_type' => null,
+])
+
+    <div class="col-lg-2 col-sm-12 ">
         <x-box.profile-box :user="$user"/>
+       
     </div>
+<div class="col-lg-2  col-sm-12">
+     <x-box.user-badge :user="$user"/>
+</div>
+    <div class="col-lg-3 col-sm-12">
 
-    <div class="col-8">
-
-        <div class="card shadow mb-4 border-bottom-danger">
+        <div class="card shadow mb-4 border-bottom-danger" style="height: 100%;">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold ">
@@ -17,13 +25,14 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                @livewire('services.mentors.comments',[
-                'activable_id' => $activable_id,
-                'activable_type' => $activable_type,
-                'userId' => $user->id
-                ])
+                @if($activable_id && $activable_type)
+                    @livewire('services.mentors.comments',[
+                    'activable_id' => $activable_id,
+                    'activable_type' => $activable_type,
+                    'userId' => $user->id
+                    ])
+                @endif
             </div>
         </div>
 
     </div>
-</div>

@@ -17,20 +17,24 @@
         <div class="card-body">
 
 
+            {{-- The badge icon is uploaded by the Livewire `services.media.uploadable`
+                 component below and only its storage path is submitted with this form,
+                 so we bind it through Alpine (same pattern as toolbox/file/form). --}}
             @if(isset($badge))
-            <form class="user" method="POST" action="{{ route('badges.update' , $badge->id) }}">
+            <form class="user" method="POST" action="{{ route('badges.update' , $badge->id) }}" x-data="{ filePath: @js($badge->file ?? '') }" x-on:file-uploaded.window="filePath = $event.detail.path">
                 @method('patch')
                 @else
-                <form class="user" method="POST" action="{{ route('badges.store') }}">
+                <form class="user" method="POST" action="{{ route('badges.store') }}" x-data="{ filePath: '' }" x-on:file-uploaded.window="filePath = $event.detail.path">
                     @endif
 
                     @csrf
+                    <input name="file" type="hidden" x-bind:value="filePath">
                     <div class="row">
                         <div class="col-md-6">
 
                             <div class="form-group">
                                 <label for="title">{{ __("Title") }}</label>
-                                <input name="title" type="text" class="form-control form-control-user" id="title" placeholder="Title" value="{{ $badge->title ?? '' }}">
+                                <input name="title" dir="auto" type="text" class="form-control form-control-user" id="title" placeholder="Title" value="{{ $badge->title ?? '' }}">
                             </div>
                             <div class="form-group">
                                 <label for="min_coins">{{ __("Min Coins") }}</label>
@@ -40,7 +44,7 @@
                                 <label for="max_coins">{{ __("Max Coins") }}</label>
                                 <input name="max_coins" type="number" class="form-control form-control-user" id="max_coins" placeholder="max coins" value="{{ $badge->max_coins ?? '' }}">
                             </div>
-                            
+
 
 
                         </div>
@@ -59,7 +63,7 @@
 
 
                     <div class="form-group">
-                        <textarea name="description" type="text" class="form-control editor" id="description" placeholder="Description">{{ $badge->description ?? '' }}</textarea>
+                        <textarea name="description" dir="auto" type="text" class="form-control editor" id="description" placeholder="Description">{{ $badge->description ?? '' }}</textarea>
                     </div>
 
 

@@ -84,7 +84,17 @@ class FileController extends Controller
 
         $disk = Storage::disk('public');
         abort_unless($disk->exists($path), 404);
-
+          // SVG is XML: inline it would run in this origin (stored XSS), so we
+        // neutralize scripts with a restrictive CSP + nosniff instead of forcing
+        // a download, which would break the <img> preview below.
+        if (strtolower(pathinfo($path, PATHINFO_EXTENSION)) === 'svg') {
+            return $disk->response($path, basename($path), [
+                'Content-Type' => 'image/svg+xml',
+                'X-Content-Type-Options' => 'nosniff',
+                'Content-Security-Policy' => "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'",
+                'Content-Disposition' => 'inline',
+            ]);
+        }
         return $disk->response($path);
     }
 

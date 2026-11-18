@@ -6,7 +6,19 @@ trait WithRuleUploaded
 {
 
     protected array $badges = [
-        'file' => 'required|image|max:1024', // 1MB Max
+        // Laravel's `image` rule rejects SVG by design (it validates against
+        // getimagesize(), which has no SVG signature). Since badge icons are
+        // usually designed as vectors, we replace the rule with an explicit
+        // extension whitelist plus a content sniff for SVGs.
+        //
+        // NOTE: an uploaded .svg is served back to the browser from the public
+        // disk and can execute scripts when opened directly. Keep this behind
+        // the authenticated admin area, or sanitize the XML before storing it.
+        'file' => [
+            'required',
+            'max:1024', // 1MB Max
+            'mimes:jpg,jpeg,png,gif,webp,svg',
+        ],
     ];
 
 
@@ -21,10 +33,26 @@ trait WithRuleUploaded
 
     public function getTargetRule(string $target): array
     {
+        $rules = isset($this->$target) ? $this->$target : $this->public;
 
-        if (isset($this->$target))
-            return $this->$target;
+        if ($target === 'badges') {
+            $rules['file'][] = function (string $attribute, $value, callable $fail): void {
+                if (!$value instanceof \Illuminate\Http\UploadedFile) {
+                    return;
+                }
 
-        return $this->public;
+                if (strtolower($value->getClientOriginalExtension()) !== 'svg') {
+                    return;
+                }
+
+                $content = (string) file_get_contents($value->getRealPath());
+
+                if (stripos($content, '<svg') === false) {
+                    $fail(__('validation.image', ['attribute' => $attribute]));
+                }
+            };
+        }
+
+        return $rules;
     }
 }

@@ -20,11 +20,12 @@
         </div>
     </div>
 </div>
+<div class="row mb-4">
 
-<x-box.profile-top-header :user="$participant->User" :activabel_id="$participant->id" :activable_type="'App\Models\Term'" />
+<x-box.profile-top-header :user="$participant->User" :activable_id="$participant->id" :activable_type="'App\Models\Term'" />
 
 <x-box.profile-review-box />
-
+</div>
 
 <div class="row">
 

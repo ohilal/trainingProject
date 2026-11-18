@@ -2,10 +2,21 @@
 
 
 @section("content")
+<!-- ----------------------- Profile--------------------------------->
+
+<div class="row mb-4 ">
+
+<x-box.profile-top-header :user="Auth::user()" />
+
+<x-box.profile-review-box />
+</div>
+
+ <!------------------------- End Profile------------------------------>
 <div class="row">
 
     <div class="col-12">
         <div class="card shadow mb-4 border-bottom-primary">
+
             <!-- Card Header - Dropdown -->
             <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">

@@ -25,13 +25,13 @@ class FileUploadedRender extends Component
 
         $this->fileType = $this->getFileType($file);
         $this->preview = $preview;
-        
+
     }
 
     private function getFileType(string $file): string
     {
-        $fileType = pathinfo($file, PATHINFO_EXTENSION);
-        if ($fileType == 'jpg' || $fileType == 'jpeg' || $fileType == 'png' || $fileType == 'gif') {
+        $fileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (in_array($fileType, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'], true)) {
             return 'image';
         } elseif ($fileType == 'mp4' || $fileType == 'webm' || $fileType == 'ogg') {
             return 'video';

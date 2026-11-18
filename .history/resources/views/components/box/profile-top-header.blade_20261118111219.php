@@ -1,0 +1,32 @@
+<div class="col align-items-stretch mb-4">
+
+    <div class="col-lg-2 col-sm-12 ">
+        <x-box.profile-box :user="$user"/>
+       
+    </div>
+<div class="col-lg-2  col-sm-12">
+     <x-box.user-badge :user="$user"/>
+</div>
+    <div class="col-lg-2 col-sm-12">
+
+        <div class="card shadow mb-4 border-bottom-danger" style="height: 100%;">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold ">
+                    <i class="fa fa-comment"></i>
+                    {{ __('رسائل وتنبيهات') }}
+
+                </h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                @livewire('services.mentors.comments',[
+                'activable_id' => $activable_id,
+                'activable_type' => $activable_type,
+                'userId' => $user->id
+                ])
+            </div>
+        </div>
+
+    </div>
+</div>

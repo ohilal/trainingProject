@@ -9,7 +9,12 @@
         <div class="row g-5 align-items-center" style="align-items: center;">
             <div class="col-lg-5 text-center text-lg-start">
                 <h1 class=" mb-4 animated slideInDown" style="color: var(--secondary);">مرحبا بكم فى بنك المعرفة!</h1>
-                <p class="text-darkteal pb-3 animated slideInDown">منصة تدريب تضم محتوى تدريبى ومعرفى يخدم جميع العاملين  وفقا لطبيعة اختصاصات الإدارات المختلفة، لتحقيق التكامل وضمان توفير محتوى متخصص.  </p>
+                <p class="text-darkteal pb-3 animated slideInDown " style="font-size: 1rem;">
+اكتشف محتوى تدريبياً ومعرفياً متخصصاً صُمم خصيصاً ليناسب طبيعة عملك واختصاصات إدارتك.
+<br/>
+ ابدأ رحلتك التدريبية بتسجيل الدخول عبر اسم المستخدم وكلمة المرور الخاصين بجهاز الكمبيوتر
+
+                </p>
                 <a href="{{ route('front.courses') }}" class="btn btn-darkteal btn-sm py-sm-3 px-sm-5 rounded-pill animated slideInRight">الدورات</a>
                 <a href="{{ route('front.events') }}" class="btn btn-light  btn-sm py-sm-3 px-sm-5 rounded-pill me-3 animated  slideInLeft">الفعاليات</a>
                
