@@ -69,6 +69,42 @@ class ParticipantInfoGenerator
         return $terms;
     }
 
+    public static function getCourseProgressForParticipant(User $user): array
+    {
+        $terms = self::getAllTermsForParticipant($user);
+        return self::calculateCourseProgress($terms);
+    }
+
+    public static function calculateCourseProgress(Collection $terms): array
+    {
+        $courseProgress = [];
+
+        foreach ($terms->groupBy(fn (Participant $participant) => $participant->Term->Course->id) as $courseTerms) {
+            $course = $courseTerms->first()->Term->Course;
+            $totalTasks = 0;
+            $completedTasks = 0;
+
+            foreach ($courseTerms as $participant) {
+                $totalTasks += (int) ($participant->Term->total_task ?? 0);
+                $completedTasks += (int) ($participant->Term->task_done ?? 0);
+            }
+
+            $percentage = $totalTasks > 0
+                ? (int) round(($completedTasks / $totalTasks) * 100)
+                : 0;
+
+            $courseProgress[] = [
+                'id' => $course->id,
+                'title' => $course->title,
+                'completed_tasks' => $completedTasks,
+                'total_tasks' => $totalTasks,
+                'percentage' => min(100, max(0, $percentage)),
+            ];
+        }
+
+        return $courseProgress;
+    }
+
     private static function getNextActivity(Participant $participant): ?array
     {
         foreach ($participant->Term->Sessions as $session) {

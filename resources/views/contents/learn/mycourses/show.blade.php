@@ -24,7 +24,7 @@
 
 <x-box.profile-top-header :user="$participant->User" :activable_id="$participant->id" :activable_type="'App\Models\Term'" />
 
-<x-box.profile-review-box />
+<x-box.profile-review-box :user="$participant->User" />
 </div>
 
 <div class="row">

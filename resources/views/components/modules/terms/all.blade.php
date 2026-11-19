@@ -54,9 +54,12 @@
                                 <div class="col-4">
                                     <h6 class="font-weight-bold ">{{ __(' التالى') }}</h6>
                                     @if($term->next_activity)
-                                    <p class="text-dark">
-                                        <i class="fa fa-flag-checkered"></i>
-                                        <a href="{{ $term->next_activity['url'] }}" class="">{{ $term->next_activity['title'] }}</a>
+                                    <p class="text-secondary">
+                                         
+                                        <a href="{{ $term->next_activity['url'] }}" class="">
+                                            <i class="fa fa-flag-checkered"></i> 
+                                        {{ $term->next_activity['title'] }} 
+                                    </a>
                                     </p>
                                     <small class="text-secondary">
                                         {{ $term->next_activity['session_title'] }}
@@ -65,7 +68,7 @@
                                         @endif
                                     </small>
                                     @else
-                                    <p class="text-secondary">{{ __('All activities completed') }}</p>
+                                    <p class="text-secondary">{{ __('تم الانتهاء بنجاح') }}</p>
                                     @endif
                                 </div>
                                 @endif

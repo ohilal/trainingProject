@@ -1,6 +1,3 @@
-@can('mentor.list')
-
-
     <!-- Earnings (Monthly) Card Example -->
     <!-- <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
@@ -37,37 +34,44 @@
         </div>
     </div> -->
 
-    <!-- Earnings (Monthly) Card Example -->
+    <!-- Course progress -->
     <div class="col-lg-3 col-md-6 col-sm-12">
         <div class="card border-bottom-info shadow mb-4" style="height: 100%;">
             <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold "><i class="fas fa-tasks"></i> المهام</h6>
             </div>
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                        </div>
-                        <div class="row no-gutters align-items-center">
-                            <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+            <div class="card-body p-2" style="max-height: 260px; overflow-y: auto; direction: rtl;">
+                @forelse($courseProgress as $course)
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <div class="small font-weight-bold text-info text-truncate mr-2" title="{{ $course['title'] }}">
+                                {{ $course['title'] }}
                             </div>
-                            <div class="col">
-                                <div class="progress progress-sm mr-2">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+                            <div class="h3 badge rounded-pill bg-info" style=" letter-spacing: 0.2em;">{{ $course['percentage'] }}%</div>
                         </div>
+                        <div class="progress progress-sm mb-1">
+                            <div
+                                class="progress-bar bg-info"
+                                role="progressbar"
+                                style="width: {{ $course['percentage'] }}%"
+                                aria-valuenow="{{ $course['percentage'] }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            ></div>
+                        </div>
+                        <small class="text-secondary">{{ __('الإنجاز') }}
+                            {{ $course['completed_tasks'] }}/{{ $course['total_tasks'] }} 
+                        </small>
                     </div>
-                    <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                    </div>
-                </div>
+                @empty
+                    <div class="text-center text-secondary py-3">{{ __('لا توجد دورات تدريبية') }}</div>
+                @endforelse
             </div>
         </div>
     </div>
 
     <!-- Pending Requests Card Example -->
+@can('mentor.list')
     <div class="col-lg-2 col-md-6 col-sm-12">
         <div class="card border-bottom-warning shadow mb-4" style="height: 100%;">
             <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
@@ -78,7 +82,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Pending Requests</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -87,5 +91,4 @@
             </div>
         </div>
     </div>
-
 @endcan

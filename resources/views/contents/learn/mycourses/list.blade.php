@@ -8,7 +8,7 @@
 
 <x-box.profile-top-header :user="Auth::user()" />
 
-<x-box.profile-review-box />
+<x-box.profile-review-box :user="Auth::user()" />
 </div>
 
  <!------------------------- End Profile------------------------------>

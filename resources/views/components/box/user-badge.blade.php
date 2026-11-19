@@ -1,5 +1,5 @@
 <div class="card shadow mb-4 border-bottom-success" style="height: 100%;">
-    <div class="card-header">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold ">
         <i class="fas fa-award"></i> {{ __('شارة التميز') }}
     </h6></div>
@@ -11,7 +11,7 @@
                 class="img-fluid"
                 style="max-width: 150px;"
             >
-            <div class="mt-2 font-weight-bold">{{ $badgeTitle }}</div>
+            <div class="mt-2 font-weight-bold p">{{ $badgeTitle }}</div>
         </div>
     </div>
 </div>

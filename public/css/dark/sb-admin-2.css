@@ -10875,7 +10875,10 @@ a:focus {
     height: calc(20rem - 43px) !important;
   }
 }
-
+.mt-2.font-weight-bold.p {
+  color: #e7e7e7 !important;
+  /* color: inherit !important; */
+}
 .bg-login-image {
   background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
   background-position: center;

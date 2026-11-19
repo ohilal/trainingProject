@@ -24,7 +24,7 @@
 
             @if($review)
             <div class="m-4 p-4">
-            <x-box.profile-review-box />
+            <x-box.profile-review-box :user="$participant->User" />
             </div>
             @endif
 

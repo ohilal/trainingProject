@@ -5,7 +5,7 @@
 
 <x-box.profile-top-header :user="$user" />
 
-<x-box.profile-review-box />
+<x-box.profile-review-box :user="$user" />
 
 <div class="row">
     <div class="col-7">
